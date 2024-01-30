@@ -147,6 +147,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\ECS\Component\Component.cpp" />
+    <ClCompile Include="src\ECS\Entity\Entity.cpp" />
     <ClCompile Include="Libraries\include\glm\detail\glm.cpp" />
     <ClCompile Include="Libraries\include\imgui\imgui.cpp" />
     <ClCompile Include="Libraries\include\imgui\imgui_demo.cpp" />
@@ -158,8 +160,11 @@
     <ClCompile Include="Libraries\include\stb\stb_image.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="Libraries\include\glad\glad.c" />
+    <ClCompile Include="src\ECS\System\System.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ECS\Component\Component.h" />
+    <ClInclude Include="src\ECS\Entity\Entity.h" />
     <ClInclude Include="Libraries\include\glad\glad.h" />
     <ClInclude Include="Libraries\include\GLFW\glfw3.h" />
     <ClInclude Include="Libraries\include\GLFW\glfw3native.h" />
@@ -424,6 +429,7 @@
     <ClInclude Include="Libraries\include\lua\lualib.h" />
     <ClInclude Include="Libraries\include\sol\sol.hpp" />
     <ClInclude Include="Libraries\include\stb\stb_image.h" />
+    <ClInclude Include="src\ECS\System\System.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Libraries\include\glm\detail\func_common.inl" />
