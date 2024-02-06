@@ -23,120 +23,125 @@ const char* fragmentShaderSource = "#version 330 core\n"
 
 int main()
 {
-	const int initialScreenWidth = 800;	
-	const int initialScreenHeight = 600;
+    // glfw: initialize and configure
+    // ------------------------------
+    glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	//Initialize GLFW for the 4.5 OpenGL version using the Core profile
-	glfwInit();
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    // glfw window creation
+    // --------------------
+    GLFWwindow* window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
+    if (window == NULL)
+    {
+        std::cout << "Failed to create GLFW window" << std::endl;
+        glfwTerminate();
+        return -1;
+    }
+    glfwMakeContextCurrent(window);
+    glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
 
-	GLFWwindow* window = glfwCreateWindow(initialScreenWidth, initialScreenHeight, "Cannis Canno Engine", NULL, NULL);
-	if (window == nullptr) {
-		std::cout << "Failed to create GLFW window\n";
-		glfwTerminate();
-
-		return -1;
-	}
-
-	glfwMakeContextCurrent(window);
-	glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
-
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-		std::cout << "Failed to initialize GLAD\n";
-		return -1;
-	}
-
-	//Now that GLAD has finished we can start using OpenGL functions
-	framebufferSizeCallback(window, initialScreenWidth, initialScreenWidth);
+    // glad: load all OpenGL function pointers
+    // ---------------------------------------
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        std::cout << "Failed to initialize GLAD" << std::endl;
+        return -1;
+    }
 
 
-	unsigned int shaderProgram = 0;
-	init(&shaderProgram);
+    // Initialize our shader program
+    unsigned int shaderProgram;
+    init(&shaderProgram);
 
-	float vertices[] = {
-		-0.5f, -0.5f, 0.0f, // left  
-		 0.5f, -0.5f, 0.0f, // right 
-		 0.0f,  0.5f, 0.0f  // top   
-	};
+    //Simple triangle
+    float vertices[] = {
+        -0.5f, -0.5f, 0.0f, // left  
+         0.5f, -0.5f, 0.0f, // right 
+         0.0f,  0.5f, 0.0f  // top   
+    };
 
-	unsigned int VAO, VBO;
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glBindVertexArray(VAO);
+    unsigned int VBO, VAO;
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
+    glBindVertexArray(VAO);
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
 
-	//Unbind the current buffer and VAO so that they cannot be modified elsewhere
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-	
-	double lastTime = glfwGetTime();
-	while (!glfwWindowShouldClose(window)) {
-		double current = glfwGetTime();
-		double delta = current - lastTime;
+    // Unbind the VBO and VAO so that unwanted changes cannot be done
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 
-		processInput(window);
-		update(delta);
-		render(window, &shaderProgram, &VAO);
 
-		lastTime = current;
-	}
+    //Engine loop
+    double lastTime = glfwGetTime();
+    while (!glfwWindowShouldClose(window))
+    {
+        double current = glfwGetTime();
+        double delta = current - lastTime;
+        processInput(window);
+        update(delta);
+        render(window, &shaderProgram, &VAO);
 
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
-	glDeleteProgram(shaderProgram);
+        lastTime = current;
+    }
 
-	glfwDestroyWindow(window);
-	glfwTerminate();
-	return 0;
+    //Deallocation of all resources
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteProgram(shaderProgram);
+    glfwTerminate();
+
+    return 0;
 }
 
 void init(unsigned int* shaderProgram) {
-	unsigned int vertexShader;
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	glCompileShader(vertexShader);
+    unsigned int vertexShader;
+    vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+    glCompileShader(vertexShader);
 
-	int success;
-	char infoLog[512];
+    int success;
+    char infoLog[512];
 
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-	if (!success) {
-		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
+    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+    }
 
-	unsigned int fragmentShader;
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-	glCompileShader(fragmentShader);
+    unsigned int fragmentShader;
+    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+    glCompileShader(fragmentShader);
 
-	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-	if (!success) {
-		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
+    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+    }
 
-	*shaderProgram = glCreateProgram();
-	glAttachShader(*shaderProgram, vertexShader);
-	glAttachShader(*shaderProgram, fragmentShader);
-	glLinkProgram(*shaderProgram);
+    *shaderProgram = glCreateProgram();
+    glAttachShader(*shaderProgram, vertexShader);
+    glAttachShader(*shaderProgram, fragmentShader);
+    glLinkProgram(*shaderProgram);
 
-	glGetProgramiv(*shaderProgram, GL_COMPILE_STATUS, &success);
-	if (!success) {
-		glGetProgramInfoLog(*shaderProgram, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-	}
+    glGetProgramiv(*shaderProgram, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        glGetProgramInfoLog(*shaderProgram, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+    }
 
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
 }
+
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
