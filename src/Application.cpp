@@ -6,7 +6,7 @@ void init(unsigned int* shaderProgram);
 void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void update(double delta);
-void render(GLFWwindow* window, unsigned int* shaderProgram, unsigned int* VAO);
+void render(GLFWwindow* window, unsigned int* shaderProgram, unsigned int* VAO, unsigned int* EBO);
 
 const char* vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
@@ -23,15 +23,11 @@ const char* fragmentShaderSource = "#version 330 core\n"
 
 int main()
 {
-    // glfw: initialize and configure
-    // ------------------------------
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    // glfw window creation
-    // --------------------
     GLFWwindow* window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
     if (window == NULL)
     {
@@ -42,8 +38,6 @@ int main()
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
 
-    // glad: load all OpenGL function pointers
-    // ---------------------------------------
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         std::cout << "Failed to initialize GLAD" << std::endl;
@@ -55,15 +49,22 @@ int main()
     unsigned int shaderProgram;
     init(&shaderProgram);
 
-    //Simple triangle
+    //Simple rectangle
     float vertices[] = {
-        -0.5f, -0.5f, 0.0f, // left  
-         0.5f, -0.5f, 0.0f, // right 
-         0.0f,  0.5f, 0.0f  // top   
+        -0.5f, -0.5f, 0.0f, // bottom left  
+         0.5f, -0.5f, 0.0f, // bottom right 
+         0.5f,  0.5f, 0.0f, // top right
+        -0.5f,  0.5f, 0.0f  // top left
     };
 
-    unsigned int VBO, VAO;
+    unsigned int indices[] = {
+        0, 1, 3,
+        1, 2, 3
+    };
+
+    unsigned int EBO, VBO, VAO;
     glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &EBO);
     glGenBuffers(1, &VBO);
     // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
     glBindVertexArray(VAO);
@@ -73,6 +74,10 @@ int main()
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
 
     // Unbind the VBO and VAO so that unwanted changes cannot be done
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -87,7 +92,7 @@ int main()
         double delta = current - lastTime;
         processInput(window);
         update(delta);
-        render(window, &shaderProgram, &VAO);
+        render(window, &shaderProgram, &VAO, &EBO);
 
         lastTime = current;
     }
@@ -157,13 +162,18 @@ void update(double delta) {
 	
 }
 
-void render(GLFWwindow* window, unsigned int* shaderProgram, unsigned int* VAO) {
+void render(GLFWwindow* window, unsigned int* shaderProgram, unsigned int* VAO, unsigned int* EBO) {
 	glClearColor(0.3f, 0.3f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	
 	glUseProgram(*shaderProgram);
 	glBindVertexArray(*VAO);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+
+    //Bind our EBO so that glDrawElements knows in what order we want the vertices to be drawn
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *EBO);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+    glBindVertexArray(0);
 
 	glfwSwapBuffers(window);
 	glfwPollEvents();
