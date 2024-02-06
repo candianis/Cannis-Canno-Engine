@@ -71,20 +71,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\augus\source\repos\Cannis-Canno-Engine\Libraries\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\augus\source\repos\Cannis-Canno-Engine\Libraries\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\Cannis-Canno-Engine\Libraries\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\Cannis-Canno-Engine\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\Users\augus\source\repos\Cannis-Canno-Engine\Libraries\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\augus\source\repos\Cannis-Canno-Engine\Libraries\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\Cannis-Canno-Engine\Libraries\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\Cannis-Canno-Engine\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\augus\source\repos\Cannis-Canno-Engine\Libraries\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\augus\source\repos\Cannis-Canno-Engine\Libraries\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\Cannis-Canno-Engine\Libraries\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\Cannis-Canno-Engine\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Users\augus\source\repos\Cannis-Canno-Engine\Libraries\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\augus\source\repos\Cannis-Canno-Engine\Libraries\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\Cannis-Canno-Engine\Libraries\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\Cannis-Canno-Engine\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
