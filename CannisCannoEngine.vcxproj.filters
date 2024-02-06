@@ -57,6 +57,9 @@
     <ClCompile Include="src\ECS\Component\Component.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Shaders\Shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Libraries\include\glad\glad.h">
@@ -860,6 +863,9 @@
     <ClInclude Include="src\ECS\Component\Component.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Shaders\Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Libraries\include\glm\detail\func_common.inl">
@@ -1264,5 +1270,7 @@
     <None Include="Libraries\include\glm\gtx\wrap.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="src\Shaders\Fragment\test.frag" />
+    <None Include="src\Shaders\Vertex\test.vert" />
   </ItemGroup>
 </Project>

@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Shaders\Shader.cpp" />
     <ClCompile Include="src\ECS\Component\Component.cpp" />
     <ClCompile Include="src\ECS\Entity\Entity.cpp" />
     <ClCompile Include="Libraries\include\glm\detail\glm.cpp" />
@@ -163,6 +164,7 @@
     <ClCompile Include="src\ECS\System\System.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Shaders\Shader.h" />
     <ClInclude Include="src\ECS\Component\Component.h" />
     <ClInclude Include="src\ECS\Entity\Entity.h" />
     <ClInclude Include="Libraries\include\glad\glad.h" />
@@ -566,6 +568,8 @@
     <None Include="Libraries\include\glm\gtx\vector_angle.inl" />
     <None Include="Libraries\include\glm\gtx\vector_query.inl" />
     <None Include="Libraries\include\glm\gtx\wrap.inl" />
+    <None Include="src\Shaders\Fragment\test.frag" />
+    <None Include="src\Shaders\Vertex\test.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
