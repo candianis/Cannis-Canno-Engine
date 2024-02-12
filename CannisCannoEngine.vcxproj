@@ -158,10 +158,10 @@
     <ClCompile Include="Libraries\include\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="Libraries\include\imgui\imgui_tables.cpp" />
     <ClCompile Include="Libraries\include\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="Libraries\include\stb\stb_image.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="Libraries\include\glad\glad.c" />
     <ClCompile Include="src\ECS\System\System.cpp" />
+    <ClCompile Include="src\Texture\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Shaders\Shader.h" />
@@ -432,6 +432,7 @@
     <ClInclude Include="Libraries\include\sol\sol.hpp" />
     <ClInclude Include="Libraries\include\stb\stb_image.h" />
     <ClInclude Include="src\ECS\System\System.h" />
+    <ClInclude Include="src\Texture\Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Libraries\include\glm\detail\func_common.inl" />

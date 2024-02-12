@@ -2,8 +2,8 @@
 
 Shader::Shader(const char* vertexPath, const char* fragmentPath)
 {
-	std::string* vertCode = GetSourceCode(vertexPath);
-	std::string* fragCode = GetSourceCode(fragmentPath);
+	string* vertCode = GetSourceCode(vertexPath);
+	string* fragCode = GetSourceCode(fragmentPath);
 
 	unsigned int vertexShader = CreateShader(vertCode->c_str(), GL_VERTEX_SHADER);
 	unsigned int fragmentShader = CreateShader(fragCode->c_str(), GL_FRAGMENT_SHADER);
@@ -29,23 +29,23 @@ void Shader::Use()
 	glUseProgram(ID);
 }
 
-void Shader::SetBool(const std::string& name, bool value) const
+void Shader::SetBool(const string& name, bool value) const
 {
 	glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
 }
 
-void Shader::SetInt(const std::string& name, int value) const
+void Shader::SetInt(const string& name, int value) const
 {
 	glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
 }
 
-void Shader::SetFloat(const std::string& name, float value) const
+void Shader::SetFloat(const string& name, float value) const
 {
 	glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
 }
 
-std::string* Shader::GetSourceCode(const char* filePath) {
-	std::string* code = new std::string();
+string* Shader::GetSourceCode(const char* filePath) {
+	string* code = new string();
 	std::ifstream shaderFile;
 
 	shaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
@@ -89,7 +89,7 @@ unsigned int Shader::CreateShader(const char* shaderCode, GLenum type) {
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 	if (!success) {
 		glGetShaderInfoLog(shader, 512, NULL, infoLog);
-		std::string errorType = type == GL_VERTEX_SHADER ? "VERTEX" : "FRAGMENT";
+		string errorType = type == GL_VERTEX_SHADER ? "VERTEX" : "FRAGMENT";
 		std::cout << "ERROR::SHADER::" + errorType + "::COMPILATION_FAILED\n" << infoLog << std::endl;
 	}
 
