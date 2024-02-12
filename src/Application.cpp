@@ -3,17 +3,13 @@
 #include <GLFW/glfw3.h>
 
 #include "Shaders/Shader.h"
-
-#define STB_IMAGE_IMPLEMENTATION
-#define STBI_NO_FAILURE_STRING
-#define STBI_FAILURE_USERMSG
-#include "stb/stb_image.h"
+#include "Texture/Texture.h"
 
 void init();
 void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void update(double delta);
-void render(GLFWwindow* window, Shader* shader, unsigned int texture, unsigned int* VAO, unsigned int* EBO);
+void render(GLFWwindow* window, Shader* shader, const Texture* texture, const unsigned int* VAO, const unsigned int* EBO);
 
 int main()
 {
@@ -89,35 +85,7 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    unsigned int texture;
-    glGenTextures(1, &texture);
-    glActiveTexture(GL_TEXTURE0);
-    //Bind the generate texture so that a texture image and a mipmap is assigned to it
-    glBindTexture(GL_TEXTURE_2D, texture);
-
-    //Set texture wrappings to GL_REPEAT
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-    //When scaling a texture downwards, we linearly interpolate the two closest mipmaps
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    //When scaling a texture upwards, bilinear filtering will be used
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    int width, height, channelsInFile;
-    const char* filePath = "./Assets/Textures/lava_texture.jpg";
-    unsigned char* data = stbi_load(filePath, &width, &height, &channelsInFile, 0);
-
-    if (data) {
-        //The second zero or the sixth parameter should always be 0
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-
-    else {
-        std::cout << "ERROR::TEXTURE::FILE_NOT_FOUND\n" << stbi_failure_reason() << std::endl;
-    }
-    stbi_image_free(data);
+    Texture lavaTexture("lava_texture.jpg", GL_REPEAT);
 
     triangleShader.Use();
     triangleShader.SetInt("ourTexture", 0);
@@ -130,7 +98,7 @@ int main()
         double delta = current - lastTime;
         processInput(window);
         update(delta);
-        render(window, &triangleShader, texture, &VAO, &EBO);
+        render(window, &triangleShader, &lavaTexture, &VAO, &EBO);
 
         lastTime = current;
     }
@@ -163,13 +131,13 @@ void update(double delta) {
 	
 }
 
-void render(GLFWwindow* window, Shader* shader, unsigned int texture, unsigned int* VAO, unsigned int* EBO) {
+void render(GLFWwindow* window, Shader* shader, const Texture* texture, const unsigned int* VAO, const unsigned int* EBO) {
 	glClearColor(0.3f, 0.3f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glBindTexture(GL_TEXTURE_2D, texture->ID);
 
     //Bind our EBO so that glDrawElements knows in what order we want the vertices to be drawn
     //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *EBO);
