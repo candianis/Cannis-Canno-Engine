@@ -2,6 +2,10 @@
 
 #include <glad/glad.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -9,6 +13,7 @@
 
 using std::string;
 
+/*@brief */
 class Shader
 {
 public:
@@ -22,15 +27,24 @@ public:
 /* @brief Deletes the program using this Shader's ID */
 	~Shader(); 
 
+	/**/
 	void Use();
 
+	/**/
 	void SetBool(const string& name, bool value) const;
+	/**/
 	void SetInt(const string& name, int value) const;
+	/**/
 	void SetFloat(const string& name, float value) const;
+	/**/
+	void SetMatrix4(const string& name, glm::mat4* values) const;
 
 private:
+	/*@brief */
 	string* GetSourceCode(const char* filePath);
+	/*@brief */
 	unsigned int CreateShader(const char* shaderCode, GLenum type);
+	/*@brief */
 	void CreateProgram(unsigned int vertexShader, unsigned int fragmentShader);
 };
 

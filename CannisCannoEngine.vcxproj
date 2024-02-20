@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Camera\Camera.cpp" />
     <ClCompile Include="src\Shaders\Shader.cpp" />
     <ClCompile Include="src\ECS\Component\Component.cpp" />
     <ClCompile Include="src\ECS\Entity\Entity.cpp" />
@@ -164,6 +165,7 @@
     <ClCompile Include="src\Texture\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Camera\Camera.h" />
     <ClInclude Include="src\Shaders\Shader.h" />
     <ClInclude Include="src\ECS\Component\Component.h" />
     <ClInclude Include="src\ECS\Entity\Entity.h" />
