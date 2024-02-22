@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Light\Light.cpp" />
     <ClCompile Include="src\Camera\Camera.cpp" />
     <ClCompile Include="src\Shaders\Shader.cpp" />
     <ClCompile Include="src\ECS\Component\Component.cpp" />
@@ -165,6 +166,7 @@
     <ClCompile Include="src\Texture\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Light\Light.h" />
     <ClInclude Include="src\Camera\Camera.h" />
     <ClInclude Include="src\Shaders\Shader.h" />
     <ClInclude Include="src\ECS\Component\Component.h" />
@@ -571,7 +573,9 @@
     <None Include="Libraries\include\glm\gtx\vector_angle.inl" />
     <None Include="Libraries\include\glm\gtx\vector_query.inl" />
     <None Include="Libraries\include\glm\gtx\wrap.inl" />
+    <None Include="src\Shaders\Fragment\light_cube.frag" />
     <None Include="src\Shaders\Fragment\test.frag" />
+    <None Include="src\Shaders\Vertex\light_cube.vert" />
     <None Include="src\Shaders\Vertex\test.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
