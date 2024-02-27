@@ -34,7 +34,7 @@ public:
 
 	CameraMovement camMovement;
 
-	Camera(vec3 position, float speed, float sensitivity);
+	Camera(vec3 position = vec3(0.0f), float speed = 3.0f, float sensitivity = 0.1f);
 
 	glm::mat4 GetViewMatrix();
 

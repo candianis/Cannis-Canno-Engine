@@ -1,27 +1,18 @@
 #include "Camera.h"
 
-Camera::Camera(vec3 position, float speed, float sensitivity) {
+Camera::Camera(vec3 position, float speed, float sensitivity) : yaw(90.0f), pitch(0.0f), front(0.0f, 0.0f, -1.0f), up(0.0f, 1.0f, 0.0f), camMovement(NONE) {
 	this->position = position;
 	this->speed = speed;
 	this->sensitivity = sensitivity;
 
-	this->up = vec3(0.0f, 1.0f, 0.0f);
-	this->front = vec3(0.0f, 0.0f, -1.0f);
-
-	yaw = -90.0f;
-	pitch = 0.0f;
 	UpdateVectors();
-
-	camMovement = CameraMovement::NONE;
 }
 
-glm::mat4 Camera::GetViewMatrix()
-{
+glm::mat4 Camera::GetViewMatrix() {
 	return glm::lookAt(position, position + front, up);
 }
 
-void Camera::MoveCamera(CameraMovement direction, double delta)
-{
+void Camera::MoveCamera(CameraMovement direction, double delta) {
 	float modifiedSpeed = static_cast<float>(speed * delta);
 	switch (direction) {
 		case FORWARD:
@@ -40,21 +31,24 @@ void Camera::MoveCamera(CameraMovement direction, double delta)
 	}
 }
 
-void Camera::RotateCamera(float xOffset, float yOffset)
-{
+void Camera::RotateCamera(float xOffset, float yOffset) {
 	xOffset *= sensitivity;
 	yOffset *= sensitivity;
 
 	yaw += xOffset;
 	pitch += yOffset;
 
+	if (pitch > 89.0f)
+		pitch = 89.0f;
+	if (pitch < -89.0f)
+		pitch = -89.0f;
+
 	UpdateVectors();
 }
 
-void Camera::UpdateVectors()
-{
+void Camera::UpdateVectors() {
 	glm::vec3 newFront;
-	newFront.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+	newFront.x = cos(glm::radians(yaw))* cos(glm::radians(pitch));
 	newFront.y = sin(glm::radians(pitch));
 	newFront.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 	this->front = glm::normalize(newFront);

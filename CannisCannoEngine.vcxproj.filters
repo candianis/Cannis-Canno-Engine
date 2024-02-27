@@ -1289,5 +1289,7 @@
     <None Include="src\Shaders\Vertex\test.vert" />
     <None Include="src\Shaders\Fragment\light_cube.frag" />
     <None Include="src\Shaders\Vertex\light_cube.vert" />
+    <None Include="src\Shaders\Fragment\basic_light.frag" />
+    <None Include="src\Shaders\Vertex\basic_light.vert" />
   </ItemGroup>
 </Project>

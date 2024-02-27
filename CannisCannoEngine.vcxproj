@@ -573,8 +573,10 @@
     <None Include="Libraries\include\glm\gtx\vector_angle.inl" />
     <None Include="Libraries\include\glm\gtx\vector_query.inl" />
     <None Include="Libraries\include\glm\gtx\wrap.inl" />
+    <None Include="src\Shaders\Fragment\basic_light.frag" />
     <None Include="src\Shaders\Fragment\light_cube.frag" />
     <None Include="src\Shaders\Fragment\test.frag" />
+    <None Include="src\Shaders\Vertex\basic_light.vert" />
     <None Include="src\Shaders\Vertex\light_cube.vert" />
     <None Include="src\Shaders\Vertex\test.vert" />
   </ItemGroup>

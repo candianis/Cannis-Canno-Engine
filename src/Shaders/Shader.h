@@ -41,6 +41,8 @@ public:
 	/**/
 	void SetVec3(const string& name, float x, float y, float z) const;
 	/**/
+	void SetMatrix3(const string& name, glm::mat3& values) const;
+	/**/
 	void SetMatrix4(const string& name, glm::mat4& values) const;
 
 private:
