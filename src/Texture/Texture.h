@@ -21,6 +21,8 @@ public:
 	void Bind();
 	/*@brief Unbinds this texture from OpenGL*/
 	void UnBind();
+	/*Asks OpenGL to safely delete this texture*/
+	void Delete();
 	int GetWidth() const;
 	int GetHeight() const;
 

@@ -28,7 +28,7 @@ void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 /**/
 void processInput(GLFWwindow* window, double delta, Camera* camera);
 /**/
-void update(double delta, Shader* lighting, Shader* lightCube, Camera* camera, Texture* texture);
+void update(double delta, Shader* lighting, Shader* lightCube, Camera* camera, Texture* texture, Texture* specular, Texture* emission);
 /**/
 void render(GLFWwindow* window, Shader* lighting, Shader* lightCube, const unsigned int cubeVAO, const unsigned int lightCubeVAO);
 /**/
@@ -173,6 +173,12 @@ int main()
     Texture woodenCrateTexture("wooden_container.png");
     lightingShader.SetInt("material.diffuse", 0);
 
+    Texture specularMap("wooden_container_specular.png");
+    lightingShader.SetInt("material.specular", 1);
+
+    Texture emissionMap("wooden_container_emission.jpg", GL_CLAMP_TO_BORDER);
+    lightingShader.SetInt("material.emission", 2);
+
     //Engine loop
     double lastTime = glfwGetTime();
     while (!glfwWindowShouldClose(window))
@@ -181,13 +187,16 @@ int main()
         double delta = current - lastTime;
 
         processInput(window, delta, &mainCamera);
-        update(delta, &lightingShader, &lightCubeShader, &mainCamera, &woodenCrateTexture);
+        update(delta, &lightingShader, &lightCubeShader, &mainCamera, &woodenCrateTexture, &specularMap, &emissionMap);
         render(window, &lightingShader, &lightCubeShader, cubeVAO, lightCubeVAO);
 
         lastTime = current;
     }
 
     //Deallocation of all resources
+    woodenCrateTexture.Delete();
+    specularMap.Delete();
+    emissionMap.Delete();
     glDeleteVertexArrays(1, &cubeVAO);
     glDeleteBuffers(1, &VBO);
     lightingShader.~Shader();
@@ -222,7 +231,7 @@ void processInput(GLFWwindow* window, double delta, Camera* camera) {
         camera->MoveCamera(LEFT, delta);
 }
 
-void update(double delta, Shader* lighting, Shader* lightCube, Camera* camera, Texture* texture) {
+void update(double delta, Shader* lighting, Shader* lightCube, Camera* camera, Texture* texture, Texture* specular, Texture* emission) {
     mat4 model = mat4(1.0f);
 
     //Transpose and inverse the model so that it is calculated only once and not for each vertex
@@ -264,10 +273,16 @@ void update(double delta, Shader* lighting, Shader* lightCube, Camera* camera, T
 
     glActiveTexture(GL_TEXTURE0);
     texture->Bind();
+
+    glActiveTexture(GL_TEXTURE1);
+    specular->Bind();
+
+    glActiveTexture(GL_TEXTURE2);
+    emission->Bind();
 }
 
 void render(GLFWwindow* window, Shader* lighting, Shader* lightCube, const unsigned int cubeVAO, const unsigned int lightCubeVAO) {
-    glClearColor(0.3f, 0.3f, 1.0f, 1.0f);
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     //We clear the zbuffer as the model will change coordinates each cycle
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
