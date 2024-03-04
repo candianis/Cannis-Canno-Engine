@@ -17,7 +17,10 @@ public:
 	Texture(const string fileName, GLenum textureWrapping = GL_REPEAT);
 	~Texture() = default;
 
-	void Use();
+	/*@brief Binds this texture as the currently active texture object*/
+	void Bind();
+	/*@brief Unbinds this texture from OpenGL*/
+	void UnBind();
 	int GetWidth() const;
 	int GetHeight() const;
 
@@ -27,11 +30,12 @@ private:
 	//Image components in the file such as red|green|blue|alpha or grey|alpha
 	int channelsInFile;
 
-	/*@returns returns the appropiate format in GLenum according to the image type in a string
-	  @brief string The type of the image such as jpg or png. GLenum */
-	std::map<string, GLenum> imageTypeFormat = {
-		{ "jpg", GL_RGB},
-		{ "png", GL_RGBA}
+	/*@returns The appropiate format in GLenum according to the image's channels
+	  @brief The type of the image such as jpg or png. GLenum */
+	std::map<int, GLenum> imageTypeFormat = {
+		{ 1, GL_RED},
+		{ 3, GL_RGB},
+		{ 4, GL_RGBA}
 	};
 
 };

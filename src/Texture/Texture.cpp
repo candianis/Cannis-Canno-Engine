@@ -7,17 +7,6 @@
 
 Texture::Texture(const string fileName, GLenum textureWrapping) {
     glGenTextures(1, &ID);
-    //Bind the generate texture so that a texture image and a mipmap is assigned to it
-    glBindTexture(GL_TEXTURE_2D, ID);
-
-    //Set texture wrappings to GL_REPEAT
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, textureWrapping);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, textureWrapping);
-
-    //When scaling a texture downwards, we linearly interpolate the two closest mipmaps
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    //When scaling a texture upwards, bilinear filtering will be used
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     string filePath = "./Assets/Textures/" + fileName;
     unsigned char* data = stbi_load(filePath.c_str(), &width, &height, &channelsInFile, 0);
@@ -25,9 +14,21 @@ Texture::Texture(const string fileName, GLenum textureWrapping) {
     if (data) {
         string fileType = fileName.substr(fileName.find(".") + 1);
         
+        //Bind the generate texture so that a texture image and a mipmap is assigned to it
+        glBindTexture(GL_TEXTURE_2D, ID);
+
         //The second zero or the sixth parameter should always be 0
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, imageTypeFormat[fileType], GL_UNSIGNED_BYTE, data);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, imageTypeFormat[channelsInFile], GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
+
+        //Set texture wrappings to GL_REPEAT
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, textureWrapping);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, textureWrapping);
+
+        //When scaling a texture downwards, we linearly interpolate the two closest mipmaps
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        //When scaling a texture upwards, bilinear filtering will be used
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     }
 
     else {
@@ -46,8 +47,13 @@ Texture::Texture(const string fileName, GLenum textureWrapping) {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture::Use() {
+void Texture::Bind() {
     glBindTexture(GL_TEXTURE_2D, ID);
+}
+
+void Texture::UnBind()
+{
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 int Texture::GetWidth() const {
