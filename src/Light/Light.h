@@ -12,6 +12,6 @@ public:
 
 private:
 	glm::vec3 lightColor;
-
+	 
 };
 

@@ -18,7 +18,20 @@ const float fieldOfView = 45.0f;
 bool firstMouse;
 float lastX, lastY;
 Camera mainCamera(vec3(0.0f, 0.0f, -5.0f));
-vec3 lightPos = vec3(1.2f, 1.0f, 2.0f);
+vec3 lightPos = vec3(-0.2f, -1.0f, -0.3f);
+
+glm::vec3 cubePositions[] = {
+    glm::vec3(0.0f,  0.0f,  0.0f),
+    glm::vec3(2.0f,  5.0f, -15.0f),
+    glm::vec3(-1.5f, -2.2f, -2.5f),
+    glm::vec3(-3.8f, -2.0f, -12.3f),
+    glm::vec3(2.4f, -0.4f, -3.5f),
+    glm::vec3(-1.7f,  3.0f, -7.5f),
+    glm::vec3(1.3f, -2.0f, -2.5f),
+    glm::vec3(1.5f,  2.0f, -2.5f),
+    glm::vec3(1.5f,  0.2f, -1.5f),
+    glm::vec3(-1.3f,  1.0f, -1.5f)
+};
 
 using glm::vec3;
 using glm::mat4;
@@ -28,7 +41,7 @@ void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 /**/
 void processInput(GLFWwindow* window, double delta, Camera* camera);
 /**/
-void update(double delta, Shader* lighting, Shader* lightCube, Camera* camera, Texture* texture, Texture* specular, Texture* emission);
+void update(double delta, Shader* lighting, Camera* camera, Texture* texture, Texture* specular, Texture* emission);
 /**/
 void render(GLFWwindow* window, Shader* lighting, Shader* lightCube, const unsigned int cubeVAO, const unsigned int lightCubeVAO);
 /**/
@@ -164,7 +177,7 @@ int main()
     lightingShader.SetFloat("material.shininess", 64.0f);
 
     //Set the light's values as uniforms
-    lightingShader.SetVec3("light.position", lightPos);
+    lightingShader.SetVec3("light.direction", lightPos);
     lightingShader.SetVec3("light.ambient", 0.2f, 0.2f, 0.2f);
     lightingShader.SetVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
     lightingShader.SetVec3("light.specular", 1.0f, 1.0f, 1.0f);
@@ -187,7 +200,7 @@ int main()
         double delta = current - lastTime;
 
         processInput(window, delta, &mainCamera);
-        update(delta, &lightingShader, &lightCubeShader, &mainCamera, &woodenCrateTexture, &specularMap, &emissionMap);
+        update(delta, &lightingShader, &mainCamera, &woodenCrateTexture, &specularMap, &emissionMap);
         render(window, &lightingShader, &lightCubeShader, cubeVAO, lightCubeVAO);
 
         lastTime = current;
@@ -231,7 +244,7 @@ void processInput(GLFWwindow* window, double delta, Camera* camera) {
         camera->MoveCamera(LEFT, delta);
 }
 
-void update(double delta, Shader* lighting, Shader* lightCube, Camera* camera, Texture* texture, Texture* specular, Texture* emission) {
+void update(double delta, Shader* lighting, Camera* camera, Texture* texture, Texture* specular, Texture* emission) {
     mat4 model = mat4(1.0f);
 
     //Transpose and inverse the model so that it is calculated only once and not for each vertex
@@ -254,22 +267,13 @@ void update(double delta, Shader* lighting, Shader* lightCube, Camera* camera, T
     lighting->SetMatrix4("view", view);
     lighting->SetMatrix4("projection", projection);
 
-    float lightX = 2.0f * sin(glfwGetTime());
+    float lightX = 2.0f * static_cast<float>(sin(glfwGetTime()));
     float lightY = -0.3f;
-    float lightZ = 1.5f * cos(glfwGetTime());
+    float lightZ = 1.5f * static_cast<float>(cos(glfwGetTime()));
     lightPos = glm::vec3(lightX, lightY, lightZ);
 
     // send light position to lightingShader
     lighting->SetVec3("light.position", lightPos);
-
-    lightCube->Use();
-    lightCube->SetMatrix4("projection", projection);
-    lightCube->SetMatrix4("view", view);
-
-
-    model = glm::translate(model, lightPos);
-    model = glm::scale(model, vec3(0.2f));
-    lightCube->SetMatrix4("model", model);
 
     glActiveTexture(GL_TEXTURE0);
     texture->Bind();
@@ -286,12 +290,22 @@ void render(GLFWwindow* window, Shader* lighting, Shader* lightCube, const unsig
     //We clear the zbuffer as the model will change coordinates each cycle
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    for (unsigned int i = 0; i < 10; i++)
+    {
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::scale(model, vec3(0.2f));
+        model = glm::translate(model, cubePositions[i]);
+        float angle = 20.0f * i;
+        model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+        lighting->SetMatrix4("model", model);
+        glm::mat3 inverse = glm::transpose(glm::inverse(model));
+        lighting->SetMatrix3("inverseModel", inverse);
+
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+    }
+
     lighting->Use();
     glBindVertexArray(cubeVAO);
-    glDrawArrays(GL_TRIANGLES, 0, 36);
-
-    lightCube->Use();
-    glBindVertexArray(lightCubeVAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
 
     glfwSwapBuffers(window);
