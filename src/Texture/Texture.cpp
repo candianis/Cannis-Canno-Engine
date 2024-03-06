@@ -26,7 +26,7 @@ Texture::Texture(const string fileName, GLenum textureWrapping) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, textureWrapping);
 
         //When scaling a texture downwards, we linearly interpolate the two closest mipmaps
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         //When scaling a texture upwards, bilinear filtering will be used
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     }
@@ -47,24 +47,24 @@ Texture::Texture(const string fileName, GLenum textureWrapping) {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture::Bind() {
+void Texture::bind() {
     glBindTexture(GL_TEXTURE_2D, ID);
 }
 
-void Texture::UnBind()
+void Texture::unbind()
 {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture::Delete()
+void Texture::cleanUp()
 {
     glDeleteTextures(1, &ID);
 }
 
-int Texture::GetWidth() const {
+int Texture::getWidth() const {
     return width;
 }
 
-int Texture::GetHeight() const {
+int Texture::getHeight() const {
     return height;
 }

@@ -36,12 +36,12 @@ public:
 
 	Camera(vec3 position = vec3(0.0f), float speed = 3.0f, float sensitivity = 0.1f);
 
-	glm::mat4 GetViewMatrix();
+	glm::mat4 getViewMatrix();
 
-	void MoveCamera(CameraMovement direction, double delta);
-	void RotateCamera(float xOffset, float yOffset);
+	void moveCamera(CameraMovement direction, double delta);
+	void rotateCamera(float xOffset, float yOffset);
 
 private: 
-	void UpdateVectors();
+	void updateVectors();
 };
 

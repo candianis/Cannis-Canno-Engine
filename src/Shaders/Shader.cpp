@@ -24,42 +24,42 @@ Shader::~Shader()
 	glDeleteProgram(ID);
 }
 
-void Shader::Use()
+void Shader::use()
 {
 	glUseProgram(ID);
 }
 
-void Shader::SetBool(const string& name, bool value) const
+void Shader::setBool(const string& name, bool value) const
 {
 	glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
 }
 
-void Shader::SetInt(const string& name, int value) const
+void Shader::setInt(const string& name, int value) const
 {
 	glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
 }
 
-void Shader::SetFloat(const string& name, float value) const
+void Shader::setFloat(const string& name, float value) const
 {
 	glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
 }
 
-void Shader::SetVec3(const string& name, const glm::vec3& value) const
+void Shader::setVec3(const string& name, const glm::vec3& value) const
 {
 	glUniform3f(glGetUniformLocation(ID, name.c_str()), value.x, value.y, value.z);
 }
 
-void Shader::SetVec3(const string& name, float x, float y, float z) const
+void Shader::setVec3(const string& name, float x, float y, float z) const
 {
 	glUniform3f(glGetUniformLocation(ID, name.c_str()), x, y, z);
 }
 
-void Shader::SetMatrix3(const string& name, glm::mat3& values) const
+void Shader::setMatrix3(const string& name, glm::mat3& values) const
 {
 	glUniformMatrix3fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(values));
 }
 
-void Shader::SetMatrix4(const string& name, glm::mat4& values) const
+void Shader::setMatrix4(const string& name, glm::mat4& values) const
 {
 	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(values));
 }

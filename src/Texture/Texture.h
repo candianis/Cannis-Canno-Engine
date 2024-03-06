@@ -18,13 +18,13 @@ public:
 	~Texture() = default;
 
 	/*@brief Binds this texture as the currently active texture object*/
-	void Bind();
+	void bind();
 	/*@brief Unbinds this texture from OpenGL*/
-	void UnBind();
+	void unbind();
 	/*Asks OpenGL to safely delete this texture*/
-	void Delete();
-	int GetWidth() const;
-	int GetHeight() const;
+	void cleanUp();
+	int getWidth() const;
+	int getHeight() const;
 
 private:
 	int width;

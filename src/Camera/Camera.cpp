@@ -5,14 +5,14 @@ Camera::Camera(vec3 position, float speed, float sensitivity) : yaw(90.0f), pitc
 	this->speed = speed;
 	this->sensitivity = sensitivity;
 
-	UpdateVectors();
+	updateVectors();
 }
 
-glm::mat4 Camera::GetViewMatrix() {
+glm::mat4 Camera::getViewMatrix() {
 	return glm::lookAt(position, position + front, up);
 }
 
-void Camera::MoveCamera(CameraMovement direction, double delta) {
+void Camera::moveCamera(CameraMovement direction, double delta) {
 	float modifiedSpeed = static_cast<float>(speed * delta);
 	switch (direction) {
 		case FORWARD:
@@ -31,7 +31,7 @@ void Camera::MoveCamera(CameraMovement direction, double delta) {
 	}
 }
 
-void Camera::RotateCamera(float xOffset, float yOffset) {
+void Camera::rotateCamera(float xOffset, float yOffset) {
 	xOffset *= sensitivity;
 	yOffset *= sensitivity;
 
@@ -43,10 +43,10 @@ void Camera::RotateCamera(float xOffset, float yOffset) {
 	if (pitch < -89.0f)
 		pitch = -89.0f;
 
-	UpdateVectors();
+	updateVectors();
 }
 
-void Camera::UpdateVectors() {
+void Camera::updateVectors() {
 	glm::vec3 newFront;
 	newFront.x = cos(glm::radians(yaw))* cos(glm::radians(pitch));
 	newFront.y = sin(glm::radians(pitch));

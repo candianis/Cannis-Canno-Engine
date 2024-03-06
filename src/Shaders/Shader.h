@@ -28,22 +28,22 @@ public:
 	~Shader(); 
 
 	/**/
-	void Use();
+	void use();
 
 	/**/
-	void SetBool(const string& name, bool value) const;
+	void setBool(const string& name, bool value) const;
 	/**/
-	void SetInt(const string& name, int value) const;
+	void setInt(const string& name, int value) const;
 	/**/
-	void SetFloat(const string& name, float value) const;
+	void setFloat(const string& name, float value) const;
 	/**/
-	void SetVec3(const string& name, const glm::vec3& value) const;
+	void setVec3(const string& name, const glm::vec3& value) const;
 	/**/
-	void SetVec3(const string& name, float x, float y, float z) const;
+	void setVec3(const string& name, float x, float y, float z) const;
 	/**/
-	void SetMatrix3(const string& name, glm::mat3& values) const;
+	void setMatrix3(const string& name, glm::mat3& values) const;
 	/**/
-	void SetMatrix4(const string& name, glm::mat4& values) const;
+	void setMatrix4(const string& name, glm::mat4& values) const;
 
 private:
 	/*@brief */

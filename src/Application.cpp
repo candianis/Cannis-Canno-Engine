@@ -17,8 +17,8 @@ const int screen_height = 768;
 const float fieldOfView = 45.0f;
 bool firstMouse;
 float lastX, lastY;
-Camera mainCamera(vec3(0.0f, 0.0f, -5.0f));
-vec3 lightPos = vec3(-0.2f, -1.0f, -0.3f);
+Camera mainCamera(vec3(0.0f, 0.0f, 3.0f));
+vec3 globalLightDirection = vec3(1.2f, 1.0f, 2.0f);
 
 glm::vec3 cubePositions[] = {
     glm::vec3(0.0f,  0.0f,  0.0f),
@@ -33,6 +33,13 @@ glm::vec3 cubePositions[] = {
     glm::vec3(-1.3f,  1.0f, -1.5f)
 };
 
+glm::vec3 pointLightPositions[] = {
+    glm::vec3(0.7f,  0.2f,  2.0f),
+    glm::vec3(2.3f, -3.3f, -4.0f),
+    glm::vec3(-4.0f,  2.0f, -12.0f),
+    glm::vec3(0.0f,  0.0f, -3.0f)
+};
+
 using glm::vec3;
 using glm::mat4;
 
@@ -41,11 +48,11 @@ void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 /**/
 void processInput(GLFWwindow* window, double delta, Camera* camera);
 /**/
-void update(double delta, Shader* lighting, Camera* camera, Texture* texture, Texture* specular, Texture* emission);
+void update(double delta, Shader* lighting, Shader* lightCubeShader, Camera* camera, Texture* texture, Texture* specular, Texture* emission);
 /**/
 void render(GLFWwindow* window, Shader* lighting, Shader* lightCube, const unsigned int cubeVAO, const unsigned int lightCubeVAO);
 /**/
-void MouseCallback(GLFWwindow* window, double xposIn, double yposIn);
+void mouseCallback(GLFWwindow* window, double xposIn, double yposIn);
 
 
 int main()
@@ -65,7 +72,7 @@ int main()
 
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
-    glfwSetCursorPosCallback(window, MouseCallback);
+    glfwSetCursorPosCallback(window, mouseCallback);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
@@ -166,31 +173,60 @@ int main()
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertexSize * sizeof(float), (void*)0);
 
-    //Scene colors
-    vec3 objectColor = vec3(1.0f, 0.5f, 0.31f);
-    vec3 lightColor = vec3(1.0f, 1.0f, 1.0f);
-
-    lightingShader.Use();
-
-    //Set the material's values as uniforms
-    lightingShader.SetVec3("material.specular", vec3(0.5f, 0.5f, 0.5f));
-    lightingShader.SetFloat("material.shininess", 64.0f);
+    lightingShader.use();
 
     //Set the light's values as uniforms
-    lightingShader.SetVec3("light.direction", lightPos);
-    lightingShader.SetVec3("light.ambient", 0.2f, 0.2f, 0.2f);
-    lightingShader.SetVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
-    lightingShader.SetVec3("light.specular", 1.0f, 1.0f, 1.0f);
+       // directional light
+    lightingShader.setVec3("dirLight.direction", globalLightDirection);
+    lightingShader.setVec3("dirLight.ambient", 0.05f, 0.05f, 0.05f);
+    lightingShader.setVec3("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
+    lightingShader.setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
+
+    // point light 1
+    lightingShader.setVec3("pointLights[0].position", pointLightPositions[0]);
+    lightingShader.setVec3("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
+    lightingShader.setVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
+    lightingShader.setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+    lightingShader.setFloat("pointLights[0].constant", 1.0f);
+    lightingShader.setFloat("pointLights[0].linear", 0.09f);
+    lightingShader.setFloat("pointLights[0].quadratic", 0.032f);
+    // point light 2
+    lightingShader.setVec3("pointLights[1].position", pointLightPositions[1]);
+    lightingShader.setVec3("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
+    lightingShader.setVec3("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
+    lightingShader.setVec3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
+    lightingShader.setFloat("pointLights[1].constant", 1.0f);
+    lightingShader.setFloat("pointLights[1].linear", 0.09f);
+    lightingShader.setFloat("pointLights[1].quadratic", 0.032f);
+    // point light 3
+    lightingShader.setVec3("pointLights[2].position", pointLightPositions[2]);
+    lightingShader.setVec3("pointLights[2].ambient", 0.05f, 0.05f, 0.05f);
+    lightingShader.setVec3("pointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
+    lightingShader.setVec3("pointLights[2].specular", 1.0f, 1.0f, 1.0f);
+    lightingShader.setFloat("pointLights[2].constant", 1.0f);
+    lightingShader.setFloat("pointLights[2].linear", 0.09f);
+    lightingShader.setFloat("pointLights[2].quadratic", 0.032f);
+    // point light 4
+    lightingShader.setVec3("pointLights[3].position", pointLightPositions[3]);
+    lightingShader.setVec3("pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
+    lightingShader.setVec3("pointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
+    lightingShader.setVec3("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
+    lightingShader.setFloat("pointLights[3].constant", 1.0f);
+    lightingShader.setFloat("pointLights[3].linear", 0.09f);
+    lightingShader.setFloat("pointLights[3].quadratic", 0.032f);
 
     //Textures 
     Texture woodenCrateTexture("wooden_container.png");
-    lightingShader.SetInt("material.diffuse", 0);
+    lightingShader.setInt("material.diffuse", 0);
 
     Texture specularMap("wooden_container_specular.png");
-    lightingShader.SetInt("material.specular", 1);
+    lightingShader.setInt("material.specular", 1);
 
     Texture emissionMap("wooden_container_emission.jpg", GL_CLAMP_TO_BORDER);
-    lightingShader.SetInt("material.emission", 2);
+    lightingShader.setInt("material.emission", 2);
+
+    //Set the material's values as uniforms
+    lightingShader.setFloat("material.shininess", 32.0f);
 
     //Engine loop
     double lastTime = glfwGetTime();
@@ -200,16 +236,16 @@ int main()
         double delta = current - lastTime;
 
         processInput(window, delta, &mainCamera);
-        update(delta, &lightingShader, &mainCamera, &woodenCrateTexture, &specularMap, &emissionMap);
+        update(delta, &lightingShader, &lightCubeShader, &mainCamera, &woodenCrateTexture, &specularMap, &emissionMap);
         render(window, &lightingShader, &lightCubeShader, cubeVAO, lightCubeVAO);
 
         lastTime = current;
     }
 
     //Deallocation of all resources
-    woodenCrateTexture.Delete();
-    specularMap.Delete();
-    emissionMap.Delete();
+    woodenCrateTexture.cleanUp();
+    specularMap.cleanUp();
+    emissionMap.cleanUp();
     glDeleteVertexArrays(1, &cubeVAO);
     glDeleteBuffers(1, &VBO);
     lightingShader.~Shader();
@@ -232,57 +268,48 @@ void processInput(GLFWwindow* window, double delta, Camera* camera) {
     }
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera->MoveCamera(FORWARD, delta);
+        camera->moveCamera(FORWARD, delta);
 
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera->MoveCamera(BACKWARD, delta);
+        camera->moveCamera(BACKWARD, delta);
 
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera->MoveCamera(RIGHT, delta);
+        camera->moveCamera(RIGHT, delta);
 
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera->MoveCamera(LEFT, delta);
+        camera->moveCamera(LEFT, delta);
 }
 
-void update(double delta, Shader* lighting, Camera* camera, Texture* texture, Texture* specular, Texture* emission) {
-    mat4 model = mat4(1.0f);
+void update(double delta, Shader* lighting, Shader* lightCube, Camera* camera, Texture* texture, Texture* specular, Texture* emission) {
+    lighting->use();
+    lighting->setVec3("viewPos", camera->position);
+    lighting->setVec3("dirLight.position", globalLightDirection);
 
-    //Transpose and inverse the model so that it is calculated only once and not for each vertex
-    glm::mat3 inverse = glm::transpose(glm::inverse(model));
+    mat4 model = mat4(1.0f);
+    lighting->setMatrix4("model", model);
 
     //the camera coordinates
     mat4 view = mat4(1.0f);
-    view = camera->GetViewMatrix();
+    view = camera->getViewMatrix();
+    lighting->setMatrix4("view", view);
 
     //We assign the world camera to use projection perspective
     mat4 projection = mat4(1.0f);
     projection = glm::perspective(glm::radians(fieldOfView), float(screen_width / screen_width), 0.1f, 100.0f);
-
-    lighting->Use();
-    lighting->SetVec3("viewPos", camera->position);
-
-    lighting->SetMatrix4("model", model);
-    lighting->SetMatrix3("inverseModel", inverse);
-
-    lighting->SetMatrix4("view", view);
-    lighting->SetMatrix4("projection", projection);
-
-    float lightX = 2.0f * static_cast<float>(sin(glfwGetTime()));
-    float lightY = -0.3f;
-    float lightZ = 1.5f * static_cast<float>(cos(glfwGetTime()));
-    lightPos = glm::vec3(lightX, lightY, lightZ);
-
-    // send light position to lightingShader
-    lighting->SetVec3("light.position", lightPos);
+    lighting->setMatrix4("projection", projection);
 
     glActiveTexture(GL_TEXTURE0);
-    texture->Bind();
+    texture->bind();
 
     glActiveTexture(GL_TEXTURE1);
-    specular->Bind();
+    specular->bind();
 
     glActiveTexture(GL_TEXTURE2);
-    emission->Bind();
+    emission->bind();
+
+    lightCube->use();
+    lightCube->setMatrix4("projection", projection);
+    lightCube->setMatrix4("view", view);
 }
 
 void render(GLFWwindow* window, Shader* lighting, Shader* lightCube, const unsigned int cubeVAO, const unsigned int lightCubeVAO) {
@@ -290,29 +317,37 @@ void render(GLFWwindow* window, Shader* lighting, Shader* lightCube, const unsig
     //We clear the zbuffer as the model will change coordinates each cycle
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    for (unsigned int i = 0; i < 10; i++)
+    lighting->use();
+    glBindVertexArray(cubeVAO);
+    for (size_t i = 0; i < 10; i++)
     {
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::scale(model, vec3(0.2f));
         model = glm::translate(model, cubePositions[i]);
         float angle = 20.0f * i;
         model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-        lighting->SetMatrix4("model", model);
+        lighting->setMatrix4("model", model);
         glm::mat3 inverse = glm::transpose(glm::inverse(model));
-        lighting->SetMatrix3("inverseModel", inverse);
+        lighting->setMatrix3("inverseModel", inverse);
 
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        glDrawArrays(GL_TRIANGLES, 0, 36);  
     }
 
-    lighting->Use();
-    glBindVertexArray(cubeVAO);
-    glDrawArrays(GL_TRIANGLES, 0, 36);
+    lightCube->use();
+    glBindVertexArray(lightCubeVAO);
+    for (size_t i = 0; i < 4; i++) {
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, pointLightPositions[i]);
+        model = glm::scale(model, vec3(0.2f));
+        lightCube->setMatrix4("model", model);
+        
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+    }
 
     glfwSwapBuffers(window);
     glfwPollEvents();
 }
 
-void MouseCallback(GLFWwindow* window, double xposIn, double yposIn)
+void mouseCallback(GLFWwindow* window, double xposIn, double yposIn)
 {
     float xpos = static_cast<float>(xposIn);
     float ypos = static_cast<float>(yposIn);
@@ -330,5 +365,5 @@ void MouseCallback(GLFWwindow* window, double xposIn, double yposIn)
     lastX = xpos;
     lastY = ypos;
 
-    mainCamera.RotateCamera(xoffset, yoffset);
+    mainCamera.rotateCamera(xoffset, yoffset);
 }
