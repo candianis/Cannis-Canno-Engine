@@ -5,25 +5,26 @@
 #define STBI_FAILURE_USERMSG
 #include <stb/stb_image.h>
 
-Texture::Texture(const string fileName, GLenum textureWrapping) {
+Texture::Texture(const string& p_fileName, GLenum p_textureWrapping) : type(None) {
     glGenTextures(1, &ID);
 
-    string filePath = "./Assets/Textures/" + fileName;
-    unsigned char* data = stbi_load(filePath.c_str(), &width, &height, &channelsInFile, 0);
+    string filePath = "./Assets/Textures/" + p_fileName;
+    this->filePath = filePath;
+    unsigned char* data = stbi_load(filePath.c_str(), &m_width, &m_height, &m_channelsInFile, 0);
 
     if (data) {
-        string fileType = fileName.substr(fileName.find(".") + 1);
+        string fileType = p_fileName.substr(p_fileName.find(".") + 1);
         
         //Bind the generate texture so that a texture image and a mipmap is assigned to it
         glBindTexture(GL_TEXTURE_2D, ID);
 
         //The second zero or the sixth parameter should always be 0
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, imageTypeFormat[channelsInFile], GL_UNSIGNED_BYTE, data);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_width, m_height, 0, m_imageTypeFormat[m_channelsInFile], GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
 
         //Set texture wrappings to GL_REPEAT
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, textureWrapping);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, textureWrapping);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, p_textureWrapping);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, p_textureWrapping);
 
         //When scaling a texture downwards, we linearly interpolate the two closest mipmaps
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
@@ -34,9 +35,9 @@ Texture::Texture(const string fileName, GLenum textureWrapping) {
     else {
         std::cout << "ERROR::TEXTURE::FILE_NOT_FOUND\n" << stbi_failure_reason() << std::endl;
         stbi_image_free(data);
-        data = stbi_load("./Assets/Textures/default.jpg", &width, &height, &channelsInFile, 0);
+        data = stbi_load("./Assets/Textures/default.jpg", &m_width, &m_height, &m_channelsInFile, 0);
         if (data) {
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_width, m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
         }
         else {
             std::cout << "ERROR::TEXTURE::DEFAULT_TEXTURE_NOT_FOUND\n" << stbi_failure_reason() << std::endl;
@@ -47,24 +48,22 @@ Texture::Texture(const string fileName, GLenum textureWrapping) {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture::bind() {
+void Texture::bind() const {
     glBindTexture(GL_TEXTURE_2D, ID);
 }
 
-void Texture::unbind()
-{
+void Texture::unbind() const {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture::cleanUp()
-{
+void Texture::cleanUp() const {
     glDeleteTextures(1, &ID);
 }
 
 int Texture::getWidth() const {
-    return width;
+    return m_width;
 }
 
 int Texture::getHeight() const {
-    return height;
+    return m_height;
 }

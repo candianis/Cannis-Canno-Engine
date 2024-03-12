@@ -1,14 +1,15 @@
 #include "Shader.h"
 
-Shader::Shader(const char* vertexPath, const char* fragmentPath)
-{
-	string* vertCode = GetSourceCode(vertexPath);
-	string* fragCode = GetSourceCode(fragmentPath);
+using Cannis::Shader;
 
-	unsigned int vertexShader = CreateShader(vertCode->c_str(), GL_VERTEX_SHADER);
-	unsigned int fragmentShader = CreateShader(fragCode->c_str(), GL_FRAGMENT_SHADER);
+Shader::Shader(const char* vertexPath, const char* fragmentPath) {
+	string* vertCode = getSourceCode(vertexPath);
+	string* fragCode = getSourceCode(fragmentPath);
 
-	CreateProgram(vertexShader, fragmentShader);
+	unsigned int vertexShader = createShader(vertCode->c_str(), GL_VERTEX_SHADER);
+	unsigned int fragmentShader = createShader(fragCode->c_str(), GL_FRAGMENT_SHADER);
+
+	createProgram(vertexShader, fragmentShader);
 
 	// delete the shaders as they're linked into our program now and no longer necessary
 	glDeleteShader(vertexShader);
@@ -19,52 +20,43 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 	delete(fragCode);
 }
 
-Shader::~Shader()
-{
+Shader::~Shader() {
 	glDeleteProgram(ID);
 }
 
-void Shader::use()
-{
+void Shader::use() {
 	glUseProgram(ID);
 }
 
-void Shader::setBool(const string& name, bool value) const
-{
+void Shader::setBool(const string& name, bool value) const {
 	glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
 }
 
-void Shader::setInt(const string& name, int value) const
-{
+void Shader::setInt(const string& name, int value) const {
 	glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
 }
 
-void Shader::setFloat(const string& name, float value) const
-{
+void Shader::setFloat(const string& name, float value) const {
 	glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
 }
 
-void Shader::setVec3(const string& name, const glm::vec3& value) const
-{
+void Shader::setVec3(const string& name, const glm::vec3& value) const {
 	glUniform3f(glGetUniformLocation(ID, name.c_str()), value.x, value.y, value.z);
 }
 
-void Shader::setVec3(const string& name, float x, float y, float z) const
-{
+void Shader::setVec3(const string& name, float x, float y, float z) const {
 	glUniform3f(glGetUniformLocation(ID, name.c_str()), x, y, z);
 }
 
-void Shader::setMatrix3(const string& name, glm::mat3& values) const
-{
+void Shader::setMatrix3(const string& name, glm::mat3& values) const {
 	glUniformMatrix3fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(values));
 }
 
-void Shader::setMatrix4(const string& name, glm::mat4& values) const
-{
+void Shader::setMatrix4(const string& name, glm::mat4& values) const {
 	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(values));
 }
 
-string* Shader::GetSourceCode(const char* filePath) {
+string* Shader::getSourceCode(const char* filePath) {
 	string* code = new string();
 	std::ifstream shaderFile;
 
@@ -96,7 +88,7 @@ string* Shader::GetSourceCode(const char* filePath) {
 	return code;
 }
 
-unsigned int Shader::CreateShader(const char* shaderCode, GLenum type) {
+unsigned int Shader::createShader(const char* shaderCode, GLenum type) {
 	unsigned int shader;
 	int success;
 	char infoLog[512];
@@ -116,7 +108,7 @@ unsigned int Shader::CreateShader(const char* shaderCode, GLenum type) {
 	return shader;
 }
 
-void Shader::CreateProgram(unsigned int vertexShader, unsigned int fragmentShader) {
+void Shader::createProgram(unsigned int vertexShader, unsigned int fragmentShader) {
 	ID = glCreateProgram();
 	glAttachShader(ID, vertexShader);
 	glAttachShader(ID, fragmentShader);
@@ -126,8 +118,7 @@ void Shader::CreateProgram(unsigned int vertexShader, unsigned int fragmentShade
 	char infoLog[512];
 
 	glGetProgramiv(ID, GL_LINK_STATUS, &success);
-	if (!success)
-	{
+	if (!success) {
 		glGetProgramInfoLog(ID, 512, NULL, infoLog);
 		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
 	}

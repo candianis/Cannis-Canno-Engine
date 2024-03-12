@@ -71,20 +71,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\Cannis-Canno-Engine\Libraries\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\Cannis-Canno-Engine\Libraries\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>.\Libraries\include;$(IncludePath)</IncludePath>
+    <LibraryPath>.\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..\Cannis-Canno-Engine\Libraries\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\Cannis-Canno-Engine\Libraries\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>.\Libraries\include;$(IncludePath)</IncludePath>
+    <LibraryPath>.\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>..\Cannis-Canno-Engine\Libraries\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\Cannis-Canno-Engine\Libraries\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>.\Libraries\include;$(IncludePath)</IncludePath>
+    <LibraryPath>.\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..\Cannis-Canno-Engine\Libraries\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\Cannis-Canno-Engine\Libraries\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>.\Libraries\include;$(IncludePath)</IncludePath>
+    <LibraryPath>.\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -96,7 +96,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;Assimp/assimp-vc143-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -113,7 +113,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;Assimp/assimp-vc143-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -126,7 +126,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;Assimp/assimp-vc143-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -143,10 +143,12 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;Assimp/assimp-vc143-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Model\Model.cpp" />
+    <ClCompile Include="src\Mesh\Mesh.cpp" />
     <ClCompile Include="src\Light\Light.cpp" />
     <ClCompile Include="src\Camera\Camera.cpp" />
     <ClCompile Include="src\Shaders\Shader.cpp" />
@@ -164,8 +166,12 @@
     <ClCompile Include="Libraries\include\glad\glad.c" />
     <ClCompile Include="src\ECS\System\System.cpp" />
     <ClCompile Include="src\Texture\Texture.cpp" />
+    <ClCompile Include="src\Vertex\Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Libraries\include\assimp\config.h" />
+    <ClInclude Include="src\Model\Model.h" />
+    <ClInclude Include="src\Mesh\Mesh.h" />
     <ClInclude Include="src\Light\Light.h" />
     <ClInclude Include="src\Camera\Camera.h" />
     <ClInclude Include="src\Shaders\Shader.h" />
@@ -437,6 +443,7 @@
     <ClInclude Include="Libraries\include\stb\stb_image.h" />
     <ClInclude Include="src\ECS\System\System.h" />
     <ClInclude Include="src\Texture\Texture.h" />
+    <ClInclude Include="src\Vertex\Vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Libraries\include\glm\detail\func_common.inl" />
@@ -575,9 +582,11 @@
     <None Include="Libraries\include\glm\gtx\wrap.inl" />
     <None Include="src\Shaders\Fragment\basic_light.frag" />
     <None Include="src\Shaders\Fragment\light_cube.frag" />
+    <None Include="src\Shaders\Fragment\model_visual.frag" />
     <None Include="src\Shaders\Fragment\test.frag" />
     <None Include="src\Shaders\Vertex\basic_light.vert" />
     <None Include="src\Shaders\Vertex\light_cube.vert" />
+    <None Include="src\Shaders\Vertex\model_visual.vert" />
     <None Include="src\Shaders\Vertex\test.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

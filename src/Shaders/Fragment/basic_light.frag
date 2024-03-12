@@ -53,7 +53,6 @@ vec3 CalculateSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir
 
 out vec4 FragColor;
 
-
 in vec3 FragPos;
 in vec3 Normal;
 in vec2 TexCoords;
