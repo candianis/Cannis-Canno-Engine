@@ -1,35 +1,50 @@
 #pragma once
 
+#include <glad/glad.h>
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+#include "../Shaders/Shader.h"
+#include "../Texture/Texture.h"
+#include "../Vertex/Vertex.h"
+
+#include <string>
 #include <vector>
 
-#include "../Vertex/Vertex.h"
-#include "../Texture/Texture.h"
-#include "../Shaders/Shader.h"
+using Cannis::Shader;
+using Cannis::Texture;
+using Cannis::Vertex;
 
 using std::vector;
 using std::string;
 
 namespace Cannis {
-	class Mesh {
-		public:
-			vector<Vertex> vertices;
-			vector<unsigned int> indices;
-			vector<Texture> textures;
+    class Mesh {
+    public:
+        // mesh Data
+        vector<Vertex> vertices;
+        vector<unsigned int> indices;
+        vector<Texture> textures;
 
-			/* @brief */
-			Mesh(const vector<Vertex>& p_vertices, const vector<unsigned int>& p_indices, const vector<Texture>& p_textures);
-			~Mesh();
+        // constructor
+        Mesh(const vector<Vertex>& vertices, const vector<unsigned int>& indices, const vector<Texture>& textures);
 
-			/* @brief */
-			void draw(const Shader& p_shader) const;
+        ~Mesh();
 
-		private:
-			unsigned int m_VAO;
-			unsigned int m_VBO;
-			unsigned int m_EBO;
+        // @brief render the mesh
+        // @param shader Shader this mesh will use to render itself
+        void draw(const Shader& shader) const;
 
-			void setupMesh() const;
+    private:
+        // render data 
+        unsigned int m_VBO, m_EBO, m_VAO;
 
-			string getTextureName(const TextureType& p_texture) const;
-	};
+        // @brief initializes all the buffer objects/arrays
+        void setupMesh() const;
+
+        // @brief 
+        // @returns The texture's type as a string
+        string getTextureName(const TextureType& p_texType) const;
+    };
 }

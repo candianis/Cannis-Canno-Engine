@@ -32,7 +32,6 @@ glm::vec3 pointLightPositions[] = {
 };
 
 using Cannis::Shader;
-using Cannis::Model;
 using glm::vec3;
 using glm::mat4;
 
@@ -43,7 +42,7 @@ void processInput(GLFWwindow* window, double delta, Camera* camera);
 /**/
 void update(double delta, Shader* lighting, Camera* camera, Model& currentModel);
 /**/
-void render(GLFWwindow* window, Shader* lighting, const Model& currentModel);
+void render(GLFWwindow* window, Shader* lighting, Model& currentModel);
 /**/
 void mouseCallback(GLFWwindow* window, double xposIn, double yposIn);
 
@@ -81,7 +80,7 @@ int main() {
 
     modelVisualization.use();
 
-    Model f117("f117.obj");
+    Model f117("./Assets/3DModels/backpack.obj");
 
     //Engine loop
     double lastTime = glfwGetTime();
@@ -146,7 +145,7 @@ void update(double delta, Shader* lighting, Camera* camera, Model& currentModel)
     lighting->setMatrix4("projection", projection);
 }
 
-void render(GLFWwindow* window, Shader* lighting, const Model& currentModel) {
+void render(GLFWwindow* window, Shader* lighting, Model& currentModel) {
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     //We clear the zbuffer as the model will change coordinates each cycle
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

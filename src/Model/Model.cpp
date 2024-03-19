@@ -2,16 +2,17 @@
 
 #include "Model.h"
 
-using Cannis::Model;
 using glm::vec3;
 
-Model::Model(const char* p_modelName) {
+Model::Model(const char* p_modelName, bool gamma) {
 	loadModel(p_modelName);
+	m_gammaCorrection = gamma;
 }
 
 Model::Model(const char* p_modelName, const char* p_textureName) {
 	
 }
+
 
 void Model::draw(const Shader& p_shader) const {
 	for (size_t i = 0; i < m_meshes.size(); ++i) {
@@ -19,18 +20,42 @@ void Model::draw(const Shader& p_shader) const {
 	}
 }
 
-void Model::loadModel(string p_modelName) {
-	Assimp::Importer importer;
-	string filePath = "./Assets/3DModels/" + p_modelName;
-	const aiScene* loadedScene = importer.ReadFile(filePath, aiProcess_Triangulate | aiProcess_FlipUVs);
+//void Model::addTexture(const char* p_textureName, const aiString str)
+//{
+//    // check if texture was loaded before and if so, continue to next iteration: skip loading a new texture
+//    bool skip = false;
+//    for (unsigned int j = 0; j < m_texturesLoaded.size(); j++) {
+//        if (std::strcmp(m_texturesLoaded[j].path.data(), p_textureName) == 0) {
+//            textures.push_back(m_texturesLoaded[j]);
+//            skip = true; // texture with the same name has been loaded so we skip to the next one
+//            break;
+//        }
+//    }
+//
+//    if (!skip) {   // if texture hasn't been loaded already, load it
+//        Texture texture(p_textureName);
+//        texture.type = ;
+//        texture.path = p_textureName;
+//        textures.push_back(texture);
+//        m_texturesLoaded.push_back(texture);
+//    }
+//}
 
-	if (!loadedScene || loadedScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !loadedScene->mRootNode) {
-		std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
-		return;
-	}
+void Model::loadModel(const string& p_modelName) {
+    // read file via ASSIMP
+    Assimp::Importer importer;
+    const aiScene* scene = importer.ReadFile(p_modelName, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+    // check for errors
+    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
+    {
+        std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
+        return;
+    }
+    // retrieve the directory path of the filepath
+    m_directory = p_modelName.substr(0, p_modelName.find_last_of('/'));
 
-	m_directory = filePath;
-	processNode(loadedScene->mRootNode, loadedScene);
+    // process ASSIMP's root node recursively
+    processNode(scene->mRootNode, scene);
 }
 
 void Model::processNode(aiNode* p_node, const aiScene* p_scene) {
@@ -44,83 +69,105 @@ void Model::processNode(aiNode* p_node, const aiScene* p_scene) {
 	}
 }
 
-Cannis::Mesh Model::processMesh(aiMesh* mesh, const aiScene* p_scene) {
-	vector<Vertex> vertices;
-	for (size_t i = 0; i < mesh->mNumVertices; ++i) {
-		Vertex vertex;
+Mesh Model::processMesh(aiMesh* p_mesh, const aiScene* p_scene) {
+    // data to fill
+    vector<Vertex> vertices;
+    vector<unsigned int> indices;
+    vector<Texture> textures;
 
-		//Process vertex position
-		aiVector3D vertexPos = mesh->mVertices[i];
-		vec3 position(vertexPos.x, vertexPos.y, vertexPos.z);
-		vertex.position = position;
+    // walk through each of the mesh's vertices
+    for (unsigned int i = 0; i < p_mesh->mNumVertices; i++)
+    {
+        Vertex vertex;
+        glm::vec3 vector; 
+        // positions
+        vector.x = p_mesh->mVertices[i].x;
+        vector.y = p_mesh->mVertices[i].y;
+        vector.z = p_mesh->mVertices[i].z;
+        vertex.position = vector;
+        // normals
+        if (p_mesh->HasNormals())
+        {
+            vector.x = p_mesh->mNormals[i].x;
+            vector.y = p_mesh->mNormals[i].y;
+            vector.z = p_mesh->mNormals[i].z;
+            vertex.normal = vector;
+        }
+        // texture coordinates
+        if (p_mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
+        {
+            glm::vec2 vec;
+            // a vertex can contain up to 8 different texture coordinates. We thus make the assumption that we won't 
+            // use models where a vertex can have multiple texture coordinates so we always take the first set (0).
+            vec.x = p_mesh->mTextureCoords[0][i].x;
+            vec.y = p_mesh->mTextureCoords[0][i].y;
+            vertex.texCoord = vec;
+            // tangent
+            vector.x = p_mesh->mTangents[i].x;
+            vector.y = p_mesh->mTangents[i].y;
+            vector.z = p_mesh->mTangents[i].z;
+            vertex.tangent = vector;
+            // bitangent
+            vector.x = p_mesh->mBitangents[i].x;
+            vector.y = p_mesh->mBitangents[i].y;
+            vector.z = p_mesh->mBitangents[i].z;
+            vertex.bitangent = vector;
+        }
+        else
+            vertex.texCoord = glm::vec2(0.0f, 0.0f);
 
-		//Process normal values
-		if (mesh->HasNormals()) {
-			aiVector3D normalVal = mesh->mNormals[i];
-			vec3 normal(normalVal.x, normalVal.y, normalVal.z);
-			vertex.normal = normal;
-		}
+        vertices.push_back(vertex);
+    }
+    // now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
+    for (unsigned int i = 0; i < p_mesh->mNumFaces; i++)
+    {
+        aiFace face = p_mesh->mFaces[i];
+        // retrieve all indices of the face and store them in the indices vector
+        for (unsigned int j = 0; j < face.mNumIndices; j++)
+            indices.push_back(face.mIndices[j]);
+    }
+    // process materials
+    aiMaterial* material = p_scene->mMaterials[p_mesh->mMaterialIndex];
 
-		vertex.texCoord = glm::vec2(0.0f, 0.0f);
+    // 1. diffuse maps
+    vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+    textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+    // 2. specular maps
+    vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+    textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+    // 3. normal maps
+    std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
+    textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
+    // 4. height maps
+    std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
+    textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
-		//Process texture coordinates
-		if (mesh->mTextureCoords[0]) {
-			aiVector3D texCoordVal = mesh->mTextureCoords[0][i];
-			glm::vec2 texCoord(texCoordVal.x, texCoordVal.y);
-			vertex.texCoord = texCoord;
-		}
-
-		vertices.push_back(vertex);
-	}
-
-	vector<unsigned int> indices;
-	for (size_t i = 0; i < mesh->mNumFaces; ++i) {
-		const struct aiFace face = mesh->mFaces[i];
-		for (size_t index = 0; index < face.mNumIndices; ++index)
-			indices.push_back(face.mIndices[index]);
-	}
-
-	vector<Texture> textures;
-	aiMaterial* material = p_scene->mMaterials[mesh->mMaterialIndex];
-
-	vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE);
-	textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-
-	if (diffuseMaps.size() <= 0) {
-		Texture texture("f117.png");
-		texture.type = Diffuse;
-		textures.push_back(texture);
-	}
-
-	vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR);
-	textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-
-	return Mesh(vertices, indices, textures);
+    // return a mesh object created from the extracted mesh data
+    return Mesh(vertices, indices, textures);
 }
 
-vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType p_textureType) {
-	vector<Texture> textures;
-	for (size_t i = 0; i < mat->GetTextureCount(p_textureType); i++) {
-		aiString filePath;
-		mat->GetTexture(p_textureType, i, &filePath);
+vector<Texture> Model::loadMaterialTextures(aiMaterial* p_mat, aiTextureType p_type, string p_typeName) {
+    vector<Texture> textures;
+    for (unsigned int i = 0; i < p_mat->GetTextureCount(p_type); i++) {
+        aiString str;
+        p_mat->GetTexture(p_type, i, &str);
+        // check if texture was loaded before and if so, continue to next iteration: skip loading a new texture
+        bool skip = false;
+        for (unsigned int j = 0; j < m_texturesLoaded.size(); j++) {
+            if (std::strcmp(m_texturesLoaded[j].path.data(), str.C_Str()) == 0) {
+                textures.push_back(m_texturesLoaded[j]);
+                skip = true; // texture with the same name has been loaded so we skip to the next one
+                break;
+            }
+        }
 
-		// check if texture was loaded before and if so, continue to next iteration: skip loading a new texture
-		bool skip = false;
-		for (size_t j = 0; j < m_loadedTextures.size(); j++) {
-			if (std::strcmp(m_loadedTextures[j].filePath.data(), filePath.C_Str()) == 0) {
-				textures.push_back(m_loadedTextures[j]);
-				skip = true; // a texture with the same filepath has already been loaded, continue to next one.
-				break;
-			}
-		}
-
-		if (!skip) {   
-			// if texture hasn't been loaded already, load it
-			Texture texture(filePath.C_Str());
-			textures.push_back(texture);
-			m_loadedTextures.push_back(texture);  // store it as texture loaded for entire model, to ensure we won't load a duplicated texture.
-		}
-	}
-	
-	return textures;
+        if (!skip) {   // if texture hasn't been loaded already, load it
+            Texture texture(str.C_Str());
+            texture.type = p_typeName;
+            texture.path = str.C_Str();
+            textures.push_back(texture);
+            m_texturesLoaded.push_back(texture);
+        }
+    }
+    return textures;
 }
