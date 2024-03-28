@@ -1314,5 +1314,6 @@
     <None Include="src\Shaders\Vertex\basic_light.vert" />
     <None Include="src\Shaders\Vertex\model_visual.vert" />
     <None Include="src\Shaders\Fragment\model_visual.frag" />
+    <None Include="Assets\3DModels\f117.mtl" />
   </ItemGroup>
 </Project>

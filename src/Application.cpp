@@ -24,6 +24,8 @@ float lastX, lastY;
 Camera mainCamera(vec3(0.0f, 0.0f, 3.0f));
 vec3 globalLightDirection = vec3(1.2f, 1.0f, 2.0f);
 
+const int modelAmount = 3;
+
 glm::vec3 pointLightPositions[] = {
     glm::vec3(0.7f,  0.2f,  2.0f),
     glm::vec3(2.3f, -3.3f, -4.0f),
@@ -40,9 +42,9 @@ void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 /**/
 void processInput(GLFWwindow* window, double delta, Camera* camera);
 /**/
-void update(double delta, Shader* lighting, Camera* camera, Model& currentModel);
+void update(double delta, Shader* lighting, Camera* camera, Model* currentModel);
 /**/
-void render(GLFWwindow* window, Shader* lighting, Model& currentModel);
+void render(GLFWwindow* window, Shader* lighting, Model* currentModel);
 /**/
 void mouseCallback(GLFWwindow* window, double xposIn, double yposIn);
 
@@ -71,31 +73,40 @@ int main() {
 
     //Allow OpenGL to keep track of the z positions of all vertices 
     glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+    
+    //
+    glEnable(GL_STENCIL_TEST);
+    //Each bit is written to the stencil buffer as is. 0x00 so that 
+    glStencilMask(0xFF);
+    //
+    glStencilFunc(GL_EQUAL, 1, 0xFF);
 
     // Initialize our shader program
-    Shader lightingShader("./src/Shaders/Vertex/basic_light.vert", "./src/Shaders/Fragment/basic_light.frag");
-    Shader lightCubeShader("./src/Shaders/Vertex/light_cube.vert", "./src/Shaders/Fragment/light_cube.frag");
-    Shader modelVisualization("./src/Shaders/Vertex/model_visual.vert", "./src/Shaders/Fragment/model_visual.frag");
+    Shader lightingShader("basic_light.vert", "basic_light.frag");
+    Shader lightCubeShader("light_cube.vert", "light_cube.frag");
+    Shader modelVisualization("model_visual.vert", "model_visual.frag");
     init();
 
     modelVisualization.use();
-
-    Model f117("./Assets/3DModels/backpack.obj");
+    
+    Model model("f22.obj", "f22.png", false);
 
     //Engine loop
     double lastTime = glfwGetTime();
     while (!glfwWindowShouldClose(window)) {
         double current = glfwGetTime();
         double delta = current - lastTime;
+        lastTime = current;
 
         processInput(window, delta, &mainCamera);
-        update(delta, &modelVisualization, &mainCamera, f117);
-        render(window, &modelVisualization, f117);
-
-        lastTime = current;
+        update(delta, &modelVisualization, &mainCamera, &model);
+        render(window, &modelVisualization, &model);
     }
 
     //Deallocation of all resources
+    lightingShader.~Shader();
+    model.clean();
     glfwTerminate();
 
     return 0;
@@ -127,11 +138,13 @@ void processInput(GLFWwindow* window, double delta, Camera* camera) {
         camera->moveCamera(LEFT, delta);
 }
 
-void update(double delta, Shader* lighting, Camera* camera, Model& currentModel) {
+void update(double delta, Shader* lighting, Camera* camera, Model* currentModel) {
     lighting->use();
 
     mat4 model = mat4(1.0f);
     model = glm::scale(model, vec3(2.0f, 2.0f, 2.0f));
+    float angle = delta;
+    model = glm::rotate(model, glm::radians(angle), vec3(1.0f, 0.3f, 0.5f));
     lighting->setMatrix4("model", model);
 
     //the camera coordinates
@@ -145,13 +158,13 @@ void update(double delta, Shader* lighting, Camera* camera, Model& currentModel)
     lighting->setMatrix4("projection", projection);
 }
 
-void render(GLFWwindow* window, Shader* lighting, Model& currentModel) {
+void render(GLFWwindow* window, Shader* lighting, Model* currentModel) {
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     //We clear the zbuffer as the model will change coordinates each cycle
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
     lighting->use();
-    currentModel.draw(*lighting);
+    currentModel->draw(*lighting);
 
     glfwSwapBuffers(window);
     glfwPollEvents();

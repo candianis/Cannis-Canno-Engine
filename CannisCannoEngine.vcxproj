@@ -446,6 +446,7 @@
     <ClInclude Include="src\Vertex\Vertex.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\3DModels\f117.mtl" />
     <None Include="Libraries\include\glm\detail\func_common.inl" />
     <None Include="Libraries\include\glm\detail\func_common_simd.inl" />
     <None Include="Libraries\include\glm\detail\func_exponential.inl" />

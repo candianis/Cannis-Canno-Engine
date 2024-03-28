@@ -28,7 +28,7 @@ namespace Cannis {
 			/* @brief Deletes the program using this Shader's ID */
 			~Shader();
 
-			/**/
+			/* @brief Asks OpenGL to use this shader*/
 			void use();
 
 			/**/
@@ -47,11 +47,15 @@ namespace Cannis {
 			void setMatrix4(const string& name, glm::mat4& values) const;
 
 		private:
-			/*@brief */
-			string* getSourceCode(const char* filePath);
-			/*@brief */
+			// @brief 
+			// @returns Get the shader code (.vert/.frag) as a string
+			string getSourceCode(const char* p_filePath);
+
+			// @brief Creates a vertex or fragment shader
+			// @returns The newly created shader's ID
 			unsigned int createShader(const char* shaderCode, GLenum type);
-			/*@brief */
+			
+			// @brief Compiles and links the given .frag and .vert files
 			void createProgram(unsigned int vertexShader, unsigned int fragmentShader);
 	};
 }

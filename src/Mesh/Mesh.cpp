@@ -2,7 +2,7 @@
 
 using Cannis::Mesh;
 
-Mesh::Mesh(const vector<Vertex>& p_vertices, const vector<unsigned int>& p_indices, const vector<Cannis::Texture>& p_textures) {
+Mesh::Mesh(const vector<Vertex>& p_vertices, const vector<unsigned int>& p_indices, vector<Cannis::Texture>* p_textures) {
 	this->vertices = p_vertices;
 	this->indices = p_indices;
 	this->textures = p_textures;
@@ -14,24 +14,19 @@ Mesh::Mesh(const vector<Vertex>& p_vertices, const vector<unsigned int>& p_indic
 	setupMesh();
 }
 
-Mesh::~Mesh() {
-	//glDeleteVertexArrays(1, &m_VAO);
-	//glDeleteBuffers(1, &m_VBO);
-	//glDeleteBuffers(1, &m_EBO);
-}
-
 void Mesh::draw(const Shader& p_shader) const {
 	size_t diffuseAmount = 1;
 	size_t specularAmount = 1;
 	size_t normalAmount = 1;
 	size_t heightAmount = 1;
 
-	for (size_t i = 0; i < textures.size(); ++i) {
+	for (size_t i = 0; i < textures->size(); ++i) {
 		glActiveTexture(GL_TEXTURE0 + i);
 		
-		string name = getTextureName(textures[i].textureType);
+		TextureType texType = textures->at(i).textureType;
+		string name = getTextureName(texType);
 		string number = "";
-		switch (textures[i].textureType) {
+		switch (texType) {
 			case Diffuse:
 				number = std::to_string(diffuseAmount++);
 				break;
@@ -51,7 +46,7 @@ void Mesh::draw(const Shader& p_shader) const {
 		name += number;
 
 		p_shader.setInt(name, i);
-		glBindTexture(GL_TEXTURE_2D, textures[i].ID);
+		glBindTexture(GL_TEXTURE_2D, textures->at(i).ID);
 	}
 
 	glBindVertexArray(m_VAO);
@@ -59,6 +54,12 @@ void Mesh::draw(const Shader& p_shader) const {
 	glBindVertexArray(0);
 	
 	glActiveTexture(GL_TEXTURE0);
+}
+
+void Mesh::clean() const {
+	glDeleteVertexArrays(1, &m_VAO);
+	glDeleteBuffers(1, &m_VBO);
+	glDeleteBuffers(1, &m_EBO);
 }
 
 

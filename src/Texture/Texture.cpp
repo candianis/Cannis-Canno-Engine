@@ -5,12 +5,12 @@
 #define STBI_FAILURE_USERMSG
 #include <stb/stb_image.h>
 
-Cannis::Texture::Texture(const string& p_fileName, GLenum p_textureWrapping) : textureType(None) {
+Cannis::Texture::Texture(const string& p_fileName, bool flipVertically, GLenum p_textureWrapping) : textureType(None) {
     glGenTextures(1, &ID);
 
     string filePath = "./Assets/Textures/" + p_fileName;
     this->path = filePath;
-    stbi_set_flip_vertically_on_load(true);
+    stbi_set_flip_vertically_on_load(flipVertically);
 
     unsigned char* data = stbi_load(filePath.c_str(), &m_width, &m_height, &m_channelsInFile, 0);
 
@@ -48,6 +48,11 @@ Cannis::Texture::Texture(const string& p_fileName, GLenum p_textureWrapping) : t
 
     stbi_image_free(data);
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+Cannis::Texture::~Texture()
+{
+    
 }
 
 void Cannis::Texture::bind() const {

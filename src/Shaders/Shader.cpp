@@ -2,22 +2,23 @@
 
 using Cannis::Shader;
 
-Shader::Shader(const char* vertexPath, const char* fragmentPath) {
-	string* vertCode = getSourceCode(vertexPath);
-	string* fragCode = getSourceCode(fragmentPath);
+Shader::Shader(const char* p_vertexName, const char* p_fragmentName) {
+	string vertexPath = "./src/Shaders/Vertex/";
+	vertexPath += p_vertexName;
+	string vertCode(getSourceCode(vertexPath.c_str()));
+	string fragmentPath = "./src/Shaders/Fragment/";
+	fragmentPath += p_fragmentName;
+	string fragCode(getSourceCode(fragmentPath.c_str()));
+	std::cout << vertCode << std::endl;
 
-	unsigned int vertexShader = createShader(vertCode->c_str(), GL_VERTEX_SHADER);
-	unsigned int fragmentShader = createShader(fragCode->c_str(), GL_FRAGMENT_SHADER);
+	unsigned int vertexShader = createShader(vertCode.c_str(), GL_VERTEX_SHADER);
+	unsigned int fragmentShader = createShader(fragCode.c_str(), GL_FRAGMENT_SHADER);
 
 	createProgram(vertexShader, fragmentShader);
 
 	// delete the shaders as they're linked into our program now and no longer necessary
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
-
-	//Return the memory we asked for when getting the sourceCode
-	delete(vertCode);
-	delete(fragCode);
 }
 
 Shader::~Shader() {
@@ -56,20 +57,20 @@ void Shader::setMatrix4(const string& name, glm::mat4& values) const {
 	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(values));
 }
 
-string* Shader::getSourceCode(const char* filePath) {
-	string* code = new string();
+string Shader::getSourceCode(const char* p_filePath) {
+	string code;
 	std::ifstream shaderFile;
 
 	shaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 	try {
-		shaderFile.open(filePath, std::ios::in);
+		shaderFile.open(p_filePath, std::ios::in);
 
 		if (!shaderFile.is_open()) {
-			std::cout << "ERR: Failed to open the file: " << filePath << std::endl;
+			std::cout << "ERR: Failed to open the file: " << p_filePath << std::endl;
 		}
 
 		if (!shaderFile.good()) {
-			std::cout << "ERR: An error was found while trying to read the file: " << filePath << std::endl;
+			std::cout << "ERR: An error was found while trying to read the file: " << p_filePath << std::endl;
 		}
 
 		std::stringstream shaderStream;
@@ -78,7 +79,7 @@ string* Shader::getSourceCode(const char* filePath) {
 
 		shaderFile.close();
 
-		*code = shaderStream.str();
+		code = shaderStream.str();
 	}
 	catch (std::ifstream::failure e)
 	{

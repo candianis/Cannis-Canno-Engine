@@ -18,6 +18,7 @@
 using Cannis::Shader;
 using Cannis::Mesh;
 using std::vector;
+using glm::vec3;
 
 class Model
 {
@@ -25,13 +26,17 @@ public:
     // @param path expects a filepath to a 3D model.
     // @param gamma 
     Model(const char* p_path, bool p_gamma = false);
-    Model(const char* p_modelName, const char* p_textureName);
+    Model(const char* p_modelName, const char* p_textureName, bool p_flipTextureVertically = true, bool p_gamma = false);
 
     // @brief draws the model and all its meshes
     // @param shader Shader that will be applied to this model and all its meshes
     void draw(const Shader& p_shader) const;
 
-    //void addTexture(const char* p_textureName);
+    // @brief 
+    void addTexture(const char* p_textureName, bool p_flipTextureVertically = true);
+
+    // @brief Deletes all textures and meshes of this model
+    void clean();
 
 private:
     // @brief all the meshes this model has

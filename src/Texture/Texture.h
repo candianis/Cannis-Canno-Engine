@@ -26,12 +26,11 @@ namespace Cannis {
 		string type;
 		string path;
 
-		Texture() = default;
 		/*@brief Creates a 2D texture and binds it to the current texture OpenGL will use to render an object.
 		  @param fileName the name of the image inside the Textures folder in Assets. If the system is not found a pink image will be applied
 		  @param textureWrapping the type of texture wrapping OpenGL will use for this specific texture. The default method is to repeat the texture, GL_REPEAT*/
-		Texture(const string& fileName, GLenum textureWrapping = GL_REPEAT);
-		~Texture() = default;
+		Texture(const string& fileName, bool flipVertically = true, GLenum textureWrapping = GL_REPEAT);
+		~Texture();
 
 		/*@brief Binds this texture as the currently active texture object*/
 		void bind() const;

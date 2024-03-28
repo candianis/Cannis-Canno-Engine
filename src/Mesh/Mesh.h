@@ -25,16 +25,17 @@ namespace Cannis {
         // mesh Data
         vector<Vertex> vertices;
         vector<unsigned int> indices;
-        vector<Texture> textures;
+        vector<Texture>* textures;
 
         // constructor
-        Mesh(const vector<Vertex>& vertices, const vector<unsigned int>& indices, const vector<Texture>& textures);
-
-        ~Mesh();
+        Mesh(const vector<Vertex>& vertices, const vector<unsigned int>& indices, vector<Texture>* textures);
 
         // @brief render the mesh
         // @param shader Shader this mesh will use to render itself
         void draw(const Shader& shader) const;
+
+        // @brief Cleans all the buffers this mesh created
+        void clean() const;
 
     private:
         // render data 

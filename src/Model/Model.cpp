@@ -2,17 +2,17 @@
 
 #include "Model.h"
 
-using glm::vec3;
 
 Model::Model(const char* p_modelName, bool gamma) {
 	loadModel(p_modelName);
 	m_gammaCorrection = gamma;
 }
 
-Model::Model(const char* p_modelName, const char* p_textureName) {
-	
+Model::Model(const char* p_modelName, const char* p_textureName, bool p_flipTextureVertically, bool p_gamma) {
+    loadModel(p_modelName);
+    addTexture(p_textureName, p_flipTextureVertically);
+    m_gammaCorrection = p_gamma;
 }
-
 
 void Model::draw(const Shader& p_shader) const {
 	for (size_t i = 0; i < m_meshes.size(); ++i) {
@@ -20,31 +20,36 @@ void Model::draw(const Shader& p_shader) const {
 	}
 }
 
-//void Model::addTexture(const char* p_textureName, const aiString str)
-//{
-//    // check if texture was loaded before and if so, continue to next iteration: skip loading a new texture
-//    bool skip = false;
-//    for (unsigned int j = 0; j < m_texturesLoaded.size(); j++) {
-//        if (std::strcmp(m_texturesLoaded[j].path.data(), p_textureName) == 0) {
-//            textures.push_back(m_texturesLoaded[j]);
-//            skip = true; // texture with the same name has been loaded so we skip to the next one
-//            break;
-//        }
-//    }
-//
-//    if (!skip) {   // if texture hasn't been loaded already, load it
-//        Texture texture(p_textureName);
-//        texture.type = ;
-//        texture.path = p_textureName;
-//        textures.push_back(texture);
-//        m_texturesLoaded.push_back(texture);
-//    }
-//}
+void Model::clean() {
+    for (int i = 0; i < m_meshes.size(); ++i) {
+        m_meshes[i].clean();
+    }
+
+    for (int i = 0; i < m_texturesLoaded.size(); ++i) {
+        m_texturesLoaded[i].cleanUp();
+    }
+}
+
+void Model::addTexture(const char* p_textureName, bool p_flipTextureVertically) {    
+    // check if texture was loaded all ready and exit early
+    bool skip = false;
+    for (unsigned int i = 0; i < m_texturesLoaded.size(); i++) {
+        if (std::strcmp(m_texturesLoaded[i].path.data(), p_textureName) == 0) {
+            return;
+        }
+    }
+
+    //If it was not then we add the texture
+    Texture texture(p_textureName, p_flipTextureVertically);
+    texture.path = p_textureName;
+    m_texturesLoaded.push_back(texture);
+}
 
 void Model::loadModel(const string& p_modelName) {
     // read file via ASSIMP
     Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(p_modelName, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+    string filePath = "./Assets/3DModels/" + p_modelName;
+    const aiScene* scene = importer.ReadFile(filePath, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
     // check for errors
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
     {
@@ -143,7 +148,7 @@ Mesh Model::processMesh(aiMesh* p_mesh, const aiScene* p_scene) {
     textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
     // return a mesh object created from the extracted mesh data
-    return Mesh(vertices, indices, textures);
+    return Mesh(vertices, indices, &m_texturesLoaded);
 }
 
 vector<Texture> Model::loadMaterialTextures(aiMaterial* p_mat, aiTextureType p_type, string p_typeName) {
