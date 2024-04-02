@@ -9,7 +9,6 @@ Shader::Shader(const char* p_vertexName, const char* p_fragmentName) {
 	string fragmentPath = "./src/Shaders/Fragment/";
 	fragmentPath += p_fragmentName;
 	string fragCode(getSourceCode(fragmentPath.c_str()));
-	std::cout << vertCode << std::endl;
 
 	unsigned int vertexShader = createShader(vertCode.c_str(), GL_VERTEX_SHADER);
 	unsigned int fragmentShader = createShader(fragCode.c_str(), GL_FRAGMENT_SHADER);
@@ -25,7 +24,7 @@ Shader::~Shader() {
 	glDeleteProgram(ID);
 }
 
-void Shader::use() {
+void Shader::use() const {
 	glUseProgram(ID);
 }
 
@@ -55,6 +54,11 @@ void Shader::setMatrix3(const string& name, glm::mat3& values) const {
 
 void Shader::setMatrix4(const string& name, glm::mat4& values) const {
 	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(values));
+}
+
+void Shader::clean()
+{
+	glDeleteProgram(ID);
 }
 
 string Shader::getSourceCode(const char* p_filePath) {

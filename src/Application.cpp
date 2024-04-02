@@ -9,12 +9,17 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <assimp/config.h>
+#include <imgui/imgui.h>
+#include <imgui/imgui_impl_glfw.h>
+#include <imgui/imgui_impl_opengl3.h>
 
 #include "Shaders/Shader.h"
 #include "Texture/Texture.h"
 #include "Camera/Camera.h"
 #include "Light/Light.h"
 #include "Model/Model.h"
+
+#include "Managers/GuiManager/GuiManager.h"
 
 const int screen_width = 1024;
 const int screen_height = 768;
@@ -34,18 +39,21 @@ glm::vec3 pointLightPositions[] = {
 };
 
 using Cannis::Shader;
+using Cannis::GuiManager;
 using glm::vec3;
 using glm::mat4;
 
+// @brief 
 void init();
+// @brief
 void framebufferSizeCallback(GLFWwindow* window, int width, int height);
-/**/
+// @brief 
 void processInput(GLFWwindow* window, double delta, Camera* camera);
-/**/
+// @brief 
 void update(double delta, Shader* lighting, Camera* camera, Model* currentModel);
-/**/
-void render(GLFWwindow* window, Shader* lighting, Model* currentModel);
-/**/
+// @brief
+void render(GLFWwindow* window, Shader* lighting, Model* currentModel, GuiManager* guiManager);
+// @brief 
 void mouseCallback(GLFWwindow* window, double xposIn, double yposIn);
 
 
@@ -63,6 +71,8 @@ int main() {
     }
 
     glfwMakeContextCurrent(window);
+    // Activate vsync
+    //glfwSwapInterval(1);
     glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
     glfwSetCursorPosCallback(window, mouseCallback);
 
@@ -71,37 +81,51 @@ int main() {
         return -1;
     }
 
+    GuiManager guiManager(window, 800, 600);
+
     //Allow OpenGL to keep track of the z positions of all vertices 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
-    
-    //
-    glEnable(GL_STENCIL_TEST);
-    //Each bit is written to the stencil buffer as is. 0x00 so that 
-    glStencilMask(0xFF);
-    //
-    glStencilFunc(GL_EQUAL, 1, 0xFF);
+
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    glFrontFace(GL_CCW);
 
     // Initialize our shader program
     Shader lightingShader("basic_light.vert", "basic_light.frag");
     Shader lightCubeShader("light_cube.vert", "light_cube.frag");
     Shader modelVisualization("model_visual.vert", "model_visual.frag");
+    Shader objectSelectionShader("selection.vert", "selection.frag");
+
     init();
 
     modelVisualization.use();
     
     Model model("f22.obj", "f22.png", false);
 
-    //Engine loop
     double lastTime = glfwGetTime();
-    while (!glfwWindowShouldClose(window)) {
-        double current = glfwGetTime();
-        double delta = current - lastTime;
-        lastTime = current;
+    double currentTime = 0.0;
+    double delta = 0.0;
+    size_t counter = 0;
 
+    //Engine loop
+    while (!glfwWindowShouldClose(window)) {
+        currentTime = glfwGetTime();
+        delta = currentTime - lastTime;
+        ++counter;
+        if (delta > 1.0f / 30.0f) {
+            double fps = (1.0 / delta) * counter;
+            double ms = (delta / counter) * 1000;
+
+            //std::cout << "FPS: " << fps << " | " << ms << " ms | Counter: " << counter << std::endl;
+
+            lastTime = currentTime;
+            counter = 0;
+        }
+        
         processInput(window, delta, &mainCamera);
         update(delta, &modelVisualization, &mainCamera, &model);
-        render(window, &modelVisualization, &model);
+        render(window, &modelVisualization, &model, &guiManager);
     }
 
     //Deallocation of all resources
@@ -121,6 +145,8 @@ void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
 }
 
 void processInput(GLFWwindow* window, double delta, Camera* camera) {
+    glfwPollEvents();
+
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
     }
@@ -158,16 +184,22 @@ void update(double delta, Shader* lighting, Camera* camera, Model* currentModel)
     lighting->setMatrix4("projection", projection);
 }
 
-void render(GLFWwindow* window, Shader* lighting, Model* currentModel) {
+void render(GLFWwindow* window, Shader* lighting, Model* currentModel, GuiManager* guiManager) {
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     //We clear the zbuffer as the model will change coordinates each cycle
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    glDisable(GL_DEPTH_TEST);
 
+    guiManager->update();
+    guiManager->bindFramebuffer(true);
+
+    glEnable(GL_DEPTH_TEST);
     lighting->use();
     currentModel->draw(*lighting);
 
+    guiManager->bindFramebuffer(false);
+
     glfwSwapBuffers(window);
-    glfwPollEvents();
 }
 
 void mouseCallback(GLFWwindow* window, double xposIn, double yposIn)

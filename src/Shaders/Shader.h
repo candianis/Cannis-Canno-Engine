@@ -25,11 +25,12 @@ namespace Cannis {
 			 *	@param fragmentPath the file directory of your fragment shader. It should end on .frag
 			*/
 			Shader(const char* vertexPath, const char* fragmentPath);
+
 			/* @brief Deletes the program using this Shader's ID */
 			~Shader();
 
 			/* @brief Asks OpenGL to use this shader*/
-			void use();
+			void use() const;
 
 			/**/
 			void setBool(const string& name, bool value) const;
@@ -45,6 +46,8 @@ namespace Cannis {
 			void setMatrix3(const string& name, glm::mat3& values) const;
 			/**/
 			void setMatrix4(const string& name, glm::mat4& values) const;
+
+			void clean();
 
 		private:
 			// @brief 

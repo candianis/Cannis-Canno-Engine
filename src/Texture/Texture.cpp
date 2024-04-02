@@ -5,7 +5,9 @@
 #define STBI_FAILURE_USERMSG
 #include <stb/stb_image.h>
 
-Cannis::Texture::Texture(const string& p_fileName, bool flipVertically, GLenum p_textureWrapping) : textureType(None) {
+using Cannis::Texture;
+
+Texture::Texture(const string& p_fileName, bool flipVertically, GLenum p_textureWrapping) : textureType(None) {
     glGenTextures(1, &ID);
 
     string filePath = "./Assets/Textures/" + p_fileName;
@@ -50,27 +52,26 @@ Cannis::Texture::Texture(const string& p_fileName, bool flipVertically, GLenum p
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-Cannis::Texture::~Texture()
-{
+Texture::~Texture() {
     
 }
 
-void Cannis::Texture::bind() const {
+void Texture::bind() const {
     glBindTexture(GL_TEXTURE_2D, ID);
 }
 
-void Cannis::Texture::unbind() const {
+void Texture::unbind() const {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Cannis::Texture::cleanUp() const {
+void Texture::cleanUp() const {
     glDeleteTextures(1, &ID);
 }
 
-int Cannis::Texture::getWidth() const {
+int Texture::getWidth() const {
     return m_width;
 }
 
-int Cannis::Texture::getHeight() const {
+int Texture::getHeight() const {
     return m_height;
 }
