@@ -79,10 +79,10 @@ void Framebuffer::resize(int p_newWidth, int p_newHeight) {
 }
 
 void Cannis::Framebuffer::update() {
-	m_framebufferShader->use();
-	glBindVertexArray(m_quadVAO);
-	glBindTexture(GL_TEXTURE_2D, m_textureColorBuffer);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
+	//m_framebufferShader->use();
+	//glBindVertexArray(m_quadVAO);
+	//glBindTexture(GL_TEXTURE_2D, m_textureColorBuffer);
+	//glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
 void Framebuffer::bind() const {

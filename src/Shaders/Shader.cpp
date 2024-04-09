@@ -20,6 +20,35 @@ Shader::Shader(const char* p_vertexName, const char* p_fragmentName) {
 	glDeleteShader(fragmentShader);
 }
 
+Shader::Shader(const char* p_vertexName, const char* p_fragmentName, const char* p_geometryName) {
+	string vertexPath = "./src/Shaders/Vertex/";
+	vertexPath += p_vertexName;
+	string vertCode(getSourceCode(vertexPath.c_str()));
+
+	string fragmentPath = "./src/Shaders/Fragment/";
+	fragmentPath += p_fragmentName;
+	string fragCode(getSourceCode(fragmentPath.c_str()));
+
+	string geometryPath = "./src/Shaders/Geometry/";
+	geometryPath += p_geometryName;
+	string geometryCode(getSourceCode(geometryPath.c_str()));
+
+	unsigned int vertexShader = createShader(vertCode.c_str(), GL_VERTEX_SHADER);
+	unsigned int fragmentShader = createShader(fragCode.c_str(), GL_FRAGMENT_SHADER);
+	unsigned int geometryShader = createShader(geometryCode.c_str(), GL_GEOMETRY_SHADER);
+
+	createProgram(vertexShader, fragmentShader, geometryShader);
+
+	// delete the shaders as they're linked into our program now and no longer necessary
+	glDeleteShader(vertexShader);
+	glDeleteShader(fragmentShader);
+	glDeleteShader(geometryShader);
+}
+
+Shader::Shader(const Shader& p_shader) {
+	this->ID = p_shader.ID;
+}
+
 Shader::~Shader() {
 	glDeleteProgram(ID);
 }
@@ -62,6 +91,11 @@ void Shader::clean()
 }
 
 string Shader::getSourceCode(const char* p_filePath) {
+	if (p_filePath == nullptr) {
+		std::cout << "ERR::PathIsNull" << std::endl;
+		return "";
+	}
+
 	string code;
 	std::ifstream shaderFile;
 
@@ -113,10 +147,10 @@ unsigned int Shader::createShader(const char* shaderCode, GLenum type) {
 	return shader;
 }
 
-void Shader::createProgram(unsigned int vertexShader, unsigned int fragmentShader) {
+void Shader::createProgram(unsigned int p_vertexShader, unsigned int p_fragmentShader) {
 	ID = glCreateProgram();
-	glAttachShader(ID, vertexShader);
-	glAttachShader(ID, fragmentShader);
+	glAttachShader(ID, p_vertexShader);
+	glAttachShader(ID, p_fragmentShader);
 	glLinkProgram(ID);
 
 	int success;
@@ -129,6 +163,28 @@ void Shader::createProgram(unsigned int vertexShader, unsigned int fragmentShade
 	}
 
 	//Clean the shaders as they are no longer needed
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
+	glDeleteShader(p_vertexShader);
+	glDeleteShader(p_fragmentShader);
+}
+
+void Shader::createProgram(unsigned int p_vertexShader, unsigned int p_fragmentShader, unsigned int p_geometryShader) {
+	ID = glCreateProgram();
+	glAttachShader(ID, p_vertexShader);
+	glAttachShader(ID, p_fragmentShader);
+	glAttachShader(ID, p_geometryShader);
+	glLinkProgram(ID);
+
+	int success;
+	char infoLog[512];
+
+	glGetProgramiv(ID, GL_LINK_STATUS, &success);
+	if (!success) {
+		glGetProgramInfoLog(ID, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+	}
+
+	//Clean the shaders as they are no longer needed
+	glDeleteShader(p_vertexShader);
+	glDeleteShader(p_fragmentShader);
+	glDeleteShader(p_geometryShader);
 }

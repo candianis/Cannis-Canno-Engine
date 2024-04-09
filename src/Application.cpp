@@ -13,13 +13,13 @@
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
 
-#include "Shaders/Shader.h"
 #include "Texture/Texture.h"
 #include "Camera/Camera.h"
 #include "Light/Light.h"
 #include "Model/Model.h"
 
 #include "Managers/GuiManager/GuiManager.h"
+#include "Managers/ShaderManager/ShaderManager.h"
 
 const int screen_width = 1024;
 const int screen_height = 768;
@@ -40,6 +40,7 @@ glm::vec3 pointLightPositions[] = {
 
 using Cannis::Shader;
 using Cannis::GuiManager;
+using Cannis::ShaderManager;
 using glm::vec3;
 using glm::mat4;
 
@@ -50,9 +51,9 @@ void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 // @brief 
 void processInput(GLFWwindow* window, double delta, Camera* camera);
 // @brief 
-void update(double delta, Shader* lighting, Camera* camera, Model* currentModel);
+void update(double delta, std::shared_ptr<ShaderManager> p_shaderManager, Camera* camera, Model* currentModel);
 // @brief
-void render(GLFWwindow* window, Shader* lighting, Model* currentModel, GuiManager* guiManager);
+void render(GLFWwindow* window, std::shared_ptr<ShaderManager> p_shaderManager, Model* currentModel, GuiManager* guiManager);
 // @brief 
 void mouseCallback(GLFWwindow* window, double xposIn, double yposIn);
 
@@ -92,14 +93,11 @@ int main() {
     glFrontFace(GL_CCW);
 
     // Initialize our shader program
-    Shader lightingShader("basic_light.vert", "basic_light.frag");
-    Shader lightCubeShader("light_cube.vert", "light_cube.frag");
-    Shader modelVisualization("model_visual.vert", "model_visual.frag");
-    Shader objectSelectionShader("selection.vert", "selection.frag");
+    std::shared_ptr<ShaderManager> shaderManager = std::make_shared<ShaderManager>();
 
     init();
 
-    modelVisualization.use();
+    shaderManager->useShader(Cannis::Model_Visualization);
     
     Model model("f22.obj", "f22.png", false);
 
@@ -124,12 +122,12 @@ int main() {
         }
         
         processInput(window, delta, &mainCamera);
-        update(delta, &modelVisualization, &mainCamera, &model);
-        render(window, &modelVisualization, &model, &guiManager);
+        update(delta, shaderManager, &mainCamera, &model);
+        render(window, shaderManager, &model, &guiManager);
     }
 
     //Deallocation of all resources
-    lightingShader.~Shader();
+    shaderManager->clean();
     model.clean();
     glfwTerminate();
 
@@ -164,39 +162,45 @@ void processInput(GLFWwindow* window, double delta, Camera* camera) {
         camera->moveCamera(LEFT, delta);
 }
 
-void update(double delta, Shader* lighting, Camera* camera, Model* currentModel) {
-    lighting->use();
+void update(double delta, std::shared_ptr<ShaderManager> p_shaderManager, Camera* camera, Model* currentModel) {
+    p_shaderManager->useShader(Cannis::Model_Visualization);
 
     mat4 model = mat4(1.0f);
     model = glm::scale(model, vec3(2.0f, 2.0f, 2.0f));
     float angle = delta;
     model = glm::rotate(model, glm::radians(angle), vec3(1.0f, 0.3f, 0.5f));
-    lighting->setMatrix4("model", model);
+    p_shaderManager->setMatrix4(Cannis::Model_Visualization, "model", model);
 
     //the camera coordinates
     mat4 view = mat4(1.0f);
     view = camera->getViewMatrix();
-    lighting->setMatrix4("view", view);
+    p_shaderManager->setMatrix4(Cannis::Model_Visualization, "view", view);
 
     //We assign the world camera to use projection perspective
     mat4 projection = mat4(1.0f);
     projection = glm::perspective(glm::radians(fieldOfView), float(screen_width / screen_width), 0.1f, 100.0f);
-    lighting->setMatrix4("projection", projection);
+    p_shaderManager->setMatrix4(Cannis::Model_Visualization, "projection", projection);
+
+    p_shaderManager->setFloat(Cannis::Model_Visualization, "time", glfwGetTime());
 }
 
-void render(GLFWwindow* window, Shader* lighting, Model* currentModel, GuiManager* guiManager) {
-    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+void render(GLFWwindow* window, std::shared_ptr<ShaderManager> p_shaderManager, Model* currentModel, GuiManager* guiManager) {
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     //We clear the zbuffer as the model will change coordinates each cycle
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-    glDisable(GL_DEPTH_TEST);
+    glClear(GL_COLOR_BUFFER_BIT);
 
     guiManager->update();
     guiManager->bindFramebuffer(true);
 
     glEnable(GL_DEPTH_TEST);
-    lighting->use();
-    currentModel->draw(*lighting);
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    //We clear the zbuffer as the model will change coordinates each cycle
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
+    p_shaderManager->useShader(Cannis::Model_Visualization);
+    currentModel->draw(p_shaderManager->getShader(Cannis::Model_Visualization));
+
+    glDisable(GL_DEPTH_TEST);
     guiManager->bindFramebuffer(false);
 
     glfwSwapBuffers(window);

@@ -14,7 +14,7 @@ Model::Model(const char* p_modelName, const char* p_textureName, bool p_flipText
     m_gammaCorrection = p_gamma;
 }
 
-void Model::draw(const Shader& p_shader) const {
+void Model::draw(const shared_ptr<Shader> p_shader) const {
 	for (size_t i = 0; i < m_meshes.size(); ++i) {
 		m_meshes[i].draw(p_shader);
 	}

@@ -14,7 +14,7 @@ Mesh::Mesh(const vector<Vertex>& p_vertices, const vector<unsigned int>& p_indic
 	setupMesh();
 }
 
-void Mesh::draw(const Shader& p_shader) const {
+void Mesh::draw(const shared_ptr<Shader> p_shader) const {
 	size_t diffuseAmount = 1;
 	size_t specularAmount = 1;
 	size_t normalAmount = 1;
@@ -45,7 +45,7 @@ void Mesh::draw(const Shader& p_shader) const {
 		}
 		name += number;
 
-		p_shader.setInt(name, i);
+		p_shader->setInt(name, i);
 		glBindTexture(GL_TEXTURE_2D, textures->at(i).ID);
 	}
 

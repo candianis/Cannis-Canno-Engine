@@ -13,12 +13,15 @@
 #include "../Shaders/Shader.h"
 
 #include <iostream>
+#include <memory>
 #include <vector>
 
 using Cannis::Shader;
 using Cannis::Mesh;
 using std::vector;
 using glm::vec3;
+
+using std::shared_ptr;
 
 class Model
 {
@@ -30,7 +33,7 @@ public:
 
     // @brief draws the model and all its meshes
     // @param shader Shader that will be applied to this model and all its meshes
-    void draw(const Shader& p_shader) const;
+    void draw(const shared_ptr<Shader> p_shader) const;
 
     // @brief 
     void addTexture(const char* p_textureName, bool p_flipTextureVertically = true);

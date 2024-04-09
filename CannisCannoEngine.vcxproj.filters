@@ -81,16 +81,7 @@
     <ClCompile Include="src\Managers\AssetManager\AssetManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Managers\EventManager\EventManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Managers\EventManager\Event\Event.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Managers\GuiManager\GuiManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Managers\GraphicsManager\GraphicsManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Managers\GraphicsManager\Framebuffer\Framebuffer.cpp">
@@ -929,19 +920,13 @@
     <ClInclude Include="src\Managers\AssetManager\AssetManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Managers\EventManager\EventManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Managers\EventManager\Event\Event.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Managers\GuiManager\GuiManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Managers\GraphicsManager\GraphicsManager.h">
+    <ClInclude Include="src\Managers\GraphicsManager\Framebuffer\Framebuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Managers\GraphicsManager\Framebuffer\Framebuffer.h">
+    <ClInclude Include="src\Managers\ShaderManager\ShaderSlot\ShaderSlot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1361,5 +1346,6 @@
     <None Include="src\Shaders\Fragment\selection.frag" />
     <None Include="src\Shaders\Vertex\screenShader.vert" />
     <None Include="src\Shaders\Fragment\screenShader.frag" />
+    <None Include="src\Shaders\Geometry\explosion.geom" />
   </ItemGroup>
 </Project>

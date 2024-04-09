@@ -148,10 +148,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Managers\GraphicsManager\Framebuffer\Framebuffer.cpp" />
-    <ClCompile Include="src\Managers\GraphicsManager\GraphicsManager.cpp" />
     <ClCompile Include="src\Managers\GuiManager\GuiManager.cpp" />
-    <ClCompile Include="src\Managers\EventManager\Event\Event.cpp" />
-    <ClCompile Include="src\Managers\EventManager\EventManager.cpp" />
     <ClCompile Include="src\Managers\AssetManager\AssetManager.cpp" />
     <ClCompile Include="src\Managers\ShaderManager\ShaderManager.cpp" />
     <ClCompile Include="src\Model\Model.cpp" />
@@ -177,13 +174,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Managers\GraphicsManager\Framebuffer\Framebuffer.h" />
-    <ClInclude Include="src\Managers\GraphicsManager\GraphicsManager.h" />
     <ClInclude Include="src\Managers\GuiManager\GuiManager.h" />
-    <ClInclude Include="src\Managers\EventManager\Event\Event.h" />
-    <ClInclude Include="src\Managers\EventManager\EventManager.h" />
     <ClInclude Include="src\Managers\AssetManager\AssetManager.h" />
     <ClInclude Include="Libraries\include\assimp\config.h" />
     <ClInclude Include="src\Managers\ShaderManager\ShaderManager.h" />
+    <ClInclude Include="src\Managers\ShaderManager\ShaderSlot\ShaderSlot.h" />
     <ClInclude Include="src\Model\Model.h" />
     <ClInclude Include="src\Mesh\Mesh.h" />
     <ClInclude Include="src\Light\Light.h" />
@@ -600,6 +595,7 @@
     <None Include="src\Shaders\Fragment\model_visual.frag" />
     <None Include="src\Shaders\Fragment\screenShader.frag" />
     <None Include="src\Shaders\Fragment\selection.frag" />
+    <None Include="src\Shaders\Geometry\explosion.geom" />
     <None Include="src\Shaders\Vertex\screenShader.vert" />
     <None Include="src\Shaders\Vertex\selection.vert" />
     <None Include="src\Shaders\Fragment\test.frag" />

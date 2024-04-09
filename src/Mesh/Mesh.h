@@ -10,6 +10,7 @@
 #include "../Vertex/Vertex.h"
 
 #include <string>
+#include <memory>
 #include <vector>
 
 using Cannis::Shader;
@@ -18,6 +19,7 @@ using Cannis::Vertex;
 
 using std::vector;
 using std::string;
+using std::shared_ptr;
 
 namespace Cannis {
     class Mesh {
@@ -32,7 +34,7 @@ namespace Cannis {
 
         // @brief render the mesh
         // @param shader Shader this mesh will use to render itself
-        void draw(const Shader& shader) const;
+        void draw(const shared_ptr<Shader> p_shader) const;
 
         // @brief Cleans all the buffers this mesh created
         void clean() const;
