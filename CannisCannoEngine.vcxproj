@@ -591,11 +591,13 @@
     <None Include="Libraries\include\glm\gtx\vector_query.inl" />
     <None Include="Libraries\include\glm\gtx\wrap.inl" />
     <None Include="src\Shaders\Fragment\basic_light.frag" />
+    <None Include="src\Shaders\Fragment\blinn_phong.frag" />
     <None Include="src\Shaders\Fragment\light_cube.frag" />
     <None Include="src\Shaders\Fragment\model_visual.frag" />
     <None Include="src\Shaders\Fragment\screenShader.frag" />
     <None Include="src\Shaders\Fragment\selection.frag" />
     <None Include="src\Shaders\Geometry\explosion.geom" />
+    <None Include="src\Shaders\Vertex\blinn_phong.vert" />
     <None Include="src\Shaders\Vertex\screenShader.vert" />
     <None Include="src\Shaders\Vertex\selection.vert" />
     <None Include="src\Shaders\Fragment\test.frag" />

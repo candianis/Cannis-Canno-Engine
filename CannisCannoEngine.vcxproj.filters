@@ -1347,5 +1347,7 @@
     <None Include="src\Shaders\Vertex\screenShader.vert" />
     <None Include="src\Shaders\Fragment\screenShader.frag" />
     <None Include="src\Shaders\Geometry\explosion.geom" />
+    <None Include="src\Shaders\Fragment\blinn_phong.frag" />
+    <None Include="src\Shaders\Vertex\blinn_phong.vert" />
   </ItemGroup>
 </Project>

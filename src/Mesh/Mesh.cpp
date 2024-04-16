@@ -27,6 +27,7 @@ void Mesh::draw(const shared_ptr<Shader> p_shader) const {
 		string name = getTextureName(texType);
 		string number = "";
 		switch (texType) {
+			case None:
 			case Diffuse:
 				number = std::to_string(diffuseAmount++);
 				break;
@@ -100,6 +101,7 @@ void Mesh::setupMesh() const {
 
 string Mesh::getTextureName(const TextureType& p_texType) const {
 	switch (p_texType) {
+		case None:
 		case Diffuse:
 			return "texture_diffuse";
 			break;

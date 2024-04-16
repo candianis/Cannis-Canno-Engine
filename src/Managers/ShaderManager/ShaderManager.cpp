@@ -5,6 +5,7 @@ using Cannis::ShaderManager;
 ShaderManager::ShaderManager() {
 	addShader(ShaderSlot::Model_Visualization, "model_visual.vert", "model_visual.frag");
 	addShader(ShaderSlot::Phong, "basic_light.vert", "basic_light.frag");
+	addShader(ShaderSlot::Blinn_Phong, "blinn_phong.vert", "blinn_phong.frag");
 }
 
 void ShaderManager::addShader(const ShaderSlot p_shaderSlot, const string& p_vertexName, const string& p_fragmentName) {

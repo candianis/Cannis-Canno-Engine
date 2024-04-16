@@ -28,6 +28,9 @@ bool firstMouse;
 float lastX, lastY;
 Camera mainCamera(vec3(0.0f, 0.0f, 3.0f));
 vec3 globalLightDirection = vec3(1.2f, 1.0f, 2.0f);
+glm::vec3 lightPos(0.0f, 2.0f, 0.0f);
+
+Cannis::ShaderSlot shaderSlot = Cannis::Blinn_Phong;
 
 const int modelAmount = 3;
 
@@ -102,7 +105,7 @@ int main() {
 
     shaderManager->useShader(Cannis::Model_Visualization);
     
-    Model model("f22.obj", "f22.png", false);
+    Model model("f117.obj", "f117.png", false);
 
     double lastTime = glfwGetTime();
     double currentTime = 0.0;
@@ -166,25 +169,30 @@ void processInput(GLFWwindow* window, double delta, Camera* camera) {
 }
 
 void update(double delta, std::shared_ptr<ShaderManager> p_shaderManager, Camera* camera, Model* currentModel) {
-    p_shaderManager->useShader(Cannis::Model_Visualization);
+    p_shaderManager->useShader(shaderSlot);
 
     mat4 model = mat4(1.0f);
     model = glm::scale(model, vec3(2.0f, 2.0f, 2.0f));
     float angle = delta;
     model = glm::rotate(model, glm::radians(angle), vec3(1.0f, 0.3f, 0.5f));
-    p_shaderManager->setMatrix4(Cannis::Model_Visualization, "model", model);
+    p_shaderManager->setMatrix4(shaderSlot, "model", model);
 
     //the camera coordinates
     mat4 view = mat4(1.0f);
     view = camera->getViewMatrix();
-    p_shaderManager->setMatrix4(Cannis::Model_Visualization, "view", view);
+    p_shaderManager->setMatrix4(shaderSlot, "view", view);
 
     //We assign the world camera to use projection perspective
     mat4 projection = mat4(1.0f);
     projection = glm::perspective(glm::radians(fieldOfView), float(screen_width / screen_width), 0.1f, 100.0f);
-    p_shaderManager->setMatrix4(Cannis::Model_Visualization, "projection", projection);
+    p_shaderManager->setMatrix4(shaderSlot, "projection", projection);
 
-    p_shaderManager->setFloat(Cannis::Model_Visualization, "time", glfwGetTime());
+    p_shaderManager->setVec3(shaderSlot, "viewPos", camera->position);
+    p_shaderManager->setVec3(shaderSlot, "lightPos", lightPos);
+    p_shaderManager->setInt(shaderSlot, "blinn", 1);
+
+
+    //p_shaderManager->setFloat(shaderSlot, "time", glfwGetTime());
 }
 
 void render(GLFWwindow* window, std::shared_ptr<ShaderManager> p_shaderManager, Model* currentModel, GuiManager* guiManager) {
@@ -194,8 +202,8 @@ void render(GLFWwindow* window, std::shared_ptr<ShaderManager> p_shaderManager, 
 
     guiManager->update();
 
-    p_shaderManager->useShader(Cannis::Model_Visualization);
-    currentModel->draw(p_shaderManager->getShader(Cannis::Model_Visualization));
+    p_shaderManager->useShader(shaderSlot);
+    currentModel->draw(p_shaderManager->getShader(shaderSlot));
     
     guiManager->lateUpdate();
 
