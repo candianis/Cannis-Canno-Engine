@@ -63,6 +63,7 @@ int main() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_SAMPLES, 4);
 
     GLFWwindow* window = glfwCreateWindow(screen_width, screen_height, "Cannis Canno Engine", NULL, NULL);
     if (window == NULL) {
@@ -91,6 +92,8 @@ int main() {
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glFrontFace(GL_CCW);
+
+    glEnable(GL_MULTISAMPLE);
 
     // Initialize our shader program
     std::shared_ptr<ShaderManager> shaderManager = std::make_shared<ShaderManager>();
@@ -187,21 +190,14 @@ void update(double delta, std::shared_ptr<ShaderManager> p_shaderManager, Camera
 void render(GLFWwindow* window, std::shared_ptr<ShaderManager> p_shaderManager, Model* currentModel, GuiManager* guiManager) {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     //We clear the zbuffer as the model will change coordinates each cycle
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     guiManager->update();
-    guiManager->bindFramebuffer(true);
-
-    glEnable(GL_DEPTH_TEST);
-    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-    //We clear the zbuffer as the model will change coordinates each cycle
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
     p_shaderManager->useShader(Cannis::Model_Visualization);
     currentModel->draw(p_shaderManager->getShader(Cannis::Model_Visualization));
-
-    glDisable(GL_DEPTH_TEST);
-    guiManager->bindFramebuffer(false);
+    
+    guiManager->lateUpdate();
 
     glfwSwapBuffers(window);
 }

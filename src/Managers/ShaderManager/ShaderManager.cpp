@@ -3,7 +3,7 @@
 using Cannis::ShaderManager;
 
 ShaderManager::ShaderManager() {
-	addShader(ShaderSlot::Model_Visualization, "model_visual.vert", "model_visual.frag", "explosion.geom");
+	addShader(ShaderSlot::Model_Visualization, "model_visual.vert", "model_visual.frag");
 	addShader(ShaderSlot::Phong, "basic_light.vert", "basic_light.frag");
 }
 

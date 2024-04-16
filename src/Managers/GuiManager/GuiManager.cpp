@@ -28,10 +28,13 @@ void GuiManager::update() {
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
+	
 	m_fbo->update();
 }
 
+void GuiManager::lateUpdate() {
+	m_fbo->lateUpdate();
+}
 
 void GuiManager::clean() const {
 	ImGui_ImplOpenGL3_Shutdown();

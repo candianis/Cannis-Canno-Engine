@@ -15,6 +15,9 @@ namespace Cannis {
 		// @brief
 		void update();
 
+		// @brief 
+		void lateUpdate();
+
 		// @brief
 		void bind() const;
 
@@ -33,12 +36,23 @@ namespace Cannis {
 		// @brief Render Buffer Object | 
 		unsigned int m_rbo;
 
-		unsigned int m_quadVAO;
-		unsigned int m_quadVBO;
+		// @brief Intermediate Render Buffer Object
+		unsigned int m_intermediateFBO;
+		unsigned int m_screenTexture;
+
+		int m_textureWidth;
+		int m_textureHeight;
 
 		std::unique_ptr<Shader> m_framebufferShader;
 
 		// @brief ID of the framebuffer's texture
-		unsigned int m_textureColorBuffer;
+		unsigned int m_textureColorBufferMultisampled;
+
+		unsigned int m_screenVAO;
+		unsigned int m_screenVBO;
+		void setScreenArray();
+
+		// @brief
+		void createIntermediateFramebuffer();
 	};
 }

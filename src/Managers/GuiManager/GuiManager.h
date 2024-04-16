@@ -20,6 +20,8 @@ namespace Cannis {
 		// @brief 
 		void update();
 
+		void lateUpdate();
+
 		// @brief
 		void clean() const;
 
