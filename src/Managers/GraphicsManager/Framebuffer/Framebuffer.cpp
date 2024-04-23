@@ -8,6 +8,11 @@
 using Cannis::Framebuffer;
 
 Framebuffer::Framebuffer(int p_screenWidth, int p_screenHeight) : m_textureWidth(p_screenWidth), m_textureHeight(p_screenHeight) {
+	////Shader configuration
+	//m_framebufferShader = std::make_unique<Shader>("screenShader.vert", "screenShader.frag");
+	//m_framebufferShader->use();
+	//m_framebufferShader->setInt("screenTexture", m_screenTexture);
+
 	setScreenArray();
 
 	glGenFramebuffers(1, &m_ID);
@@ -39,10 +44,6 @@ Framebuffer::Framebuffer(int p_screenWidth, int p_screenHeight) : m_textureWidth
 
 	createIntermediateFramebuffer();
 
-	//Shader configuration
-	m_framebufferShader = std::make_unique<Shader>("screenShader.vert", "screenShader.frag");
-	m_framebufferShader->use();
-	m_framebufferShader->setInt("screenTexture", m_screenTexture);
 }
 
 void Framebuffer::resize(int p_newWidth, int p_newHeight) {
@@ -64,7 +65,7 @@ void Framebuffer::resize(int p_newWidth, int p_newHeight) {
 void Framebuffer::update() {
 	bind();
 	// 3. now render quad with scene's visuals as its texture image
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	//We clear the zbuffer as the model will change coordinates each cycle
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
@@ -79,8 +80,6 @@ void Framebuffer::lateUpdate() {
 	glEnable(GL_DEPTH_TEST);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, m_screenTexture); // use the now resolved color attachment as the quad's texture
-	m_framebufferShader->use();
-	// draw Screen quad
 
 	glDisable(GL_DEPTH_TEST);
 	unbind();

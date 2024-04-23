@@ -28,7 +28,7 @@ namespace Cannis {
 		void clean() const;
 
 		unsigned int getTextureID() const;
-
+		
 	private:
 		// @brief Frame Buffer Object | 
 		unsigned int m_ID;
@@ -43,7 +43,6 @@ namespace Cannis {
 		int m_textureWidth;
 		int m_textureHeight;
 
-		std::unique_ptr<Shader> m_framebufferShader;
 
 		// @brief ID of the framebuffer's texture
 		unsigned int m_textureColorBufferMultisampled;

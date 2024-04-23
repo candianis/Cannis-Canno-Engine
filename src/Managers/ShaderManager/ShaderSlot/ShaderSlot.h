@@ -1,11 +1,12 @@
 #pragma once
 
-namespace Cannis {
+namespace ShaderSlot {
 	enum ShaderSlot {
 		Blinn_Phong,
 		Phong,
 		Model_Visualization,
 		Object_Selection,
+		SceneVisualization,
 		Custom_Shader0,
 		Custom_Shader1,
 		Custom_Shader2,

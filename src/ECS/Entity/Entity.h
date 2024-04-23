@@ -1,9 +1,15 @@
 #pragma once
 
+#include <bitset>
+#include <cstdint>
+
+using std::uint32_t;
+using std::uint8_t;
+
 class Entity
 {
 private:
-	unsigned long ID;
+	uint32_t ID;
 
 public:
 	Entity(int ID) : ID(ID) {};

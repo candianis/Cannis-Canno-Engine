@@ -147,6 +147,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\ECS\EntityManager\EntityManager.cpp" />
+    <ClCompile Include="src\Game\Game.cpp" />
     <ClCompile Include="src\Managers\GraphicsManager\Framebuffer\Framebuffer.cpp" />
     <ClCompile Include="src\Managers\GuiManager\GuiManager.cpp" />
     <ClCompile Include="src\Managers\AssetManager\AssetManager.cpp" />
@@ -173,6 +175,8 @@
     <ClCompile Include="src\Vertex\Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ECS\EntityManager\EntityManager.h" />
+    <ClInclude Include="src\Game\Game.h" />
     <ClInclude Include="src\Managers\GraphicsManager\Framebuffer\Framebuffer.h" />
     <ClInclude Include="src\Managers\GuiManager\GuiManager.h" />
     <ClInclude Include="src\Managers\AssetManager\AssetManager.h" />
@@ -453,6 +457,7 @@
     <ClInclude Include="src\ECS\System\System.h" />
     <ClInclude Include="src\Texture\Texture.h" />
     <ClInclude Include="src\Vertex\Vertex.h" />
+    <ClInclude Include="src\ECS\Component\Types\Transform.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\3DModels\f117.mtl" />

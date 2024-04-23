@@ -30,7 +30,7 @@ Camera mainCamera(vec3(0.0f, 0.0f, 3.0f));
 vec3 globalLightDirection = vec3(1.2f, 1.0f, 2.0f);
 glm::vec3 lightPos(0.0f, 2.0f, 0.0f);
 
-Cannis::ShaderSlot shaderSlot = Cannis::Blinn_Phong;
+ShaderSlot::ShaderSlot shaderSlot = ShaderSlot::Blinn_Phong;
 
 const int modelAmount = 3;
 
@@ -103,9 +103,9 @@ int main() {
 
     init();
 
-    shaderManager->useShader(Cannis::Model_Visualization);
+    shaderManager->useShader(ShaderSlot::Model_Visualization);
     
-    Model model("f117.obj", "f117.png", false);
+    Model model("f22.obj", "f22.png", false);
 
     double lastTime = glfwGetTime();
     double currentTime = 0.0;
