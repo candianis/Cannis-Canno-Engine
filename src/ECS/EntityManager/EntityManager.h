@@ -2,14 +2,12 @@
 
 #include "../Entity/Entity.h"
 
-#include <bitset>
 #include <queue>
 #include <unordered_map>
 
 const uint32_t maxEntities = 100;
-const uint8_t maxComponents = 32;
 
-using Signature = std::bitset<maxComponents>;
+
 using std::unordered_map;
 using std::queue;
 
@@ -19,13 +17,13 @@ public:
 	// @brief
 	EntityManager();
 
+	// @brief 
+	// @returns 
 	Entity createEntity();
 
-	// @brief 
-	// @param p_entity Entity to destroy
-	void DestroyEntity(const Entity& p_entity);
-
-
+	// @brief Destroys the 
+	// @param p_entityToKill Reference to the Entity that needs to be disposed of
+	void killEntity(const Entity& p_entityToKill);
 
 private:
 	// @brief
@@ -37,4 +35,3 @@ private:
 	// @brief
 	uint32_t m_currentEntityAmount;
 };
-

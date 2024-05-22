@@ -21,13 +21,14 @@
 #include "Managers/GuiManager/GuiManager.h"
 #include "Managers/ShaderManager/ShaderManager.h"
 
+#include "Game/Game.h"
+
 const int screen_width = 1024;
 const int screen_height = 768;
 const float fieldOfView = 45.0f;
 bool firstMouse;
 float lastX, lastY;
 Camera mainCamera(vec3(0.0f, 0.0f, 3.0f));
-vec3 globalLightDirection = vec3(1.2f, 1.0f, 2.0f);
 glm::vec3 lightPos(0.0f, 2.0f, 0.0f);
 
 ShaderSlot::ShaderSlot shaderSlot = ShaderSlot::Blinn_Phong;
@@ -60,79 +61,11 @@ void mouseCallback(GLFWwindow* window, double xposIn, double yposIn);
 
 
 int main() {
-    glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_SAMPLES, 4);
+    Game game(1080, 720);
+    game.initialize();
 
-    GLFWwindow* window = glfwCreateWindow(screen_width, screen_height, "Cannis Canno Engine", NULL, NULL);
-    if (window == NULL) {
-        std::cout << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        return -1;
-    }
-
-    glfwMakeContextCurrent(window);
-
-    glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
-    glfwSetCursorPosCallback(window, mouseCallback);
-
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std::cout << "Failed to initialize GLAD" << std::endl;
-        return -1;
-    }
-
-    GuiManager guiManager(window, 800, 600);
-
-    //Allow OpenGL to keep track of the z positions of all vertices 
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
-
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
-    glFrontFace(GL_CCW);
-
-    glEnable(GL_MULTISAMPLE);
-
-    // Initialize our shader program
-    std::shared_ptr<ShaderManager> shaderManager = std::make_shared<ShaderManager>();
-
-    init();
-
-    shaderManager->useShader(ShaderSlot::Model_Visualization);
-    
-    Model model("f22.obj", "f22.png", false);
-
-    double lastTime = glfwGetTime();
-    double currentTime = 0.0;
-    double delta = 0.0;
-    size_t counter = 0;
-
-    //Engine loop
-    while (!glfwWindowShouldClose(window)) {
-        currentTime = glfwGetTime();
-        delta = currentTime - lastTime;
-        ++counter;
-        if (delta > 1.0f / 30.0f) {
-            double fps = (1.0 / delta) * counter;
-            double ms = (delta / counter) * 1000;
-
-            //std::cout << "FPS: " << fps << " | " << ms << " ms | Counter: " << counter << std::endl;
-
-            lastTime = currentTime;
-            counter = 0;
-        }
-        
-        processInput(window, delta, &mainCamera);
-        update(delta, shaderManager, &mainCamera, &model);
-        render(window, shaderManager, &model, &guiManager);
-    }
-
-    //Deallocation of all resources
-    shaderManager->clean();
-    model.clean();
-    glfwTerminate();
+    game.run();
+    game.destroy();
 
     return 0;
 }
@@ -187,9 +120,6 @@ void update(double delta, std::shared_ptr<ShaderManager> p_shaderManager, Camera
     p_shaderManager->setVec3(shaderSlot, "viewPos", camera->position);
     p_shaderManager->setVec3(shaderSlot, "lightPos", lightPos);
     p_shaderManager->setInt(shaderSlot, "blinn", 1);
-
-
-    //p_shaderManager->setFloat(shaderSlot, "time", glfwGetTime());
 }
 
 void render(GLFWwindow* window, std::shared_ptr<ShaderManager> p_shaderManager, Model* currentModel, GuiManager* guiManager) {

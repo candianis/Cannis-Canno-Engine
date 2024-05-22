@@ -1,6 +1,3 @@
 #include "Component.h"
 
-unsigned int Component::GetID()
-{
-    return ID;
-}
+uint32_t IComponent::nextID = 0;

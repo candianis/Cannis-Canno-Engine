@@ -8,7 +8,7 @@ Camera::Camera(vec3 position, float speed, float sensitivity) : yaw(90.0f), pitc
 	updateVectors();
 }
 
-glm::mat4 Camera::getViewMatrix() {
+glm::mat4 Camera::getViewMatrix() const {
 	return glm::lookAt(position, position + front, up);
 }
 
@@ -47,7 +47,7 @@ void Camera::rotateCamera(float xOffset, float yOffset) {
 }
 
 void Camera::updateVectors() {
-	glm::vec3 newFront;
+	glm::vec3 newFront(0);
 	newFront.x = cos(glm::radians(yaw))* cos(glm::radians(pitch));
 	newFront.y = sin(glm::radians(pitch));
 	newFront.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));

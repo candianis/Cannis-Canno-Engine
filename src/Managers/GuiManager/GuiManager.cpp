@@ -19,6 +19,10 @@ GuiManager::GuiManager(GLFWwindow* p_window, int p_screenWidth, int p_screenHeig
 	m_fbo = std::make_unique<Framebuffer>(p_screenWidth, p_screenHeight);
 }
 
+void GuiManager::init() {
+	
+}
+
 void GuiManager::update() {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();

@@ -17,6 +17,8 @@ namespace Cannis {
 		// @brief 
 		GuiManager(GLFWwindow* p_window, int p_screenWidth, int p_screenHeight);
 
+		void init();
+
 		// @brief 
 		void update();
 

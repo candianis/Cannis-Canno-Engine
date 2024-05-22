@@ -26,6 +26,7 @@ using std::shared_ptr;
 class Model
 {
 public:
+    Model();
     // @param path expects a filepath to a 3D model.
     // @param gamma 
     Model(const char* p_path, bool p_gamma = false);

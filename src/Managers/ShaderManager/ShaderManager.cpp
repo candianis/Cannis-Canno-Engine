@@ -18,7 +18,6 @@ void ShaderManager::addShader(const ShaderSlot::ShaderSlot p_shaderSlot, const s
 	m_shaders.try_emplace(p_shaderSlot, std::make_shared<Shader>(p_vertexName.c_str(), p_fragmentName.c_str(), p_geometryShader.c_str()));
 }
 
-
 void ShaderManager::addShader(const ShaderSlot::ShaderSlot p_shaderSlot, const Shader& p_newShader) {
 	m_shaders.try_emplace(p_shaderSlot, std::make_shared<Shader>(p_newShader));
 }

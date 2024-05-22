@@ -3,6 +3,10 @@
 #include "Model.h"
 
 
+Model::Model() : m_gammaCorrection(false) {
+
+}
+
 Model::Model(const char* p_modelName, bool gamma) {
 	loadModel(p_modelName);
 	m_gammaCorrection = gamma;
@@ -84,7 +88,7 @@ Mesh Model::processMesh(aiMesh* p_mesh, const aiScene* p_scene) {
     for (unsigned int i = 0; i < p_mesh->mNumVertices; i++)
     {
         Vertex vertex;
-        glm::vec3 vector; 
+        glm::vec3 vector(0); 
         // positions
         vector.x = p_mesh->mVertices[i].x;
         vector.y = p_mesh->mVertices[i].y;
@@ -101,7 +105,7 @@ Mesh Model::processMesh(aiMesh* p_mesh, const aiScene* p_scene) {
         // texture coordinates
         if (p_mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
         {
-            glm::vec2 vec;
+            glm::vec2 vec(0,0);
             // a vertex can contain up to 8 different texture coordinates. We thus make the assumption that we won't 
             // use models where a vertex can have multiple texture coordinates so we always take the first set (0).
             vec.x = p_mesh->mTextureCoords[0][i].x;
@@ -148,7 +152,8 @@ Mesh Model::processMesh(aiMesh* p_mesh, const aiScene* p_scene) {
     textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
     // return a mesh object created from the extracted mesh data
-    return Mesh(vertices, indices, &m_texturesLoaded);
+    Mesh newMesh(vertices, indices, &m_texturesLoaded);
+    return newMesh;
 }
 
 vector<Texture> Model::loadMaterialTextures(aiMaterial* p_mat, aiTextureType p_type, string p_typeName) {

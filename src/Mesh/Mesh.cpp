@@ -2,14 +2,14 @@
 
 using Cannis::Mesh;
 
-Mesh::Mesh(const vector<Vertex>& p_vertices, const vector<unsigned int>& p_indices, vector<Cannis::Texture>* p_textures) {
+Mesh::Mesh(const vector<Vertex>& p_vertices, const vector<unsigned int>& p_indices, vector<Cannis::Texture>* p_textures) : m_VAO(0), m_VBO(0), m_EBO(0) {
 	this->vertices = p_vertices;
 	this->indices = p_indices;
 	this->textures = p_textures;
 
 	glGenVertexArrays(1, &m_VAO);
-	glGenBuffers(1, &m_VBO);
 	glGenBuffers(1, &m_EBO);
+	glGenBuffers(1, &m_VBO);
 
 	setupMesh();
 }
@@ -46,7 +46,7 @@ void Mesh::draw(const shared_ptr<Shader> p_shader) const {
 		}
 		name += number;
 
-		p_shader->setInt(name, i);
+		p_shader->setInt(name, static_cast<int>(i));
 		glBindTexture(GL_TEXTURE_2D, textures->at(i).ID);
 	}
 

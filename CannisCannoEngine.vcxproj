@@ -147,8 +147,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\ECS\EntityManager\EntityManager.cpp" />
+    <ClCompile Include="Games\MiniWarriors\MiniWarriors.cpp" />
+    <ClCompile Include="src\ECS\System\Types\LightSystem\LightSystem.cpp" />
+    <ClCompile Include="src\ECS\System\Types\MeshRenderer\MeshRendererSystem.cpp" />
     <ClCompile Include="src\Game\Game.cpp" />
+    <ClCompile Include="src\Managers\InputManager\InputManager.cpp" />
+    <ClCompile Include="src\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\ECS\ComponentManager\ComponentManager.cpp" />
+    <ClCompile Include="src\ECS\Registry\Registry.cpp" />
+    <ClCompile Include="src\ECS\EntityManager\EntityManager.cpp" />
     <ClCompile Include="src\Managers\GraphicsManager\Framebuffer\Framebuffer.cpp" />
     <ClCompile Include="src\Managers\GuiManager\GuiManager.cpp" />
     <ClCompile Include="src\Managers\AssetManager\AssetManager.cpp" />
@@ -172,9 +179,22 @@
     <ClCompile Include="Libraries\include\glad\glad.c" />
     <ClCompile Include="src\ECS\System\System.cpp" />
     <ClCompile Include="src\Texture\Texture.cpp" />
+    <ClCompile Include="src\Utilities\Signature\Signature.cpp" />
     <ClCompile Include="src\Vertex\Vertex.cpp" />
+    <ClCompile Include="src\ECS\SystemManager\SystemManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Games\MiniWarriors\MiniWarriors.h" />
+    <ClInclude Include="src\ECS\System\Types\LightSystem\LightSystem.h" />
+    <ClInclude Include="src\ECS\Component\Types\LightComponent.h" />
+    <ClInclude Include="src\ECS\System\Types\MeshRenderer\MeshRendererSystem.h" />
+    <ClInclude Include="src\Managers\InputManager\InputManager.h" />
+    <ClInclude Include="src\Renderer\Renderer.h" />
+    <ClInclude Include="src\ECS\Component\Types\MeshComponent.h" />
+    <ClInclude Include="src\Utilities\Interface\IPool.h" />
+    <ClInclude Include="src\Utilities\Pool\ComponentPool.h" />
+    <ClInclude Include="src\ECS\ComponentManager\ComponentManager.h" />
+    <ClInclude Include="src\ECS\Registry\Registry.h" />
     <ClInclude Include="src\ECS\EntityManager\EntityManager.h" />
     <ClInclude Include="src\Game\Game.h" />
     <ClInclude Include="src\Managers\GraphicsManager\Framebuffer\Framebuffer.h" />
@@ -456,8 +476,10 @@
     <ClInclude Include="Libraries\include\stb\stb_image.h" />
     <ClInclude Include="src\ECS\System\System.h" />
     <ClInclude Include="src\Texture\Texture.h" />
+    <ClInclude Include="src\Utilities\Signature\Signature.h" />
     <ClInclude Include="src\Vertex\Vertex.h" />
     <ClInclude Include="src\ECS\Component\Types\Transform.h" />
+    <ClInclude Include="src\ECS\SystemManager\SystemManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\3DModels\f117.mtl" />
