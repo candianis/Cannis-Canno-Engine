@@ -35,10 +35,7 @@ private:
 
 	/// -----	Entity	-----///
 	// @brief List of pointers to all the entities in the scene
-	static vector<shared_ptr<Entity>> m_entities;
-
-	static vector<shared_ptr<Entity>> m_entitiesToBeAdded;
-	static vector<shared_ptr<Entity>> m_entitiesToBeDeleted;
+	static vector<Entity> m_entities;
 
 	// @brief Queue of available IDs from destroyed entities
 	static deque<uint32_t> m_reusableIDs;
@@ -49,7 +46,7 @@ private:
 	//Pool index = entity id
 	static vector<shared_ptr<IPool>> m_componentPools;
 
-	static vector<shared_ptr<Signature>> m_entityComponentSignatures;
+	static vector<Signature> m_entityComponentSignatures;
 
 	// ----- Systems ----- //
 	// @brief 

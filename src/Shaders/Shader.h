@@ -39,7 +39,11 @@ namespace Cannis {
 			~Shader();
 
 			// @brief Asks OpenGL to use this shader
-			void use() const;
+			void Bind() const;
+
+			void Unbind() const;
+
+			//Set uniforms
 
 			/**/
 			void setBool(const string& name, bool value) const;

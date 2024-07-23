@@ -27,7 +27,7 @@ const shared_ptr<Shader> ShaderManager::getShader(const ShaderSlot::ShaderSlot p
 }
 
 void ShaderManager::useShader(const ShaderSlot::ShaderSlot p_shaderSlot) const {
-	m_shaders.at(p_shaderSlot)->use();
+	m_shaders.at(p_shaderSlot)->Bind();
 }
 
 void ShaderManager::setBool(const ShaderSlot::ShaderSlot p_shaderName, const string& p_valueName, const bool p_value) const {

@@ -22,6 +22,10 @@ void Mesh::draw(const shared_ptr<Shader> p_shader) const {
 
 	for (size_t i = 0; i < textures->size(); ++i) {
 		glActiveTexture(GL_TEXTURE0 + i);
+
+		if (textures->size() > 1) {
+			std::cout << textures->size() << std::endl;
+		}
 		
 		TextureType texType = textures->at(i).textureType;
 		string name = getTextureName(texType);
@@ -62,7 +66,6 @@ void Mesh::clean() const {
 	glDeleteBuffers(1, &m_VBO);
 	glDeleteBuffers(1, &m_EBO);
 }
-
 
 void Mesh::setupMesh() const {
 	glBindVertexArray(m_VAO);

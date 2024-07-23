@@ -3,14 +3,13 @@
 #include "../Entity/Entity.h"
 
 #include <queue>
+#include <deque>
 #include <unordered_map>
 
 const uint32_t maxEntities = 100;
 
-
 using std::unordered_map;
-using std::queue;
-
+using std::deque;
 
 class EntityManager {
 public: 
@@ -27,11 +26,14 @@ public:
 
 private:
 	// @brief
-	std::queue<uint32_t> m_availableIDs;
+	std::deque<uint32_t> m_reusableIDs;
 
 	// @brief 
-	unordered_map<uint32_t, Signature> m_entitySignatures;
+	std::vector<Signature> m_entitySignatures;
+
+	// @brief 
+	std::vector<Entity> m_entities;
 
 	// @brief
-	uint32_t m_currentEntityAmount;
+	uint32_t m_existingEntities;
 };

@@ -1,12 +1,10 @@
 #include "Registry.h"
 
 uint32_t Registry::m_existingEntities;
-vector<shared_ptr<Entity>> Registry::m_entities;
-vector<shared_ptr<Entity>> Registry::m_entitiesToBeAdded;
-vector<shared_ptr<Entity>> Registry::m_entitiesToBeDeleted;
+vector<Entity> Registry::m_entities;
 deque<uint32_t> Registry::m_reusableIDs;
 vector<shared_ptr<IPool>> Registry::m_componentPools;
-vector<shared_ptr<Signature>> Registry::m_entityComponentSignatures;
+vector<Signature> Registry::m_entityComponentSignatures;
 unordered_map<type_index, shared_ptr<System>> m_systems;
 
 Registry& Registry::getInstance() {
@@ -28,19 +26,18 @@ shared_ptr<Entity> Registry::createEntity() {
         }
     }
 
-    else {  
+    else {
         newEntityID = m_reusableIDs.front();
         m_reusableIDs.pop_front();
     }
 
-    shared_ptr<Entity> newEntity = std::make_shared<Entity>(newEntityID);
-    m_entitiesToBeAdded.push_back(newEntity);
-
-    return newEntity;
+    Entity newEntity = Entity(newEntityID);
+    std::shared_ptr<Entity> ptrEntity = std::make_shared<Entity>(newEntity);
+    return ptrEntity;
 }
 
 void Registry::killEntity(const shared_ptr<Entity>& p_entity) {
-    m_entitiesToBeDeleted.push_back(p_entity);
+    
 }
 
 void Registry::addEntityToSystem(Entity p_entity) {

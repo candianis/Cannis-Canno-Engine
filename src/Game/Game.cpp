@@ -10,7 +10,7 @@
 using glm::mat4;
 using glm::vec3;
 
-Game::Game(int p_width, int p_height) : m_currentState(Start), currentTime(0.0), delta(0.0), counter(0), lightPos(0.0f, 0.0f, 3.0f) {
+Game::Game(int p_width, int p_height) : m_currentState(Start), currentTime(0.0), delta(0.0), counter(0), lightPos(0.0f, 2.0f, 3.0f) {
 	m_renderer = std::make_unique<Renderer>(p_width, p_height, 45.0f);
 	
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -18,10 +18,10 @@ Game::Game(int p_width, int p_height) : m_currentState(Start), currentTime(0.0),
 	}
 
 	m_guiManager = std::make_unique<Cannis::GuiManager>(m_renderer->getWindow(), p_width, p_height);
-	m_shaderManager = std::make_unique<Cannis::ShaderManager>();
+	m_renderer->init();
 
-	m_shaderManager->useShader(ShaderSlot::Model_Visualization);
-	currentModel = Model("crab.obj", "crab.png", false);
+	m_shaderManager = std::make_unique<Cannis::ShaderManager>();
+	m_shaderManager->useShader(ShaderSlot::Blinn_Phong);
 
 	InputManager::start(m_renderer->mainCamera);
 
@@ -34,8 +34,9 @@ Game::~Game() {
 }
 
 void Game::initialize() {
-	m_renderer->init();
 	m_guiManager->init();
+
+
 
 	shared_ptr<Entity> entity1 = Registry::getInstance().createEntity();
 	//entity1->addComponent<MeshComponent>();
@@ -47,7 +48,7 @@ void Game::run() {
 	while (m_currentState == GameState::Update) {
 		currentTime = glfwGetTime();
 		delta = currentTime - lastTime;
-		++counter;
+		counter++;
 		if (delta > 1.0f / 30.0f) {
 			double fps = (1.0 / delta) * counter;
 			double ms = (delta / counter) * 1000;
@@ -63,16 +64,17 @@ void Game::run() {
 }
 
 void Game::setup() {
-	m_shaderManager->useShader(ShaderSlot::Blinn_Phong);
+	
 }
 
 void Game::start() {
 	m_currentState = GameState::Update;
+
+	currentModel = Model("f22.obj", false);
+	currentModel.addTexture("f22.png", false);
 }
 
 void Game::update() {
-	m_shaderManager->useShader(ShaderSlot::Blinn_Phong);
-
 	mat4 model = mat4(1.0f);
 	model = glm::scale(model, vec3(2.0f, 2.0f, 2.0f));
 	float angle = static_cast<float>(delta);
@@ -121,8 +123,10 @@ void Game::processInput() {
 		m_currentState = GameState::Destroy;
 	}
 
-	if (glfwGetKey(m_renderer->getWindow(), GLFW_KEY_W) == GLFW_PRESS)
+	if (glfwGetKey(m_renderer->getWindow(), GLFW_KEY_W) == GLFW_PRESS) {
+		std::cout << "Forward" << std::endl;
 		m_renderer->mainCamera->moveCamera(FORWARD, delta);
+	}
 
 	if (glfwGetKey(m_renderer->getWindow(), GLFW_KEY_S) == GLFW_PRESS)
 		m_renderer->mainCamera->moveCamera(BACKWARD, delta);

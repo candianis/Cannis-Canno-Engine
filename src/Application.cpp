@@ -46,8 +46,6 @@ using Cannis::ShaderManager;
 using glm::vec3;
 using glm::mat4;
 
-// @brief 
-void init();
 // @brief
 void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 // @brief 
@@ -59,19 +57,85 @@ void render(GLFWwindow* window, std::shared_ptr<ShaderManager> p_shaderManager, 
 // @brief 
 void mouseCallback(GLFWwindow* window, double xposIn, double yposIn);
 
-
 int main() {
     Game game(1080, 720);
     game.initialize();
-
     game.run();
     game.destroy();
 
+    //glfwInit();
+    //glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    //glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    //glfwWindowHint(GLFW_SAMPLES, 4);
+
+    //GLFWwindow* window = glfwCreateWindow(screen_width, screen_height, "Cannis Canno Engine", NULL, NULL);
+    //if (window == NULL) {
+    //    std::cout << "Failed to create GLFW window" << std::endl;
+    //    glfwTerminate();
+    //    return -1;
+    //}
+
+    //glfwMakeContextCurrent(window);
+
+    //glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
+    //glfwSetCursorPosCallback(window, mouseCallback);
+
+    //if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+    //    std::cout << "Failed to initialize GLAD" << std::endl;
+    //    return -1;
+    //}
+
+    //GuiManager guiManager(window, 800, 600);
+
+    ////Allow OpenGL to keep track of the z positions of all vertices 
+    //glEnable(GL_DEPTH_TEST);
+    //glDepthFunc(GL_LESS);
+
+    //glEnable(GL_CULL_FACE);
+    //glCullFace(GL_BACK);
+    //glFrontFace(GL_CCW);
+
+    //glEnable(GL_MULTISAMPLE);
+
+    //// Initialize our shader program
+    //std::shared_ptr<ShaderManager> shaderManager = std::make_shared<ShaderManager>();
+
+    //shaderManager->useShader(ShaderSlot::Model_Visualization);
+
+    //Model model("f22.obj", "f22.png", false);
+
+    //double lastTime = glfwGetTime();
+    //double currentTime = 0.0;
+    //double delta = 0.0;
+    //size_t counter = 0;
+
+    ////Engine loop
+    //while (!glfwWindowShouldClose(window)) {
+    //    currentTime = glfwGetTime();
+    //    delta = currentTime - lastTime;
+    //    ++counter;
+    //    if (delta > 1.0f / 30.0f) {
+    //        double fps = (1.0 / delta) * counter;
+    //        double ms = (delta / counter) * 1000;
+
+    //        //std::cout << "FPS: " << fps << " | " << ms << " ms | Counter: " << counter << std::endl;
+
+    //        lastTime = currentTime;
+    //        counter = 0;
+    //    }
+
+    //    processInput(window, delta, &mainCamera);
+    //    update(delta, shaderManager, &mainCamera, &model);
+    //    render(window, shaderManager, &model, &guiManager);
+    //}
+
+    ////Deallocation of all resources
+    //shaderManager->clean();
+    //model.clean();
+    //glfwTerminate();
+
     return 0;
-}
-
-void init() {
-
 }
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height) {

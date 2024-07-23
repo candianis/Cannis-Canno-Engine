@@ -8,6 +8,7 @@
 #include "../Shaders/Shader.h"
 #include "../Texture/Texture.h"
 #include "../Vertex/Vertex.h"
+#include "../Renderer/VertexBuffer/VertexBuffer.h"
 
 #include <string>
 #include <memory>
@@ -40,7 +41,8 @@ namespace Cannis {
         void clean() const;
 
     private:
-        // render data 
+        // render data
+        
         unsigned int m_VBO, m_EBO, m_VAO;
 
         // @brief initializes all the buffer objects/arrays

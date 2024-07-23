@@ -53,8 +53,12 @@ Shader::~Shader() {
 	glDeleteProgram(ID);
 }
 
-void Shader::use() const {
+void Shader::Bind() const {
 	glUseProgram(ID);
+}
+
+void Shader::Unbind() const {
+	glUseProgram(0);
 }
 
 void Shader::setBool(const string& name, bool value) const {
