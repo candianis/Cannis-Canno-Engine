@@ -4,9 +4,9 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
+//#include <assimp/Importer.hpp>
+//#include <assimp/scene.h>
+//#include <assimp/postprocess.h>
 
 #include "../Texture/Texture.h"
 #include "../Mesh/Mesh.h"
@@ -55,13 +55,13 @@ private:
     // @param path path on disk where the model's file resides
     void loadModel(const string& p_path);
 
-    // @brief processes a node in a recursive fashion. Processes each individual mesh located at the node and repeats this process on its children nodes (if any).
-    void processNode(aiNode* p_node, const aiScene* p_scene);
+    //// @brief processes a node in a recursive fashion. Processes each individual mesh located at the node and repeats this process on its children nodes (if any).
+    //void processNode(aiNode* p_node, const aiScene* p_scene);
 
-    //@brief 
-    Mesh processMesh(aiMesh* p_mesh, const aiScene* p_scene);
+    ////@brief 
+    //Mesh processMesh(aiMesh* p_mesh, const aiScene* p_scene);
 
-    // @brief checks all material textures of a given type and loads the textures if they're not loaded yet.
-    // @returns the required info is returned as a Texture struct.
-    vector<Texture> loadMaterialTextures(aiMaterial* p_mat, aiTextureType p_type, string p_typeName);
+    //// @brief checks all material textures of a given type and loads the textures if they're not loaded yet.
+    //// @returns the required info is returned as a Texture struct.
+    //vector<Texture> loadMaterialTextures(aiMaterial* p_mat, aiTextureType p_type, string p_typeName);
 };

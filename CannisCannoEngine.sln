@@ -3,24 +3,24 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CannisCannoEngine", "CannisCannoEngine.vcxproj", "{93F9B2DC-4971-4992-9FA6-9AFDCFD424AD}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CannisCanno", "CannisCannoEngine.vcxproj", "{93F9B2DC-4971-4992-9FA6-9AFDCFD424AD}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sandbox", "Sandbox\Sandbox.vcxproj", "{EDD4E643-0619-4664-BF75-46271B4D52D8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
-		Debug|x86 = Debug|x86
 		Release|x64 = Release|x64
-		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{93F9B2DC-4971-4992-9FA6-9AFDCFD424AD}.Debug|x64.ActiveCfg = Debug|x64
 		{93F9B2DC-4971-4992-9FA6-9AFDCFD424AD}.Debug|x64.Build.0 = Debug|x64
-		{93F9B2DC-4971-4992-9FA6-9AFDCFD424AD}.Debug|x86.ActiveCfg = Debug|Win32
-		{93F9B2DC-4971-4992-9FA6-9AFDCFD424AD}.Debug|x86.Build.0 = Debug|Win32
 		{93F9B2DC-4971-4992-9FA6-9AFDCFD424AD}.Release|x64.ActiveCfg = Release|x64
 		{93F9B2DC-4971-4992-9FA6-9AFDCFD424AD}.Release|x64.Build.0 = Release|x64
-		{93F9B2DC-4971-4992-9FA6-9AFDCFD424AD}.Release|x86.ActiveCfg = Release|Win32
-		{93F9B2DC-4971-4992-9FA6-9AFDCFD424AD}.Release|x86.Build.0 = Release|Win32
+		{EDD4E643-0619-4664-BF75-46271B4D52D8}.Debug|x64.ActiveCfg = Debug|x64
+		{EDD4E643-0619-4664-BF75-46271B4D52D8}.Debug|x64.Build.0 = Debug|x64
+		{EDD4E643-0619-4664-BF75-46271B4D52D8}.Release|x64.ActiveCfg = Release|x64
+		{EDD4E643-0619-4664-BF75-46271B4D52D8}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
