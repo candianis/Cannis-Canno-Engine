@@ -1,9 +1,9 @@
 #include <Cannis.h>
 
-class Sandbox : public CannisCanno::Application {
+class Sandbox : public Cannis::Application {
 public:
 	Sandbox() {
-		printf("Hello over there");
+		
 	}
 
 	~Sandbox() {
@@ -11,6 +11,6 @@ public:
 	}
 };
 
-CannisCanno::Application* CannisCanno::CreateApplication() {
+Cannis::Application* Cannis::CreateApplication() {
 	return new Sandbox();
 }

@@ -2,7 +2,7 @@
 
 #include "Core.h"
 
-namespace CannisCanno {
+namespace Cannis {
 	class CANNIS_API Application {
 	public:
 		Application();

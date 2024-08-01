@@ -62,7 +62,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>CC_PLATFORM_WINDOWS;CC_BUILD_DLL;CC_BUILD_DLL_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Engine/vendor/spdlog/include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Engine\vendor\spdlog\include;$(SolutionDir)Engine\src</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc11</LanguageStandard_C>
     </ClCompile>
@@ -80,7 +80,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>CC_PLATFORM_WINDOWS;CC_BUILD_DLL;CC_BUILD_DLLNDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Engine/vendor/spdlog/include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Engine\vendor\spdlog\include;$(SolutionDir)Engine\src</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc11</LanguageStandard_C>
     </ClCompile>
@@ -131,6 +131,7 @@
     <ClCompile Include="Engine\src\Utilities\Signature\Signature.cpp" />
     <ClCompile Include="Engine\src\Vertex\Vertex.cpp" />
     <ClCompile Include="Engine\src\ECS\SystemManager\SystemManager.cpp" />
+    <ClCompile Include="Engine\src\Logger\Log.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\src\Cannis.h" />
@@ -140,6 +141,7 @@
     <ClInclude Include="Engine\src\ECS\Component\Types\LightComponent.h" />
     <ClInclude Include="Engine\src\ECS\System\Types\MeshRenderer\MeshRendererSystem.h" />
     <ClInclude Include="Engine\src\Core\EntryPoint.h" />
+    <ClInclude Include="Engine\src\Events\Event.h" />
     <ClInclude Include="Engine\src\Managers\InputManager\InputManager.h" />
     <ClInclude Include="Engine\src\Renderer\IndexBuffer\IndexBuffer.h" />
     <ClInclude Include="Engine\src\Renderer\Renderer.h" />
@@ -435,6 +437,7 @@
     <ClInclude Include="Engine\src\Vertex\Vertex.h" />
     <ClInclude Include="Engine\src\ECS\Component\Types\Transform.h" />
     <ClInclude Include="Engine\src\ECS\SystemManager\SystemManager.h" />
+    <ClInclude Include="Engine\src\Logger\Log.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\3DModels\f117.mtl" />

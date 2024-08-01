@@ -2,9 +2,9 @@
 
 #include <stdio.h>
 
-namespace CannisCanno {
+namespace Cannis {
 	Application::Application() {
-		printf("Hello here");
+		
 	}
 
 	Application::~Application() {
@@ -12,7 +12,6 @@ namespace CannisCanno {
 	}
 
 	void Application::Run() {
-		printf("Hello there");
 		while (true);
 	}
 }
