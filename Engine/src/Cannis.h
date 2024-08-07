@@ -6,5 +6,4 @@
 #include "Logger/Log.h"
 
 
-
 #include "Core/EntryPoint.h"
