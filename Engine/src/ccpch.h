@@ -12,8 +12,12 @@
 
 // Data structures
 #include <string>
+using std::string;
 #include <vector>
 #include <unordered_map>
+
+//
+#include "Logger/Log.h"
 
 #ifdef CC_PLATFORM_WINDOWS
 	#include <Windows.h>

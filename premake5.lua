@@ -10,6 +10,8 @@ workspace "CannisCanno"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+include "Engine/vendor/GLFW"
+
 project "CannisCanno"
 	location "Engine"
 	kind "SharedLib"
@@ -28,7 +30,14 @@ project "CannisCanno"
 
 	includedirs {
 		"Engine/src;",
-		"Engine/vendor/spdlog/include;"
+		"Engine/vendor/spdlog/include;",
+		"Engine/vendor/GLFW/include;"
+	}
+
+	links {
+		"GLFW",
+		"opengl32.lib",
+		"dwmapi.lib"
 	}
 
 	filter "system:windows"
