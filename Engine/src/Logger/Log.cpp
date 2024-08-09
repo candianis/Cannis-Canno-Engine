@@ -1,3 +1,4 @@
+#include "ccpch.h"
 #include "Log.h"
 
 namespace Cannis {

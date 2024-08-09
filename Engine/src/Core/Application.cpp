@@ -1,6 +1,5 @@
+#include <ccpch.h>
 #include "Application.h"
-
-#include <stdio.h>
 
 namespace Cannis {
 	Application::Application() {

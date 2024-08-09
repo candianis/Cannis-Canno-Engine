@@ -18,13 +18,17 @@ project "CannisCanno"
 	targetdir ("bin/" .. outputdir .."/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .."/%{prj.name}")
 
+	pchheader "ccpch.h"
+	pchsource "Engine/src/ccpch.cpp"
+
 	files {
 		"Engine/src/**.h",
 		"Engine/src/**.cpp",
 	}
 
 	includedirs {
-		"Engine/vendor/spdlog/include;",
+		"Engine/src;",
+		"Engine/vendor/spdlog/include;"
 	}
 
 	filter "system:windows"
