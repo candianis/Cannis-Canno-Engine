@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ccpch.h"
 #include "Core/Core.h"
 
 namespace Cannis {
@@ -42,7 +43,33 @@ namespace Cannis {
 		bool m_handled = false;
 	};
 
-	class EventDispatcher {
+	class EventDispatcher
+	{
+		template<typename T>
+		using EventFn = std::function<bool(T&)>;
+	public:
+		EventDispatcher(Event& event)
+			: m_Event(event)
+		{
+		}
 
+		template<typename T>
+		bool Dispatch(EventFn<T> func)
+		{
+			EventType eType = m_Event.GetEventType();
+			EventType sType = T::GetStaticType();
+			if (m_Event.GetEventType() == T::GetStaticType())
+			{
+				m_Event.m_handled = func(*(T*)&m_Event);
+				return true;
+			}
+			return false;
+		}
+	private:
+		Event& m_Event;
 	};
+
+	inline std::ostream& operator<<(std::ostream& os, Event& e) {
+		return os << e.ToString();
+	}
 }

@@ -9,6 +9,7 @@
 #include <functional>
 #include <sstream>
 #include <thread>
+#include <typeindex>
 
 // Data structures
 #include <string>

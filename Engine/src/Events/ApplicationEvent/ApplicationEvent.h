@@ -1,3 +1,5 @@
+#pragma once
+
 #include "ccpch.h"
 #include "Core/Core.h"
 #include "../Event.h"
