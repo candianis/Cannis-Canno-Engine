@@ -5,6 +5,8 @@
 #include "Events/KeyEvent.h"
 #include "Events/ApplicationEvent/ApplicationEvent.h"
 
+#include <glad/glad.h>
+
 namespace Cannis {
 	static bool s_GLFWInitialized = false;
 
@@ -58,6 +60,11 @@ namespace Cannis {
 
 		m_window = glfwCreateWindow((int)p_props.width, (int)p_props.height, p_props.title.c_str(), nullptr, nullptr);
 		glfwMakeContextCurrent(m_window);
+
+		int gladStatus = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		CC_CORE_ASSERT(gladStatus, "Failed to initialize GLAD");
+
+
 		glfwSetWindowUserPointer(m_window, &m_data);
 		SetVSync(true);
 

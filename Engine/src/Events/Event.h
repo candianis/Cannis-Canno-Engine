@@ -39,8 +39,7 @@ namespace Cannis {
 			return GetCategoryFlags() & p_category;
 		}
 
-	protected:
-		bool m_handled = false;
+		bool handled = false;
 	};
 
 	class EventDispatcher
@@ -60,7 +59,7 @@ namespace Cannis {
 			EventType sType = T::GetStaticType();
 			if (m_Event.GetEventType() == T::GetStaticType())
 			{
-				m_Event.m_handled = func(*(T*)&m_Event);
+				m_Event.handled = func(*(T*)&m_Event);
 				return true;
 			}
 			return false;

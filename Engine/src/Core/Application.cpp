@@ -1,9 +1,10 @@
 #include <ccpch.h>
 #include "Application.h"
-#include <GLFW/glfw3.h>
+
+#include <glad/glad.h>
 
 namespace Cannis {
-	Application::Application() {
+	Application::Application() : m_running(true) {
 		m_window = std::unique_ptr<Window>(Window::Create());
 		m_window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
 	}

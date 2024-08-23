@@ -11,6 +11,7 @@ workspace "CannisCanno"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 include "Engine/vendor/GLFW"
+include "Engine/vendor/glad"
 
 project "CannisCanno"
 	location "Engine"
@@ -31,11 +32,13 @@ project "CannisCanno"
 	includedirs {
 		"Engine/src;",
 		"Engine/vendor/spdlog/include;",
-		"Engine/vendor/GLFW/include;"
+		"Engine/vendor/GLFW/include;",
+		"Engine/vendor/glad/include;"
 	}
 
 	links {
 		"GLFW",
+		"Glad",
 		"opengl32.lib",
 		"dwmapi.lib"
 	}
@@ -47,7 +50,8 @@ project "CannisCanno"
 
 		defines {
 			"CC_PLATFORM_WINDOWS",
-			"CC_BUILD_DLL"
+			"CC_BUILD_DLL",
+			"GLFW_INCLUDE_NONE"
 		}
 
 		postbuildcommands {
@@ -56,14 +60,17 @@ project "CannisCanno"
 
 	filter "configurations:Debug"
 		defines "CC_DEBUG"
+		buildoptions "/MDd"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "CC_RELEASE"
+		buildoptions "/MD"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "CC_DIST"
+		buildoptions "/MD"
 		optimize "On"
 
 
