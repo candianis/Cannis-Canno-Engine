@@ -4,7 +4,7 @@
 #include "Core/Application.h"
 
 namespace Cannis {
-	UISubsystem::UISubsystem(GLFWwindow* p_window) : Subsystem("GUI"), m_time(0.0f) {
+	UISubsystem::UISubsystem() : Subsystem("GUI"), m_time(0.0f) {
 		ImGui::CreateContext();
 		ImGui::StyleColorsDark();
 
@@ -34,7 +34,6 @@ namespace Cannis {
 		io.KeyMap[ImGuiKey_Y] = GLFW_KEY_Y;
 		io.KeyMap[ImGuiKey_Z] = GLFW_KEY_Z;
 
-		ImGui_ImplGlfw_InitForOpenGL(p_window, true);
 		ImGui_ImplOpenGL3_Init("#version 410");
 
 	}
@@ -53,7 +52,6 @@ namespace Cannis {
 		m_time = time;
 
 		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
 		static bool show_demo_window = true;
@@ -86,7 +84,6 @@ namespace Cannis {
 
 	void UISubsystem::Shutdown() {
 		ImGui_ImplOpenGL3_Shutdown();
-		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
 	}
 

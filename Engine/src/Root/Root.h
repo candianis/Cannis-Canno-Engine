@@ -13,7 +13,7 @@ namespace Cannis {
 	public:
 		Root() = default;
 
-		void Init(GLFWwindow* p_window);
+		void Init();
 		void Update();
 		void Shutdown();
 	};

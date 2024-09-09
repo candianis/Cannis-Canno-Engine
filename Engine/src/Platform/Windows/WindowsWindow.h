@@ -12,7 +12,6 @@ namespace Cannis {
 		void OnUpdate() override;
 		inline unsigned int GetWidth() const override { return m_data.width; }
 		inline unsigned int GetHeight() const override { return m_data.height; }
-		inline GLFWwindow* GetGLFW() const override { return m_window; }
 
 		//Window Attributes
 		inline void SetEventCallback(const EventCallbackFn& p_callback) override { m_data.eventCallback = p_callback; }

@@ -4,7 +4,6 @@
 #include "Core/Core.h"
 
 #include "imgui.h"
-#include "Platform/GLFW/imgui_impl_glfw.h"
 #include "Platform/OpenGL/imgui_impl_opengl3.h"
 
 #include "Subsystem/Subsystem.h"
@@ -14,7 +13,7 @@
 namespace Cannis {
 	class CANNIS_API UISubsystem : public Subsystem {
 	public:
-		UISubsystem(GLFWwindow* p_window);
+		UISubsystem();
 		~UISubsystem();
 
 		void Update() override;

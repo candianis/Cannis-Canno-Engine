@@ -4,6 +4,7 @@
 
 #include "Core/Core.h"
 #include "Events/Event.h"
+#include "Events/EventBus/EventBus.h"
 
 namespace Cannis {
 	struct WindowProps {
@@ -30,7 +31,10 @@ namespace Cannis {
 		virtual void SetVSync(bool p_enabled) = 0;
 		virtual void IsVSync() const = 0;
 
-		// @This static function must be implemented per platform
+		// @note This static function must be implemented per platform
 		static Window* Create(const WindowProps& p_props = WindowProps());
+
+	protected:
+		std::unique_ptr<EventBus> m_eventBus;
 	};
 }

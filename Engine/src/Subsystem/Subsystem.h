@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core/Core.h"
-#include "Events/IEvent.h"
+#include "Events/SysEvent.h"
 #include "Events/EventBus/EventBus.h"
 
 namespace Cannis {
