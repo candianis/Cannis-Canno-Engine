@@ -16,6 +16,8 @@
 using std::string;
 #include <vector>
 #include <unordered_map>
+#include <map>
+#include <list>
 
 //
 #include "Logger/Log.h"
@@ -23,4 +25,3 @@ using std::string;
 #ifdef CC_PLATFORM_WINDOWS
 	#include <Windows.h>
 #endif
-

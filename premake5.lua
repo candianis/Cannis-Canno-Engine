@@ -11,7 +11,8 @@ workspace "CannisCanno"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 include "Engine/vendor/GLFW"
-include "Engine/vendor/glad"
+include "Engine/vendor/Glad"
+include "Engine/vendor/Imgui"
 
 project "CannisCanno"
 	location "Engine"
@@ -33,12 +34,14 @@ project "CannisCanno"
 		"Engine/src;",
 		"Engine/vendor/spdlog/include;",
 		"Engine/vendor/GLFW/include;",
-		"Engine/vendor/glad/include;"
+		"Engine/vendor/Glad/include;",
+		"Engine/vendor/Imgui"
 	}
 
 	links {
 		"GLFW",
 		"Glad",
+		"Imgui",
 		"opengl32.lib",
 		"dwmapi.lib"
 	}

@@ -35,7 +35,7 @@ namespace Cannis {
 		virtual int GetCategoryFlags() const = 0;
 		virtual std::string ToString() const { return GetName(); }
 
-		inline bool IsInCategory(EventCategory p_category) {
+		inline bool IsInCategory(EventCategory p_category) const {
 			return GetCategoryFlags() & p_category;
 		}
 

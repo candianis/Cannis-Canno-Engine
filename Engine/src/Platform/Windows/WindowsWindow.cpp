@@ -64,7 +64,6 @@ namespace Cannis {
 		int gladStatus = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		CC_CORE_ASSERT(gladStatus, "Failed to initialize GLAD");
 
-
 		glfwSetWindowUserPointer(m_window, &m_data);
 		SetVSync(true);
 
@@ -140,7 +139,6 @@ namespace Cannis {
 			MouseMovedEvent mouseEvent((float)p_xPos, (float)p_yPos);
 			data.eventCallback(mouseEvent);
 		});
-
 	}
 	
 	void WindowsWindow::Shutdown()	{
