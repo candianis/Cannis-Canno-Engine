@@ -4,6 +4,7 @@
 #include "Events/MouseEvent.h"
 #include "Events/KeyEvent.h"
 #include "Events/ApplicationEvent/ApplicationEvent.h"
+#include "Events/AppEvent/AppEvent.h"
 
 #include <glad/glad.h>
 

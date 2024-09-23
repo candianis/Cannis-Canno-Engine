@@ -1,7 +1,7 @@
 #pragma once 
 
 #include "ccpch.h"
-#include "Events/Event.h"
+#include "Events/SysEvent.h"
 #include "Events/EventCallback/EventCallback.h"
 
 namespace Cannis {

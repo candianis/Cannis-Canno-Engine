@@ -9,6 +9,12 @@ namespace Cannis {
 
 	}
 
+	void Root::SubscribeSystemsToEvents(const std::unique_ptr<EventBus>& p_eventBus) {
+		for (std::shared_ptr<Subsystem>& subsystem : m_subsystems) {
+			subsystem->SubscribeToEvent(p_eventBus);
+		}
+	}
+
 	void Root::Update() {
 		for (std::shared_ptr<Subsystem>& subsystem : m_subsystems) {
 			subsystem->Update();

@@ -5,5 +5,4 @@
 #include "Core/Application.h"
 #include "Logger/Log.h"
 
-
 #include "Core/EntryPoint.h"
