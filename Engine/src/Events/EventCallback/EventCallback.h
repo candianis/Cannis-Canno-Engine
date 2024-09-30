@@ -18,7 +18,7 @@ namespace Cannis {
     };
 
     template <typename TOwner, typename TEvent>
-    class EventCallback : public IEventCallback {
+    class SysEventCallback : public IEventCallback {
     private:
         typedef void (TOwner::* CallbackFunction)(TEvent&);
 
@@ -30,11 +30,11 @@ namespace Cannis {
         }
 
     public:
-        EventCallback(TOwner* ownerInstance, CallbackFunction callbackFunction) {
+        SysEventCallback(TOwner* ownerInstance, CallbackFunction callbackFunction) {
             this->ownerInstance = ownerInstance;
             this->callbackFunction = callbackFunction;
         }
 
-        virtual ~EventCallback() override = default;
+        virtual ~SysEventCallback() override = default;
     };
 }

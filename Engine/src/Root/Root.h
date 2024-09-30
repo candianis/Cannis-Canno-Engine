@@ -4,7 +4,7 @@
 #include "Core/Core.h"
 #include "Events/Event.h"
 #include "Subsystem/Subsystem.h"
-#include "Events/EventBus/EventBus.h"
+#include "Events/SysEventDispatcher/SysEventDispatcher.h"
 
 namespace Cannis {
 	class CANNIS_API Root {
@@ -16,7 +16,7 @@ namespace Cannis {
 		Root() = default;
 
 		void Init();
-		void SubscribeSystemsToEvents(const std::unique_ptr<EventBus>& p_eventBus);
+		void SubscribeSystemsToEvents(const std::unique_ptr<SysEventDispatcher>& p_sysEventDispatcher);
 		void Update();
 		void Shutdown();
 	};

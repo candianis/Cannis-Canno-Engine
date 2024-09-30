@@ -4,7 +4,7 @@
 #include "Core/Core.h"
 
 namespace Cannis {
-	enum class EventType {
+	/*enum class EventType {
 		None = 0,
 		WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
 		AppTick, AppUpdate, AppRender,
@@ -53,8 +53,7 @@ namespace Cannis {
 		}
 
 		template<typename T>
-		bool Dispatch(EventFn<T> func)
-		{
+		bool Dispatch(EventFn<T> func) {
 			EventType eType = m_Event.GetEventType();
 			EventType sType = T::GetStaticType();
 			if (m_Event.GetEventType() == T::GetStaticType())
@@ -70,5 +69,5 @@ namespace Cannis {
 
 	inline std::ostream& operator<<(std::ostream& os, Event& e) {
 		return os << e.ToString();
-	}
+	}*/
 }

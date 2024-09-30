@@ -2,7 +2,7 @@
 
 #include "Core/Core.h"
 #include "Events/SysEvent.h"
-#include "Events/EventBus/EventBus.h"
+#include "Events/SysEventDispatcher/SysEventDispatcher.h"
 
 namespace Cannis {
 	// @brief Engine susbsytems
@@ -17,7 +17,7 @@ namespace Cannis {
 
 		inline const std::string& GetName() const { return m_debugName; }
 
-		virtual void SubscribeToEvent(const std::unique_ptr<EventBus>& p_eventBus) {}
+		virtual void SubscribeToEvent(const std::unique_ptr<SysEventDispatcher>& p_sysEventDispatcher) {}
 
 	protected:
 		std::string m_debugName;

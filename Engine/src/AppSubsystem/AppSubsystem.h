@@ -12,10 +12,10 @@ namespace Cannis {
 
 		void Update() override;
 
-		void SubscribeToEvent(const std::unique_ptr<EventBus>& p_eventBus) override;
+		void SubscribeToEvent(const std::unique_ptr<SysEventDispatcher>& p_eventBus) override;
 
-		void OnWindowClose(AppCloseEvent& p_event);
-		void OnWindowResize(AppResizeEvent& p_event);
+		void OnWindowClose(WindowCloseEvent& p_event);
+		void OnWindowResize(WindowResizeEvent& p_event);
 
 	private:
 

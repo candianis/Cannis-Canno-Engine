@@ -10,6 +10,7 @@
 #include "Events/EventBus/EventBus.h"
 #include "Events/MouseEvent.h"
 #include "Events/AppEvent/AppEvent.h"
+#include "Events/KeyboardEvent/KeyEvent.h"
 
 #include <GLFW/glfw3.h>
 
@@ -23,12 +24,22 @@ namespace Cannis {
 		void Shutdown() override;
 		void OnEvent(SysEvent& p_event) override;
 
-		void SubscribeToEvent(const std::unique_ptr<EventBus>& p_eventBus) override;
+		void SubscribeToEvent(const std::unique_ptr<SysEventDispatcher>& p_sysEventDispatcher) override;
 
-		void OnMouseButtonPressedEvent(MouseButtonPressedEvent& p_event);
-		void OnMouseButtonReleasedEvent(MouseButtonReleasedEvent& p_event);
-		void OnMouseScrolled(MouseScrolledEvent& p_event);
-		void OnMouseMovedEvent(MouseMovedEvent& p_event);
+		// Window events
+		void OnWindowClose(const SysEvent& p_event);
+		void OnWindowResize(const SysEvent& p_event);
+
+		// Mouse Events
+		void OnMouseButtonPressedEvent(const SysEvent& p_event);
+		void OnMouseButtonReleasedEvent(const SysEvent& p_event);
+		void OnMouseScrolledEvent(const SysEvent& p_event);
+		void OnMouseMovedEvent(const SysEvent& p_event);
+
+		//Keyboard events
+		void OnKeyPressedEvent(const SysEvent& p_event);
+		void OnKeyReleasedEvent(const SysEvent& p_event);
+		void OnKeyTypedEvent(const SysEvent& p_event);
 
 	private:
 		void CreateEditor();

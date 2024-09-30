@@ -2,69 +2,53 @@
 #include "AppEvent.h"
 
 namespace Cannis {
-	AppResizeEvent::AppResizeEvent(unsigned int p_width, unsigned int p_height) {
-
-	}
-
-	AppResizeEvent::~AppResizeEvent() {
-
-	}
-
-	inline std::string AppResizeEvent::ToString() const {
+	inline std::string WindowResizeEvent::ToString() const {
 		std::stringstream ss;
 		ss << "WindowResizeEvent: " << m_width << ", " << m_height;
 		return ss.str();
 	}
 
-	AppCloseEvent::AppCloseEvent() {
-
-	}
-
-	AppCloseEvent::~AppCloseEvent() {
-
-	}
-
-	std::string AppCloseEvent::ToString() const {
+	std::string WindowCloseEvent::ToString() const {
 		std::stringstream ss;
 		ss << "WindowCloseEvent: true";
 		return ss.str();
 	}
 
-	CCAppTickEvent::CCAppTickEvent() {
+	AppTickEvent::AppTickEvent() {
 
 	}
 
-	CCAppTickEvent::~CCAppTickEvent() {
+	AppTickEvent::~AppTickEvent() {
 
 	}
 
-	std::string CCAppTickEvent::ToString() const {
+	std::string AppTickEvent::ToString() const {
 		std::stringstream ss;
 		ss << "Application Tick: ";
 		return ss.str();
 	}
 
-	CCAppUpdateEvent::CCAppUpdateEvent() {
+	AppUpdateEvent::AppUpdateEvent() {
 
 	}
 
-	CCAppUpdateEvent::~CCAppUpdateEvent() {
+	AppUpdateEvent::~AppUpdateEvent() {
 
 	}
 
-	std::string CCAppUpdateEvent::ToString() const {
+	std::string AppUpdateEvent::ToString() const {
 		std::stringstream ss;
 		ss << "Application Update: ";
 		return ss.str();
 	}
 
-	CCAppRenderEvent::CCAppRenderEvent() {
+	AppRenderEvent::AppRenderEvent() {
 	}
 
-	CCAppRenderEvent::~CCAppRenderEvent() {
+	AppRenderEvent::~AppRenderEvent() {
 
 	}
-	std::string CCAppRenderEvent::ToString() const {
+	std::string AppRenderEvent::ToString() const {
 		std::stringstream ss;
 		ss << "Application Render: ";
 		return ss.str();

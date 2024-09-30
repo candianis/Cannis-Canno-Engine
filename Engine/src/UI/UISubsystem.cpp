@@ -1,7 +1,9 @@
 #include "ccpch.h"
 #include "UISubsystem.h"
-#include "Events/KeyboardEvent/KeyboardEvent.h"
 #include "Core/Application.h"
+
+#include <GLFW/glfw3.h>
+#include <glad/glad.h>
 
 namespace Cannis {
 	UISubsystem::UISubsystem() : Subsystem("GUI"), m_time(0.0f) {
@@ -35,6 +37,8 @@ namespace Cannis {
 		io.KeyMap[ImGuiKey_Z] = GLFW_KEY_Z;
 
 		ImGui_ImplOpenGL3_Init("#version 450");
+
+
 	}
 
 	UISubsystem::~UISubsystem() {
@@ -66,35 +70,91 @@ namespace Cannis {
 
 	}
 		
-	void UISubsystem::SubscribeToEvent(const std::unique_ptr<EventBus>& p_eventBus) {
-		p_eventBus->SubscribeToEvent<MouseMovedEvent>(this, &UISubsystem::OnMouseMovedEvent);
-		p_eventBus->SubscribeToEvent<MouseButtonPressedEvent>(this, &UISubsystem::OnMouseButtonPressedEvent);
-		p_eventBus->SubscribeToEvent<MouseButtonReleasedEvent>(this, &UISubsystem::OnMouseButtonReleasedEvent);
-		p_eventBus->SubscribeToEvent<MouseScrolledEvent>(this, &UISubsystem::OnMouseScrolled);
+	void UISubsystem::SubscribeToEvent(const std::unique_ptr<SysEventDispatcher>& p_sysEventDispatcher) {
+		p_sysEventDispatcher->Subscribe(EventType::WindowClose, std::bind(&UISubsystem::OnWindowClose, this, std::placeholders::_1));
+		p_sysEventDispatcher->Subscribe(EventType::WindowResize, std::bind(&UISubsystem::OnWindowResize, this, std::placeholders::_1));
+		p_sysEventDispatcher->Subscribe(EventType::KeyPressed, std::bind(&UISubsystem::OnKeyPressedEvent, this, std::placeholders::_1));
 	}
 
-	void UISubsystem::OnMouseButtonPressedEvent(MouseButtonPressedEvent& p_event) {
+	void UISubsystem::OnWindowClose(const SysEvent& p_event) {
+		CC_CORE_INFO("UI subsystem was informed the window is closing");
+
+		const WindowCloseEvent& curEvent = static_cast<const WindowCloseEvent&>(p_event);
+		
+	}
+
+	void UISubsystem::OnWindowResize(const SysEvent& p_event) {
+		const WindowResizeEvent& curEvent = static_cast<const WindowResizeEvent&>(p_event);
+		
+
 		ImGuiIO& io = ImGui::GetIO();
-		io.MouseDown[p_event.GetMouseButton()] = true;
+		io.DisplaySize = ImVec2(curEvent.GetWidth(), curEvent.GetHeight());
+		io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
+		glViewport(0, 0, curEvent.GetWidth(), curEvent.GetHeight());
+
+		CC_CORE_INFO(p_event.ToString());
+	}
+
+	void UISubsystem::OnMouseButtonPressedEvent(const SysEvent& p_event) {
+		const MouseButtonPressedEvent& curEvent = static_cast<const MouseButtonPressedEvent&>(p_event);
+
+		ImGuiIO& io = ImGui::GetIO();
+		io.MouseDown[curEvent.GetMouseButton()] = true;
 		CC_CORE_INFO("Mouse Button Pressed");
 	}
 
-	void UISubsystem::OnMouseButtonReleasedEvent(MouseButtonReleasedEvent& p_event) {
+	void UISubsystem::OnMouseButtonReleasedEvent(const SysEvent& p_event) {
+		const MouseButtonReleasedEvent& curEvent = static_cast<const MouseButtonReleasedEvent&>(p_event);
+
 		ImGuiIO& io = ImGui::GetIO();
-		io.MouseDown[p_event.GetMouseButton()] = false;
+		io.MouseDown[curEvent.GetMouseButton()] = false;
 		CC_CORE_INFO("Mouse Button Released");
 	}
 
-	void UISubsystem::OnMouseScrolled(MouseScrolledEvent& p_event) {
+	void UISubsystem::OnMouseScrolledEvent(const SysEvent& p_event) {
+		const MouseScrolledEvent& curEvent = static_cast<const MouseScrolledEvent&>(p_event);
+
 		ImGuiIO& io = ImGui::GetIO();
-		io.MouseWheelH += p_event.GetXOffset();
-		io.MouseWheel += p_event.GetYOffset();
+		io.MouseWheelH += curEvent.GetXOffset();
+		io.MouseWheel += curEvent.GetYOffset();
 	}
 
-	void UISubsystem::OnMouseMovedEvent(MouseMovedEvent& p_event) {
+	void UISubsystem::OnMouseMovedEvent(const SysEvent& p_event) {
+		const MouseMovedEvent& curEvent = static_cast<const MouseMovedEvent&>(p_event);
+
 		ImGuiIO& io = ImGui::GetIO();
-		io.MousePos = ImVec2(p_event.GetX(), p_event.GetY());
+		io.MousePos = ImVec2(curEvent.GetX(), curEvent.GetY());
 		CC_CORE_INFO(p_event.ToString());
+
+	}
+
+	void UISubsystem::OnKeyPressedEvent(const SysEvent& p_event) {
+		const KeyPressedEvent& curEvent = static_cast<const KeyPressedEvent&>(p_event);
+
+		ImGuiIO& io = ImGui::GetIO();
+		io.KeysDown[curEvent.GetKey()] = true;
+
+		io.KeyCtrl = io.KeysDown[GLFW_KEY_LEFT_CONTROL] || io.KeysDown[GLFW_KEY_RIGHT_CONTROL];
+		io.KeyShift = io.KeysDown[GLFW_KEY_LEFT_SHIFT] || io.KeysDown[GLFW_KEY_RIGHT_SHIFT];
+		io.KeyAlt = io.KeysDown[GLFW_KEY_LEFT_ALT] || io.KeysDown[GLFW_KEY_RIGHT_ALT];
+		io.KeySuper = io.KeysDown[GLFW_KEY_LEFT_SUPER] || io.KeysDown[GLFW_KEY_RIGHT_SUPER];
+		CC_CORE_INFO("Key was pressed");
+	}
+
+	void UISubsystem::OnKeyReleasedEvent(const SysEvent& p_event) {
+		const KeyReleasedEvent& curEvent = static_cast<const KeyReleasedEvent&>(p_event);
+
+		ImGuiIO& io = ImGui::GetIO();
+		io.KeysDown[curEvent.GetKey()] = false;
+	}
+
+	void UISubsystem::OnKeyTypedEvent(const SysEvent& p_event) {
+		const KeyTypedEvent& curEvent = static_cast<const KeyTypedEvent&>(p_event);
+
+		ImGuiIO& io = ImGui::GetIO();
+		int keycode = curEvent.GetKey();
+		if (keycode > 0 && keycode < 0x10000)
+			io.AddInputCharacter((unsigned short)keycode);
 	}
 
 	void UISubsystem::CreateEditor() {

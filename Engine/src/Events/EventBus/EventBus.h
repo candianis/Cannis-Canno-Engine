@@ -2,10 +2,13 @@
 
 #include "ccpch.h"
 #include "Events/SysEvent.h"
+#include "Events/MouseEvent.h"
 #include "Events/EventCallback/EventCallback.h"
 
 namespace Cannis {
 	typedef std::list<std::unique_ptr<IEventCallback>> HandlerList;
+	template <typename T>
+	using SysEventFn = std::function<bool(T&)>;
 
 	class CANNIS_API EventBus {
 	public:
@@ -15,12 +18,12 @@ namespace Cannis {
 		inline void Reset() { m_subscribers.clear(); }
 
 		template <typename TEvent, typename TOwner>
-		void SubscribeToEvent(TOwner* p_ownerInstance, void (TOwner::* p_callbackFunction)(TEvent&)) {
+		void SubscribeToEvent(TOwner* p_ownerInstance, bool (TOwner::* p_callbackFunction)(TEvent&)) {
 			if (!m_subscribers[typeid(TEvent)].get()) {
 				m_subscribers[typeid(TEvent)] = std::make_shared<HandlerList>();
 			}
 
-			auto subscriber = std::make_unique<EventCallback<TOwner, TEvent>>(p_ownerInstance, p_callbackFunction);
+			auto subscriber = std::make_unique<SysEventCallback<TOwner, TEvent>>(p_ownerInstance, p_callbackFunction);
 			m_subscribers[typeid(TEvent)]->push_back(std::move(subscriber));
 		}
 
@@ -38,6 +41,11 @@ namespace Cannis {
 				TEvent event(std::forward<TArgs>(args)...);
 				handler->Execute(event);
 			}
+		}
+
+		template <typename T>
+		bool Dispatch(SysEventFn<T> p_func) {
+
 		}
 
 	private:

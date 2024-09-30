@@ -4,56 +4,58 @@
 #include "Events/SysEvent.h"
 
 namespace Cannis {
-	class CANNIS_API AppResizeEvent : public SysEvent {
+	class CANNIS_API WindowResizeEvent : public SysEvent {
 	public:
-		AppResizeEvent(unsigned int p_width, unsigned int p_height);
-		~AppResizeEvent();
+		WindowResizeEvent(unsigned int p_width, unsigned int p_height) : m_width(p_width), m_height(p_height) {}
+		~WindowResizeEvent() = default;
 
-		inline Events::IEventType GetType() const override { return Events::IEventType::WindowResize; }
-		inline Events::IEventCategory GetCategory() const override { return Events::IEventCategoryApplication; }
+		inline unsigned int GetWidth() const { return m_width; }
+		inline unsigned int GetHeight() const { return m_height; }
+		inline EventType GetType() const override { return EventType::WindowResize; }
+		inline EventCategory GetCategory() const override { return EventCategory::ECApplication; }
 		std::string ToString() const override;
 
 	private:
 		unsigned int m_width, m_height;
 	};
 
-	class CANNIS_API AppCloseEvent : public SysEvent {
+	class CANNIS_API WindowCloseEvent : public SysEvent {
 	public:
-		AppCloseEvent();
-		~AppCloseEvent();
+		WindowCloseEvent() = default;
+		~WindowCloseEvent() = default;
 
-		Events::IEventType GetType() const override { return Events::IEventType::WindowClose; }
-		Events::IEventCategory GetCategory() const override { return Events::IEventCategoryApplication; }
+		EventType GetType() const override { return EventType::WindowClose; }
+		EventCategory GetCategory() const override { return EventCategory::ECApplication; }
 		std::string ToString() const override;
 	};
 
-	class CANNIS_API CCAppTickEvent : SysEvent {
+	class CANNIS_API AppTickEvent : SysEvent {
 	public: 
-		CCAppTickEvent();
-		~CCAppTickEvent();
+		AppTickEvent();
+		~AppTickEvent();
 
-		inline Events::IEventType GetType() const override { return Events::IEventType::AppTick; }
-		inline Events::IEventCategory GetCategory() const override { return Events::IEventCategoryApplication; }
+		inline EventType GetType() const override { return EventType::AppTick; }
+		inline EventCategory GetCategory() const override { return EventCategory::ECApplication; }
 		std::string ToString() const override;
 	};
 
-	class CANNIS_API CCAppUpdateEvent : SysEvent {
+	class CANNIS_API AppUpdateEvent : SysEvent {
 	public: 
-		CCAppUpdateEvent();
-		~CCAppUpdateEvent();
+		AppUpdateEvent();
+		~AppUpdateEvent();
 
-		inline Events::IEventType GetType() const override { return Events::IEventType::AppUpdate; }
-		inline Events::IEventCategory GetCategory() const override { return Events::IEventCategoryApplication; }
+		inline EventType GetType() const override { return EventType::AppUpdate; }
+		inline EventCategory GetCategory() const override { return EventCategory::ECApplication; }
 		std::string ToString() const override;
 	};
 
-	class CANNIS_API CCAppRenderEvent : SysEvent {
+	class CANNIS_API AppRenderEvent : SysEvent {
 	public:
-		CCAppRenderEvent();
-		~CCAppRenderEvent();
+		AppRenderEvent();
+		~AppRenderEvent();
 
-		inline Events::IEventType GetType() const override { return Events::IEventType::AppRender; }
-		inline Events::IEventCategory GetCategory() const override { return Events::IEventCategoryApplication; }
+		inline EventType GetType() const override { return EventType::AppRender; }
+		inline EventCategory GetCategory() const override { return EventCategory::ECApplication; }
 		std::string ToString() const override;
 	};
 }

@@ -14,10 +14,13 @@ namespace Cannis {
 		s_instance = this;
 
 		m_window = std::unique_ptr<Window>(Window::Create());
-		m_window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
+		m_window->SetSysEventCallback(std::bind(&Application::OnSysEvent, this, std::placeholders::_1));
+
+		m_sysEventDispatcher = std::make_unique<SysEventDispatcher>();
+		m_sysEventDispatcher->Subscribe(EventType::WindowClose, std::bind(&Application::OnWindowClose, this, std::placeholders::_1));
 
 		m_root.Init();
-		m_root.SubscribeSystemsToEvents(m_eventBus);
+		m_root.SubscribeSystemsToEvents(m_sysEventDispatcher);
 	}
 
 	Application::~Application() {
@@ -34,33 +37,13 @@ namespace Cannis {
 		}
 	}
 
-	void Application::OnEvent(Event& p_event) {
-		EventDispatcher dispatcher(p_event);
-		dispatcher.Dispatch<WindowCloseEvent>(std::bind(&Application::OnWindowClose, this, std::placeholders::_1));
-
-		switch (p_event.GetEventType()) {
-			case EventType::WindowClose:
-				m_eventBus->EmitEvent<AppCloseEvent>();
-				break;
-
-			case EventType::MouseMoved:
-				m_eventBus->EmitEvent<MouseMovedEvent>(13.0f, 13.0f);
-				break;
-
-			case EventType::MouseButtonPressed:
-				m_eventBus->EmitEvent<MouseButtonPressedEvent>();
-				break;
-
-			case EventType::MouseButtonReleased:
-				m_eventBus->EmitEvent<MouseButtonReleasedEvent>();
-				break;
-		}
-
-		CC_CORE_INFO(p_event.ToString());
+	void Application::OnSysEvent(SysEvent& p_event) {
+		CC_CORE_INFO("Sys event was called: " + p_event.ToString());
+		m_sysEventDispatcher->EmitEvent(p_event);
 	}
 
-	bool Application::OnWindowClose(WindowCloseEvent& p_event) {
+	void Application::OnWindowClose(const SysEvent& p_event) {
+		CC_CORE_INFO("Sys event was sent to the application through the dispatcher");
 		m_running = false;
-		return true;
 	}
 }

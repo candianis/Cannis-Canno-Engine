@@ -14,15 +14,15 @@ namespace Cannis {
 
 	}
 
-	void AppSubsystem::SubscribeToEvent(const std::unique_ptr<EventBus>& p_eventBus) {
-		p_eventBus->SubscribeToEvent<AppCloseEvent>(this, &AppSubsystem::OnWindowClose);
+	void AppSubsystem::SubscribeToEvent(const std::unique_ptr<SysEventDispatcher>& p_eventBus) {
+		//p_eventBus->SubscribeToEvent<AppCloseEvent>(this, &AppSubsystem::OnWindowClose);
 	}
 
-	void AppSubsystem::OnWindowClose(AppCloseEvent& p_event) {
+	void AppSubsystem::OnWindowClose(WindowCloseEvent& p_event) {
 
 	}
 
-	void AppSubsystem::OnWindowResize(AppResizeEvent& p_event) {
+	void AppSubsystem::OnWindowResize(WindowResizeEvent& p_event) {
 
 	}
 }

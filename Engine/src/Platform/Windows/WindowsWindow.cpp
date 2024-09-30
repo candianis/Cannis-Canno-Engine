@@ -2,7 +2,7 @@
 
 #include "WindowsWindow.h"
 #include "Events/MouseEvent.h"
-#include "Events/KeyEvent.h"
+#include "Events/KeyboardEvent/KeyEvent.h"
 #include "Events/ApplicationEvent/ApplicationEvent.h"
 #include "Events/AppEvent/AppEvent.h"
 
@@ -41,8 +41,8 @@ namespace Cannis {
 
 		m_data.vsync = p_enabled;
 	}
-	void WindowsWindow::IsVSync() const {
-
+	bool WindowsWindow::IsVSync() const {
+		return m_data.vsync;
 	}
 	
 	void WindowsWindow::Init(const WindowProps& p_props) {
@@ -74,15 +74,15 @@ namespace Cannis {
 			data.width = p_width;
 			data.height = p_height;
 
-			WindowResizeEvent windowEvent(p_width, p_height);
-			data.eventCallback(windowEvent);
+			WindowResizeEvent appEvent(p_width, p_height);
+			data.sysEventCallback(appEvent);
 		});
 
 		glfwSetWindowCloseCallback(m_window, [](GLFWwindow* p_window) {
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(p_window);
-			
-			WindowCloseEvent windowEvent;
-			data.eventCallback(windowEvent);
+
+			WindowCloseEvent appEvent;
+			data.sysEventCallback(appEvent);
 		});
 
 		glfwSetKeyCallback(m_window, [](GLFWwindow* p_window, int p_key, int p_scancode, int p_action, int p_mods) {
@@ -90,20 +90,20 @@ namespace Cannis {
 
 			switch (p_action) {
 				case GLFW_PRESS: {
-					KeyPressedEvent keyPressedEvent(p_key, 0);
-					data.eventCallback(keyPressedEvent);
+					KeyPressedEvent keyPressedEvent(p_key);
+					data.sysEventCallback(keyPressedEvent);
 				}
 					break;
 
 				case GLFW_RELEASE: {
-						KeyReleasedEvent keyReleasedEvent(p_key);
-						data.eventCallback(keyReleasedEvent);
+					KeyReleasedEvent keyEvent(p_key);
+					data.sysEventCallback(keyEvent);
 				}
 					break;
 
 				case GLFW_REPEAT: {
-					KeyPressedEvent keyRepeatEvent(p_key, 1);
-					data.eventCallback(keyRepeatEvent);
+					KeyPressedEvent keyPressedEvent(p_key);
+					data.sysEventCallback(keyPressedEvent);
 				}
 					break;
 			}
@@ -114,14 +114,14 @@ namespace Cannis {
 
 			switch (p_action) {
 				case GLFW_PRESS: {
-					KeyPressedEvent keyPressedEvent(p_button, 0);
-					data.eventCallback(keyPressedEvent);
+					KeyPressedEvent keyPressedEvent(p_button);
+					data.sysEventCallback(keyPressedEvent);
 				}
 					break;
 
 				case GLFW_RELEASE: {
 					KeyReleasedEvent keyReleasedEvent(p_button);
-					data.eventCallback(keyReleasedEvent);
+					data.sysEventCallback(keyReleasedEvent);
 				}
 					break;
 			}
@@ -131,16 +131,18 @@ namespace Cannis {
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(p_window);
 
 			MouseScrolledEvent mouseEvent(p_xoffset, p_yoffset);
-			data.eventCallback(mouseEvent);
+			data.sysEventCallback(mouseEvent);
 		});
 
 		glfwSetCursorPosCallback(m_window, [](GLFWwindow* p_window, double p_xPos, double p_yPos) {
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(p_window);
 
 			MouseMovedEvent mouseEvent((float)p_xPos, (float)p_yPos);
-			data.eventCallback(mouseEvent);
+			data.sysEventCallback(mouseEvent);
 		});
 	}
+
+
 	
 	void WindowsWindow::Shutdown()	{
 		glfwDestroyWindow(m_window);

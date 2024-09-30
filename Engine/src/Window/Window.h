@@ -4,6 +4,7 @@
 
 #include "Core/Core.h"
 #include "Events/Event.h"
+#include "Events/SysEvent.h"
 #include "Events/EventBus/EventBus.h"
 
 namespace Cannis {
@@ -17,7 +18,7 @@ namespace Cannis {
 	// @brief Interface representing a desktop system based window
 	class CANNIS_API Window {
 	public:
-		using EventCallbackFn = std::function<void(Event&)>;
+		using SysEventCallback = std::function<void(SysEvent&)>;
 
 		virtual ~Window() {}
 		
@@ -27,9 +28,9 @@ namespace Cannis {
 		virtual unsigned int GetHeight() const = 0;
 
 		//Window Attributes
-		virtual void SetEventCallback(const EventCallbackFn& p_callback) = 0;
+		virtual void SetSysEventCallback(const SysEventCallback& p_callback) = 0;
 		virtual void SetVSync(bool p_enabled) = 0;
-		virtual void IsVSync() const = 0;
+		virtual bool IsVSync() const = 0;
 
 		// @note This static function must be implemented per platform
 		static Window* Create(const WindowProps& p_props = WindowProps());

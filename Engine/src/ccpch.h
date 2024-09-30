@@ -18,6 +18,7 @@ using std::string;
 #include <unordered_map>
 #include <map>
 #include <list>
+#include <queue>
 
 //
 #include "Logger/Log.h"

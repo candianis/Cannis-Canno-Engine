@@ -14,9 +14,9 @@ namespace Cannis {
 		inline unsigned int GetHeight() const override { return m_data.height; }
 
 		//Window Attributes
-		inline void SetEventCallback(const EventCallbackFn& p_callback) override { m_data.eventCallback = p_callback; }
+		inline void SetSysEventCallback(const SysEventCallback& p_callback) override { m_data.sysEventCallback = p_callback; }
 		void SetVSync(bool p_enabled) override;
-		void IsVSync() const override;
+		bool IsVSync() const override;
 		
 	private:
 		virtual void Init(const WindowProps& p_props);
@@ -30,7 +30,10 @@ namespace Cannis {
 			unsigned int width;
 			unsigned int height;
 			bool vsync;
-			EventCallbackFn eventCallback;
+			SysEventCallback sysEventCallback;
+			std::vector<SysEvent> eventStack;
+
+			WindowData() : width(0), height(0), vsync(false) {}
 		};
 
 		WindowData m_data;
