@@ -73,7 +73,15 @@ namespace Cannis {
 	void UISubsystem::SubscribeToEvent(const std::unique_ptr<SysEventDispatcher>& p_sysEventDispatcher) {
 		p_sysEventDispatcher->Subscribe(EventType::WindowClose, std::bind(&UISubsystem::OnWindowClose, this, std::placeholders::_1));
 		p_sysEventDispatcher->Subscribe(EventType::WindowResize, std::bind(&UISubsystem::OnWindowResize, this, std::placeholders::_1));
+
 		p_sysEventDispatcher->Subscribe(EventType::KeyPressed, std::bind(&UISubsystem::OnKeyPressedEvent, this, std::placeholders::_1));
+		p_sysEventDispatcher->Subscribe(EventType::KeyReleased, std::bind(&UISubsystem::OnKeyReleasedEvent, this, std::placeholders::_1));
+		p_sysEventDispatcher->Subscribe(EventType::KeyTyped, std::bind(&UISubsystem::OnKeyTypedEvent, this, std::placeholders::_1));
+
+		p_sysEventDispatcher->Subscribe(EventType::MouseMoved, std::bind(&UISubsystem::OnMouseMovedEvent, this, std::placeholders::_1));
+		p_sysEventDispatcher->Subscribe(EventType::MouseButtonPressed, std::bind(&UISubsystem::OnMouseButtonPressedEvent, this, std::placeholders::_1));
+		p_sysEventDispatcher->Subscribe(EventType::MouseButtonReleased, std::bind(&UISubsystem::OnMouseButtonReleasedEvent, this, std::placeholders::_1));
+		p_sysEventDispatcher->Subscribe(EventType::MouseScrolled, std::bind(&UISubsystem::OnMouseScrolledEvent, this, std::placeholders::_1));
 	}
 
 	void UISubsystem::OnWindowClose(const SysEvent& p_event) {

@@ -114,13 +114,13 @@ namespace Cannis {
 
 			switch (p_action) {
 				case GLFW_PRESS: {
-					KeyPressedEvent keyPressedEvent(p_button);
+					MouseButtonPressedEvent keyPressedEvent(p_button);
 					data.sysEventCallback(keyPressedEvent);
 				}
 					break;
 
 				case GLFW_RELEASE: {
-					KeyReleasedEvent keyReleasedEvent(p_button);
+					MouseButtonReleasedEvent keyReleasedEvent(p_button);
 					data.sysEventCallback(keyReleasedEvent);
 				}
 					break;
@@ -139,6 +139,13 @@ namespace Cannis {
 
 			MouseMovedEvent mouseEvent((float)p_xPos, (float)p_yPos);
 			data.sysEventCallback(mouseEvent);
+		});
+
+		glfwSetCharCallback(m_window, [](GLFWwindow* p_window, unsigned int p_keyCode) {
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(p_window);
+
+			KeyTypedEvent typedEvent(p_keyCode);
+			data.sysEventCallback(typedEvent);
 		});
 	}
 
