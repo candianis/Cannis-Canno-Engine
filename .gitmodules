@@ -7,3 +7,6 @@
 [submodule "Engine/vendor/Imgui"]
 	path = Engine/vendor/Imgui
 	url = https://github.com/candianis/imgui
+[submodule "Engine/vendor/GLM"]
+	path = Engine/vendor/GLM
+	url = https://github.com/g-truc/glm

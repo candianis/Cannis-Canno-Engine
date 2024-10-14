@@ -28,6 +28,8 @@ project "CannisCanno"
 	files {
 		"Engine/src/**.h",
 		"Engine/src/**.cpp",
+		"Engine/vendor/GLM/glm/**.hpp",
+		"Engine/vendor/GLM/glm/**.inl",
 	}
 
 	includedirs {
@@ -35,7 +37,8 @@ project "CannisCanno"
 		"Engine/vendor/spdlog/include;",
 		"Engine/vendor/GLFW/include;",
 		"Engine/vendor/Glad/include;",
-		"Engine/vendor/Imgui"
+		"Engine/vendor/Imgui",
+		"Engine/vendor/GLM"
 	}
 
 	links {
@@ -88,13 +91,14 @@ project "Sandbox"
 
 	files {
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/GLM/glm"
 	}
 
 	includedirs {
 		"Engine/vendor/spdlog/include;",
-		"Engine/src;"
-
+		"Engine/src;",
+		"Engine/vendor/GLM;"
 	}
 
 	links {
