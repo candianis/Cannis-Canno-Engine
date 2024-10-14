@@ -99,8 +99,6 @@ namespace Cannis {
 		io.DisplaySize = ImVec2(curEvent.GetWidth(), curEvent.GetHeight());
 		io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
 		glViewport(0, 0, curEvent.GetWidth(), curEvent.GetHeight());
-
-		CC_CORE_INFO(p_event.ToString());
 	}
 
 	void UISubsystem::OnMouseButtonPressedEvent(const SysEvent& p_event) {
@@ -108,7 +106,6 @@ namespace Cannis {
 
 		ImGuiIO& io = ImGui::GetIO();
 		io.MouseDown[curEvent.GetMouseButton()] = true;
-		CC_CORE_INFO("Mouse Button Pressed");
 	}
 
 	void UISubsystem::OnMouseButtonReleasedEvent(const SysEvent& p_event) {
@@ -116,7 +113,6 @@ namespace Cannis {
 
 		ImGuiIO& io = ImGui::GetIO();
 		io.MouseDown[curEvent.GetMouseButton()] = false;
-		CC_CORE_INFO("Mouse Button Released");
 	}
 
 	void UISubsystem::OnMouseScrolledEvent(const SysEvent& p_event) {
@@ -132,7 +128,6 @@ namespace Cannis {
 
 		ImGuiIO& io = ImGui::GetIO();
 		io.MousePos = ImVec2(curEvent.GetX(), curEvent.GetY());
-		CC_CORE_INFO(p_event.ToString());
 
 	}
 
@@ -146,7 +141,6 @@ namespace Cannis {
 		io.KeyShift = io.KeysDown[GLFW_KEY_LEFT_SHIFT] || io.KeysDown[GLFW_KEY_RIGHT_SHIFT];
 		io.KeyAlt = io.KeysDown[GLFW_KEY_LEFT_ALT] || io.KeysDown[GLFW_KEY_RIGHT_ALT];
 		io.KeySuper = io.KeysDown[GLFW_KEY_LEFT_SUPER] || io.KeysDown[GLFW_KEY_RIGHT_SUPER];
-		CC_CORE_INFO("Key was pressed");
 	}
 
 	void UISubsystem::OnKeyReleasedEvent(const SysEvent& p_event) {

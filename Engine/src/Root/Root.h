@@ -19,5 +19,7 @@ namespace Cannis {
 		void SubscribeSystemsToEvents(const std::unique_ptr<SysEventDispatcher>& p_sysEventDispatcher);
 		void Update();
 		void Shutdown();
+
+		void AddSubsystem(std::shared_ptr<Subsystem> p_subsystem);
 	};
 }

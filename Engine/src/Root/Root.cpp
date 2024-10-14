@@ -26,4 +26,7 @@ namespace Cannis {
 			subsystem->Shutdown();
 		}
 	}
+	void Root::AddSubsystem(std::shared_ptr<Subsystem> p_subsystem) {
+		m_subsystems.push_back(p_subsystem);
+	}
 }

@@ -7,6 +7,7 @@
 #include "Events/ApplicationEvent/ApplicationEvent.h"
 #include "Window/Window.h"
 #include "Root/Root.h"
+#include "Subsystem/Subsystem.h"
 
 namespace Cannis {
 	class CANNIS_API Application {
@@ -26,6 +27,8 @@ namespace Cannis {
 		virtual ~Application();
 
 		void Run();
+
+		void AddSubsystem(std::shared_ptr<Subsystem> p_subsystem);
 
 		void OnSysEvent(SysEvent& p_event);
 

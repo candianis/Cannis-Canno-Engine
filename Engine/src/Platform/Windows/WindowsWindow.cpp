@@ -148,8 +148,6 @@ namespace Cannis {
 			data.sysEventCallback(typedEvent);
 		});
 	}
-
-
 	
 	void WindowsWindow::Shutdown()	{
 		glfwDestroyWindow(m_window);

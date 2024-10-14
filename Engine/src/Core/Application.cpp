@@ -4,6 +4,8 @@
 #include "Events/AppEvent/AppEvent.h"
 #include "Events/MouseEvent.h"
 
+#include "Input/Input.h"
+
 #include <glad/glad.h>
 
 namespace Cannis {
@@ -37,13 +39,15 @@ namespace Cannis {
 		}
 	}
 
+	void Application::AddSubsystem(std::shared_ptr<Subsystem> p_subsystem) {
+		m_root.AddSubsystem(p_subsystem);
+	}
+
 	void Application::OnSysEvent(SysEvent& p_event) {
-		CC_CORE_INFO("Sys event was called: " + p_event.ToString());
 		m_sysEventDispatcher->EmitEvent(p_event);
 	}
 
 	void Application::OnWindowClose(const SysEvent& p_event) {
-		CC_CORE_INFO("Sys event was sent to the application through the dispatcher");
 		m_running = false;
 	}
 }

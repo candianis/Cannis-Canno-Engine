@@ -32,6 +32,8 @@ namespace Cannis {
 		virtual void SetVSync(bool p_enabled) = 0;
 		virtual bool IsVSync() const = 0;
 
+		virtual void* GetNativeWindow() const = 0;
+
 		// @note This static function must be implemented per platform
 		static Window* Create(const WindowProps& p_props = WindowProps());
 

@@ -18,6 +18,8 @@ namespace Cannis {
 		void SetVSync(bool p_enabled) override;
 		bool IsVSync() const override;
 		
+		inline void* GetNativeWindow() const override { return m_window; }
+
 	private:
 		virtual void Init(const WindowProps& p_props);
 		virtual void Shutdown();

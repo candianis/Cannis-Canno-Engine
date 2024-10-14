@@ -10,6 +10,8 @@
 #include <sstream>
 #include <thread>
 #include <typeindex>
+#include <bitset>
+#include <array>
 
 // Data structures
 #include <string>
@@ -19,6 +21,9 @@ using std::string;
 #include <map>
 #include <list>
 #include <queue>
+
+// Types
+#include <cstdint>
 
 //
 #include "Logger/Log.h"
