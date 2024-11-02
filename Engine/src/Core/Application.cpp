@@ -17,34 +17,32 @@ namespace Cannis {
 
 		m_window = std::unique_ptr<Window>(Window::Create());
 		m_window->SetSysEventCallback(std::bind(&Application::OnSysEvent, this, std::placeholders::_1));
+		
+		m_eventDispatcher = std::make_shared<SysEventDispatcher>();
+		m_eventDispatcher->Subscribe(EventType::WindowClose, std::bind(&Application::OnWindowClose, this, std::placeholders::_1));
 
-		m_sysEventDispatcher = std::make_unique<SysEventDispatcher>();
-		m_sysEventDispatcher->Subscribe(EventType::WindowClose, std::bind(&Application::OnWindowClose, this, std::placeholders::_1));
+		m_worldCoordinator = std::make_shared<WorldCoordinator>(m_eventDispatcher);
+		m_worldCoordinator->Init();
+		m_worldCoordinator->SubscribeToEvent();
 
-		m_root.Init();
-		m_root.SubscribeSystemsToEvents(m_sysEventDispatcher);
 	}
 
 	Application::~Application() {
-		m_root.Shutdown();
+		m_worldCoordinator->Shutdown();
 	}
 
 	void Application::Run() {
 		while (m_running) {
 			glClearColor(0, 0, 1, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
-			m_root.Update();
+			m_worldCoordinator->Update();
 
 			m_window->OnUpdate();
 		}
 	}
 
-	void Application::AddSubsystem(std::shared_ptr<Subsystem> p_subsystem) {
-		m_root.AddSubsystem(p_subsystem);
-	}
-
 	void Application::OnSysEvent(SysEvent& p_event) {
-		m_sysEventDispatcher->EmitEvent(p_event);
+		m_eventDispatcher->EmitEvent(p_event);
 	}
 
 	void Application::OnWindowClose(const SysEvent& p_event) {

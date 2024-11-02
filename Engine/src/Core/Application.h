@@ -4,10 +4,10 @@
 #include "Core.h"
 #include "Events/Event.h"
 #include "Events/SysEventDispatcher/SysEventDispatcher.h"
-#include "Events/ApplicationEvent/ApplicationEvent.h"
 #include "Window/Window.h"
 #include "Root/Root.h"
 #include "Subsystem/Subsystem.h"
+#include "ECS/World/World.h"
 
 namespace Cannis {
 	class CANNIS_API Application {
@@ -16,8 +16,8 @@ namespace Cannis {
 
 	private:
 		std::unique_ptr<Window> m_window;
-		std::unique_ptr<SysEventDispatcher> m_sysEventDispatcher;
-		Root m_root;
+		std::shared_ptr<SysEventDispatcher> m_eventDispatcher;
+		std::shared_ptr<WorldCoordinator> m_worldCoordinator;
 		bool m_running;
 
 		void OnWindowClose(const SysEvent& p_event);
@@ -28,13 +28,21 @@ namespace Cannis {
 
 		void Run();
 
-		void AddSubsystem(std::shared_ptr<Subsystem> p_subsystem);
+		template<typename SystemType>
+		void AddSubsystem();
 
 		void OnSysEvent(SysEvent& p_event);
 
 		inline static Application& Get() { return *s_instance; }
 		inline Window& GetWindow() { return *m_window; }
+
+		inline std::shared_ptr<WorldCoordinator>& GetCoordinator() { return m_worldCoordinator; }
 	};
 
 	Application* CreateApplication();
+
+	template<typename SystemType>
+	inline void Application::AddSubsystem() {
+		m_worldCoordinator->AddSubsystem<SystemType>();
+	}
 }

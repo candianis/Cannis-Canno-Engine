@@ -37,8 +37,6 @@ namespace Cannis {
 		io.KeyMap[ImGuiKey_Z] = GLFW_KEY_Z;
 
 		ImGui_ImplOpenGL3_Init("#version 450");
-
-
 	}
 
 	UISubsystem::~UISubsystem() {
@@ -70,7 +68,7 @@ namespace Cannis {
 
 	}
 		
-	void UISubsystem::SubscribeToEvent(const std::unique_ptr<SysEventDispatcher>& p_sysEventDispatcher) {
+	void UISubsystem::SubscribeToEvent(const std::shared_ptr<SysEventDispatcher>& p_sysEventDispatcher) {
 		p_sysEventDispatcher->Subscribe(EventType::WindowClose, std::bind(&UISubsystem::OnWindowClose, this, std::placeholders::_1));
 		p_sysEventDispatcher->Subscribe(EventType::WindowResize, std::bind(&UISubsystem::OnWindowResize, this, std::placeholders::_1));
 

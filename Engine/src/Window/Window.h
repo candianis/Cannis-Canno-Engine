@@ -5,7 +5,6 @@
 #include "Core/Core.h"
 #include "Events/Event.h"
 #include "Events/SysEvent.h"
-#include "Events/EventBus/EventBus.h"
 
 namespace Cannis {
 	struct WindowProps {
@@ -38,6 +37,6 @@ namespace Cannis {
 		static Window* Create(const WindowProps& p_props = WindowProps());
 
 	protected:
-		std::unique_ptr<EventBus> m_eventBus;
+		
 	};
 }

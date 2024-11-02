@@ -7,7 +7,6 @@
 #include "Platform/OpenGL/imgui_impl_opengl3.h"
 
 #include "Subsystem/Subsystem.h"
-#include "Events/EventBus/EventBus.h"
 #include "Events/MouseEvent.h"
 #include "Events/AppEvent/AppEvent.h"
 #include "Events/KeyboardEvent/KeyEvent.h"
@@ -24,7 +23,7 @@ namespace Cannis {
 		void Shutdown() override;
 		void OnEvent(SysEvent& p_event) override;
 
-		void SubscribeToEvent(const std::unique_ptr<SysEventDispatcher>& p_sysEventDispatcher) override;
+		void SubscribeToEvent(const std::shared_ptr<SysEventDispatcher>& p_sysEventDispatcher) override;
 
 		// Window events
 		void OnWindowClose(const SysEvent& p_event);

@@ -1,3 +1,4 @@
+#include "ccpch.h"
 #include <Cannis.h>
 
 #include <glm/vec3.hpp>
@@ -30,7 +31,21 @@ public:
 class Sandbox : public Cannis::Application {
 public:
 	Sandbox() {
-		AddSubsystem(std::make_shared<SandboxSystem>());
+		CC_CLIENT_ERROR("Testing");
+
+		AddSubsystem<SandboxSystem>();
+		GetCoordinator()->RegisterComponent<Cannis::MeshComponent>();
+		GetCoordinator()->RegisterComponent<Cannis::TransformComponent>();
+		
+		//
+		Cannis::EntityHandle entity(GetCoordinator());
+		entity.AddComponent<Cannis::MeshComponent>();
+		entity.AddComponent<Cannis::TransformComponent>(glm::vec3(10.0f, 0.0f, 0.0f), glm::vec3(15.0f, 3.0f, 17.0f), glm::vec3(1));
+		int test = entity.GetComponent<Cannis::TransformComponent>().position.x;
+		entity.RemoveComponent<Cannis::MeshComponent>();
+		entity.GetComponent<Cannis::TransformComponent>().position = glm::vec3(15.0f, 12.0f, 17.0f);
+		test = entity.GetComponent<Cannis::TransformComponent>().position.x;
+		entity.Destroy();
 	}
 
 	~Sandbox() {

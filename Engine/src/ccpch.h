@@ -21,12 +21,14 @@ using std::string;
 #include <map>
 #include <list>
 #include <queue>
+#include <set>
 
 // Types
 #include <cstdint>
 
 //
 #include "Logger/Log.h"
+#include <glm/glm.hpp>
 
 #ifdef CC_PLATFORM_WINDOWS
 	#include <Windows.h>

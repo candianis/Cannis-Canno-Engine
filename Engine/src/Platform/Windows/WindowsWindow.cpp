@@ -3,7 +3,6 @@
 #include "WindowsWindow.h"
 #include "Events/MouseEvent.h"
 #include "Events/KeyboardEvent/KeyEvent.h"
-#include "Events/ApplicationEvent/ApplicationEvent.h"
 #include "Events/AppEvent/AppEvent.h"
 
 #include <glad/glad.h>

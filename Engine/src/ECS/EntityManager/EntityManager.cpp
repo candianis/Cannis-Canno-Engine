@@ -27,6 +27,8 @@ namespace Cannis {
 		m_entities.erase(std::remove_if(m_entities.begin(), m_entities.end(), [&p_entity](Entity other) {
 			return p_entity == other;
 			}), m_entities.end());
+
+		m_availableIDs.push(p_entity.GetID());
 	}
 
 	void EntityManager::SetSignature(const Entity& p_entity, Signature& p_signature) {

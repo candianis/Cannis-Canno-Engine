@@ -4,7 +4,7 @@
 #include "Events/SysEvent.h"
 
 namespace Cannis {
-	class SysEventDispatcher {
+	class CANNIS_API SysEventDispatcher {
 	public:
 		using Eventfunc = std::function<void(const SysEvent&)>;
 

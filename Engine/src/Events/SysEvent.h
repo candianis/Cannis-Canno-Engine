@@ -10,6 +10,7 @@ namespace Cannis {
 		AppTick, AppUpdate, AppRender,
 		KeyPressed, KeyReleased, KeyTyped,
 		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled,
+		EntityDestroyed, SignatureChanged,
 		Demo
 	};
 
@@ -18,7 +19,8 @@ namespace Cannis {
 		ECApplication = BIT(0),
 		ECInput = BIT(1),
 		ECKeyboard = BIT(2),
-		ECMouse = BIT(3)
+		ECMouse = BIT(3),
+		ECECS = BIT(4)
 	};
 
 	class CANNIS_API SysEvent {

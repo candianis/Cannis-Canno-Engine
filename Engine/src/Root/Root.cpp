@@ -5,28 +5,49 @@
 
 namespace Cannis {
 	void Root::Init() {
-		m_subsystems.push_back(std::make_shared<UISubsystem>());
-
+		m_subsystems.insert(std::make_pair(std::type_index(typeid(UISubsystem)), std::make_shared<UISubsystem>()));
 	}
 
-	void Root::SubscribeSystemsToEvents(const std::unique_ptr<SysEventDispatcher>& p_sysEventDispatcher) {
-		for (std::shared_ptr<Subsystem>& subsystem : m_subsystems) {
-			subsystem->SubscribeToEvent(p_sysEventDispatcher);
+	void Root::SubscribeSystemsToEvents(const std::shared_ptr<SysEventDispatcher>& p_sysEventDispatcher) {
+		p_sysEventDispatcher->Subscribe(EventType::EntityDestroyed, std::bind(&Root::OnEntityDestroyed, this, std::placeholders::_1));
+		p_sysEventDispatcher->Subscribe(EventType::SignatureChanged, std::bind(&Root::OnSignatureChanged, this, std::placeholders::_1));
+
+		for (const auto& pair : m_subsystems) {
+			const auto& curSys = pair.second;
+
+			curSys->SubscribeToEvent(p_sysEventDispatcher);
+		}
+	}
+
+	void Root::OnEntityDestroyed(const SysEvent& p_event) {
+		for (const auto& pair : m_subsystems) {
+			const auto& curSys = pair.second;
+
+			curSys->OnEntityDestroyed(p_event);
+		}
+	}
+
+	void Root::OnSignatureChanged(const SysEvent& p_event) {
+		for (const auto& pair : m_subsystems) {
+			const auto& system = pair.second;
+
+			system->OnSignatureChanged(p_event);
 		}
 	}
 
 	void Root::Update() {
-		for (std::shared_ptr<Subsystem>& subsystem : m_subsystems) {
-			subsystem->Update();
+		for (const auto& pair : m_subsystems) {
+			const auto& curSys = pair.second;
+
+			curSys->Update();
 		}
 	}
 
 	void Root::Shutdown() {
-		for (std::shared_ptr<Subsystem>& subsystem : m_subsystems) {
-			subsystem->Shutdown();
+		for (const auto& pair : m_subsystems) {
+			const auto& curSys = pair.second;
+			
+			curSys->Shutdown();
 		}
-	}
-	void Root::AddSubsystem(std::shared_ptr<Subsystem> p_subsystem) {
-		m_subsystems.push_back(p_subsystem);
 	}
 }

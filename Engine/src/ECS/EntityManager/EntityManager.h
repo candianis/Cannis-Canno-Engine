@@ -5,9 +5,8 @@
 #include "ECS/ECSOptions.h"
 
 namespace Cannis {
-	using Signature = std::bitset<MaxComponents>;
 	
-	class EntityManager {
+	class CANNIS_API EntityManager {
 	public:
 		EntityManager();
 		~EntityManager();
@@ -21,6 +20,6 @@ namespace Cannis {
 	private:
 		std::vector<Entity> m_entities;
 		std::queue<uint32_t> m_availableIDs;
-		std::array<Signature, MaxComponents> m_signatures;
+		std::array<Signature, MaxEntities> m_signatures;
 	};
 }
