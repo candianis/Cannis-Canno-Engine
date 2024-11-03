@@ -1,11 +1,9 @@
 #include "ccpch.h"
 #include "Root.h"
 
-#include "UI/UISubsystem.h"
-
 namespace Cannis {
 	void Root::Init() {
-		m_subsystems.insert(std::make_pair(std::type_index(typeid(UISubsystem)), std::make_shared<UISubsystem>()));
+		
 	}
 
 	void Root::SubscribeSystemsToEvents(const std::shared_ptr<SysEventDispatcher>& p_sysEventDispatcher) {
@@ -48,6 +46,13 @@ namespace Cannis {
 			const auto& curSys = pair.second;
 			
 			curSys->Shutdown();
+		}
+	}
+	void Root::OnUIRender() {
+		for (const auto& pair : m_subsystems) {
+			const auto& curSys = pair.second;
+
+			curSys->OnUIRender();
 		}
 	}
 }

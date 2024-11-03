@@ -22,6 +22,10 @@ namespace Cannis {
 		m_root.Shutdown();
 	}
 
+	void WorldCoordinator::OnUIRender() {
+		m_root.OnUIRender();
+	}
+
 	void WorldCoordinator::SubscribeToEvent() {
 		m_componentManager.SubscribeToEvent(m_eventDispatcher);
 		m_root.SubscribeSystemsToEvents(m_eventDispatcher);

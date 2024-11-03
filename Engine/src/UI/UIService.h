@@ -3,28 +3,26 @@
 #include "ccpch.h"
 #include "Core/Core.h"
 
-#include "imgui.h"
-#include "Platform/OpenGL/imgui_impl_opengl3.h"
-
 #include "Subsystem/Subsystem.h"
 #include "Events/MouseEvent.h"
 #include "Events/AppEvent/AppEvent.h"
 #include "Events/KeyboardEvent/KeyEvent.h"
 
-#include <GLFW/glfw3.h>
-
 namespace Cannis {
-	class CANNIS_API UISubsystem : public Subsystem {
+	class CANNIS_API UIService {
 	public:
-		UISubsystem();
-		~UISubsystem();
+		UIService();
+		~UIService();
 
-		void Update() override;
-		void Shutdown() override;
-		void OnEvent(SysEvent& p_event) override;
+		void Begin();
+		void End();
+		void Update();
+		void Shutdown();
 
-		void SubscribeToEvent(const std::shared_ptr<SysEventDispatcher>& p_sysEventDispatcher) override;
+		void SubscribeToEvent(const std::shared_ptr<SysEventDispatcher>& p_sysEventDispatcher);
 
+
+	private:
 		// Window events
 		void OnWindowClose(const SysEvent& p_event);
 		void OnWindowResize(const SysEvent& p_event);
@@ -39,9 +37,6 @@ namespace Cannis {
 		void OnKeyPressedEvent(const SysEvent& p_event);
 		void OnKeyReleasedEvent(const SysEvent& p_event);
 		void OnKeyTypedEvent(const SysEvent& p_event);
-
-	private:
-		void CreateEditor();
 
 		float m_time;
 	};

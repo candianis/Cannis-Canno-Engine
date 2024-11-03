@@ -28,6 +28,7 @@ namespace Cannis {
 		void Init();
 		void Update();
 		void Shutdown();
+		void OnUIRender();
 
 		void SubscribeToEvent();
 

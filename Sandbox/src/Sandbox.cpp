@@ -31,6 +31,8 @@ public:
 class Sandbox : public Cannis::Application {
 public:
 	Sandbox() {
+		GetCoordinator()->AddSubsystem<SandboxSystem>();
+
 		CC_CLIENT_ERROR("Testing");
 
 		AddSubsystem<SandboxSystem>();

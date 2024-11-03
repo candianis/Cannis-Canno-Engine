@@ -19,6 +19,7 @@ namespace Cannis {
 		void Init();
 		void Update();
 		void Shutdown();
+		void OnUIRender();
 
 		template<typename SystemType>
 		void AddSubsystem();

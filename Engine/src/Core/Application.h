@@ -7,6 +7,7 @@
 #include "Window/Window.h"
 #include "Root/Root.h"
 #include "Subsystem/Subsystem.h"
+#include "UI/UIService.h"
 #include "ECS/World/World.h"
 
 namespace Cannis {
@@ -18,6 +19,7 @@ namespace Cannis {
 		std::unique_ptr<Window> m_window;
 		std::shared_ptr<SysEventDispatcher> m_eventDispatcher;
 		std::shared_ptr<WorldCoordinator> m_worldCoordinator;
+		std::unique_ptr<UIService> m_uiService;
 		bool m_running;
 
 		void OnWindowClose(const SysEvent& p_event);

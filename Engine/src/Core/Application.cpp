@@ -17,6 +17,7 @@ namespace Cannis {
 
 		m_window = std::unique_ptr<Window>(Window::Create());
 		m_window->SetSysEventCallback(std::bind(&Application::OnSysEvent, this, std::placeholders::_1));
+		m_uiService = std::make_unique<UIService>();
 		
 		m_eventDispatcher = std::make_shared<SysEventDispatcher>();
 		m_eventDispatcher->Subscribe(EventType::WindowClose, std::bind(&Application::OnWindowClose, this, std::placeholders::_1));
@@ -24,7 +25,6 @@ namespace Cannis {
 		m_worldCoordinator = std::make_shared<WorldCoordinator>(m_eventDispatcher);
 		m_worldCoordinator->Init();
 		m_worldCoordinator->SubscribeToEvent();
-
 	}
 
 	Application::~Application() {
@@ -35,8 +35,14 @@ namespace Cannis {
 		while (m_running) {
 			glClearColor(0, 0, 1, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
+
 			m_worldCoordinator->Update();
 
+			m_uiService->Begin();
+			m_uiService->Update();
+			m_worldCoordinator->OnUIRender();
+			m_uiService->End();
+			
 			m_window->OnUpdate();
 		}
 	}

@@ -17,6 +17,7 @@ namespace Cannis {
 
 		virtual void Update() {}
 		virtual void Shutdown() {}
+		virtual void OnUIRender() {}
 		virtual void OnEvent(SysEvent& p_event) {}
 
 		inline const std::string& GetName() const { return m_debugName; }
