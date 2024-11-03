@@ -19,8 +19,9 @@ namespace Cannis {
 
 		Entity newEntity(m_availableIDs.front());
 		m_availableIDs.pop();
+		m_entities.push_back(newEntity);
 
-		return newEntity;
+		return m_entities.back();
 	}
 
 	void EntityManager::DestroyEntity(const Entity& p_entity) {

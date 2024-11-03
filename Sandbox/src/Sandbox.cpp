@@ -26,6 +26,10 @@ public:
 		if (Cannis::Input::IsKeyPressed(CC_KEY_G))
 			CC_CLIENT_INFO("G key is pressed");
 	}
+
+	void OnUIRender() override {
+
+	}
 };
 
 class Sandbox : public Cannis::Application {

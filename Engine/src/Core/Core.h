@@ -1,11 +1,15 @@
 #pragma once
 
 #ifdef CC_PLATFORM_WINDOWS
-	#ifdef CC_BUILD_DLL
-		#define CANNIS_API __declspec(dllexport)
+	#ifdef CC_DYNAMIC_LINKING
+		#ifdef CC_BUILD_DLL
+			#define CANNIS_API __declspec(dllexport)
+		#else
+			#define CANNIS_API __declspec(dllimport)
+		#endif // DEBUG
 	#else
-		#define CANNIS_API __declspec(dllimport)
-	#endif // DEBUG
+		#define CANNIS_API
+	#endif
 
 #else
 #error Cannis Canno only supports Windows
