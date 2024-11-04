@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Window/Window.h"
+#include "Renderer/RenderingContext.h"
+
 #include <GLFW/glfw3.h>
 
 namespace Cannis {
@@ -26,6 +28,7 @@ namespace Cannis {
 
 	private:
 		GLFWwindow* m_window;
+		std::unique_ptr<RenderingContext> m_renderingContext;
 
 		struct WindowData {
 			std::string title;

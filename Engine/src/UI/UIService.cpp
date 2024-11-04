@@ -2,9 +2,8 @@
 #include "Core/Application.h"
 
 #include <imgui.h>
-
-#include "Platform/OpenGL/imgui_impl_opengl3.h"
-#include "Platform/GLFW/imgui_impl_glfw.h"
+#include <backends/imgui_impl_opengl3.h>
+#include <backends/imgui_impl_glfw.h>
 
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
@@ -15,6 +14,7 @@ namespace Cannis {
 		ImGui::StyleColorsDark();
 
 		ImGuiIO& io = ImGui::GetIO();
+		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 		io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
 		io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;

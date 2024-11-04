@@ -5,7 +5,7 @@
 #include "Events/KeyboardEvent/KeyEvent.h"
 #include "Events/AppEvent/AppEvent.h"
 
-#include <glad/glad.h>
+#include "Platform/OpenGL/Context/OpenGLContext.h"
 
 namespace Cannis {
 	static bool s_GLFWInitialized = false;
@@ -27,8 +27,8 @@ namespace Cannis {
 	}
 
 	void WindowsWindow::OnUpdate() {
+		m_renderingContext->SwapBuffers();
 		glfwPollEvents();
-		glfwSwapBuffers(m_window);
 	}
 	
 	void WindowsWindow::SetVSync(bool p_enabled) {
@@ -51,6 +51,7 @@ namespace Cannis {
 
 		CC_CORE_INFO("Creating Window {0} ({1}, {2})", p_props.title, p_props.width, p_props.height);
 
+
 		if (!s_GLFWInitialized) {
 			int success = glfwInit();
 			CC_CORE_ASSERT(success, "Could not initialize GLFW");
@@ -59,10 +60,9 @@ namespace Cannis {
 		}
 
 		m_window = glfwCreateWindow((int)p_props.width, (int)p_props.height, p_props.title.c_str(), nullptr, nullptr);
-		glfwMakeContextCurrent(m_window);
+		m_renderingContext = std::make_unique<OpenGLContext>(m_window);
+		m_renderingContext->Init();
 
-		int gladStatus = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		CC_CORE_ASSERT(gladStatus, "Failed to initialize GLAD");
 
 		glfwSetWindowUserPointer(m_window, &m_data);
 		SetVSync(true);

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ccpch.h"
+
 #include "Core.h"
 #include "Events/Event.h"
 #include "Events/SysEventDispatcher/SysEventDispatcher.h"
@@ -10,10 +11,18 @@
 #include "UI/UIService.h"
 #include "ECS/World/World.h"
 
+#include "Renderer/Shader/Shader.h"
+#include "Renderer/VertexBuffer/VertexBuffer.h"
+#include "Renderer/IndexBuffer/IndexBuffer.h"
+
 namespace Cannis {
 	class CANNIS_API Application {
 	private:
 		static Application* s_instance;
+		unsigned int m_vertexArray;
+		std::unique_ptr<Shader> m_shader;
+		std::shared_ptr<VertexBuffer> m_vertexBuffer;
+		std::shared_ptr<IndexBuffer> m_indexBuffer;
 
 	private:
 		std::unique_ptr<Window> m_window;
