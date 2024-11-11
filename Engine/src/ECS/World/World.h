@@ -86,6 +86,13 @@ namespace Cannis {
 	template<typename ComponentType, typename ...ComponentArgs>
 	inline void WorldCoordinator::AddComponent(const Entity& p_entity, ComponentArgs && ...Args) {
 		m_componentManager.AddComponent<ComponentType>(p_entity, std::forward<ComponentArgs>(Args)...);
+
+		Signature signature = m_entityManager.GetSignature(p_entity);
+		signature.set(m_componentManager.GetComponentID<ComponentType>(), true);
+		m_entityManager.SetSignature(p_entity, signature);
+
+		SignatureChangedEvent curEvent(p_entity, signature);
+		m_eventDispatcher->EmitEvent(curEvent);
 	}
 
 	template<typename ComponentType>

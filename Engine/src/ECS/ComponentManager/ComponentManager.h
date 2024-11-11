@@ -65,9 +65,10 @@ namespace Cannis {
 	inline uint8_t& ComponentManager::GetComponentID() const {
 		CC_ASSERT(m_componentTypes.find(std::type_index(typeid(ComponentType))) != m_componentTypes.end());
 
-		uint8_t testI = m_componentTypes.at(std::type_index(typeid(ComponentType)));
+		//Used .at as [] operator only insert instead of returning a value
+		uint8_t componentID = m_componentTypes.at(std::type_index(typeid(ComponentType)));
 
-		return testI;
+		return componentID;
 	}
 
 	template<typename ComponentType>

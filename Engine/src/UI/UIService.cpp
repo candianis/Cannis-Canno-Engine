@@ -108,7 +108,7 @@ namespace Cannis {
 		size_t i = 0;
 		for (const Entity entity : p_world->GetEntities()) {
 			ImGui::PushID(i);
-			auto& signature = p_world->getsi
+			//auto& signature = p_world->getsi
 			if (ImGui::CollapsingHeader(entity.name.c_str())) {
 				//Go through each component 
 

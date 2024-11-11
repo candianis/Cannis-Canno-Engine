@@ -40,8 +40,8 @@ public:
 		CC_CLIENT_ERROR("Testing");
 
 		AddSubsystem<SandboxSystem>();
-		GetCoordinator()->RegisterComponent<Cannis::MeshComponent>();
 		GetCoordinator()->RegisterComponent<Cannis::TransformComponent>();
+		GetCoordinator()->RegisterComponent<Cannis::MeshComponent>();
 		
 		//
 		Cannis::EntityHandle entity(GetCoordinator(), "New Entity");
