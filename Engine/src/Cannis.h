@@ -13,7 +13,7 @@
 
 #include "ECS/Entity/EntityHandle.h"
 #include "ECS/ComponentArray/ComponentArray.h"
-#include "ECS/Component/TransformComponent.h"
+#include "ECS/Component/TransformComponent.hpp"
 #include "ECS/Component/MeshComponent.hpp"
 #include "Subsystem/Subsystem.h"
 

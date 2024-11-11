@@ -35,6 +35,10 @@ namespace Cannis {
 		return m_entityManager.CreateEntity();
 	}
 
+	Entity& WorldCoordinator::CreateEntity(std::string p_name) {
+		return m_entityManager.CreateEntity(p_name);
+	}
+
 	void WorldCoordinator::DestroyEntity(const Entity& p_entity) {
 		m_entityManager.DestroyEntity(p_entity);
 

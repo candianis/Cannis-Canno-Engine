@@ -1,5 +1,6 @@
 #include "ccpch.h"
 #include "Core/Application.h"
+#include "ECS/Component/TransformComponent.hpp"
 
 #include <imgui.h>
 #include <backends/imgui_impl_opengl3.h>
@@ -74,9 +75,11 @@ namespace Cannis {
 		}
 	}
 
-	void UIService::Update() {
-		static bool show_demo_window = true;
-		ImGui::ShowDemoWindow(&show_demo_window);		
+	void UIService::Update(std::shared_ptr<WorldCoordinator> p_world) {
+		static bool show_demo_window = false;
+		ImGui::ShowDemoWindow(&show_demo_window);
+
+		CreateEditor(p_world);
 	}
 
 	void UIService::Shutdown() {
@@ -96,6 +99,39 @@ namespace Cannis {
 		p_sysEventDispatcher->Subscribe(EventType::MouseButtonPressed, std::bind(&UIService::OnMouseButtonPressedEvent, this, std::placeholders::_1));
 		p_sysEventDispatcher->Subscribe(EventType::MouseButtonReleased, std::bind(&UIService::OnMouseButtonReleasedEvent, this, std::placeholders::_1));
 		p_sysEventDispatcher->Subscribe(EventType::MouseScrolled, std::bind(&UIService::OnMouseScrolledEvent, this, std::placeholders::_1));
+	}
+
+	void UIService::CreateEditor(std::shared_ptr<WorldCoordinator>& p_world) {
+		bool showEntitiesWindow = true;
+		ImGui::Begin("Scene", &showEntitiesWindow);
+
+		size_t i = 0;
+		for (const Entity entity : p_world->GetEntities()) {
+			ImGui::PushID(i);
+			auto& signature = p_world->getsi
+			if (ImGui::CollapsingHeader(entity.name.c_str())) {
+				//Go through each component 
+
+				TransformComponent& transform = p_world->GetComponent<TransformComponent>(entity);
+
+				ImGui::SeparatorText("Transform");
+				ImGui::InputFloat3("Position", glm::value_ptr(transform.position));
+				ImGui::InputFloat3("Rotation", glm::value_ptr(transform.rotation));
+				ImGui::InputFloat3("Scale", glm::value_ptr(transform.scale));
+				ImGui::Spacing();
+			}
+			ImGui::PopID();
+			i++;
+		}
+		ImGui::End();
+
+		ImGui::Begin("Files", &showEntitiesWindow);
+
+		ImGui::End();
+
+		ImGui::Begin("Inspector", &showEntitiesWindow);
+
+		ImGui::End();
 	}
 
 	void UIService::OnWindowClose(const SysEvent& p_event) {

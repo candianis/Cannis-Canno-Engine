@@ -24,6 +24,18 @@ namespace Cannis {
 		return m_entities.back();
 	}
 
+	Entity& EntityManager::CreateEntity(std::string p_name) {
+		if (m_availableIDs.empty()) {
+			CC_ASSERT(m_availableIDs.empty(), "Max amount of entities has been reached")
+		}
+
+		Entity newEntity(m_availableIDs.front(), p_name);
+		m_availableIDs.pop();
+		m_entities.push_back(newEntity);
+
+		return m_entities.back();
+	}
+
 	void EntityManager::DestroyEntity(const Entity& p_entity) {
 		m_entities.erase(std::remove_if(m_entities.begin(), m_entities.end(), [&p_entity](Entity other) {
 			return p_entity == other;
@@ -36,8 +48,7 @@ namespace Cannis {
 		m_signatures[p_entity.GetID()] = p_signature;
 	}
 
-	Signature& EntityManager::GetSignature(const Entity& p_entity)
-	{
+	Signature& EntityManager::GetSignature(const Entity& p_entity) {
 		return m_signatures[p_entity.GetID()];
 	}
 }

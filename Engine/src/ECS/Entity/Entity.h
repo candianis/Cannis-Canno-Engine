@@ -12,6 +12,7 @@ namespace Cannis {
 
 		Entity() = default;
 		Entity(const uint32_t& p_ID) : m_ID(p_ID), name("Entity " + m_ID) {}
+		Entity(const uint32_t& p_ID, std::string p_name) : m_ID(p_ID), name(p_name) {}
 		Entity(const Entity& p_entity, const uint32_t& p_ID);
 		~Entity() = default;
 

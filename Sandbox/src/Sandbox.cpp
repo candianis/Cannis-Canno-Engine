@@ -44,14 +44,17 @@ public:
 		GetCoordinator()->RegisterComponent<Cannis::TransformComponent>();
 		
 		//
-		Cannis::EntityHandle entity(GetCoordinator());
+		Cannis::EntityHandle entity(GetCoordinator(), "New Entity");
 		entity.AddComponent<Cannis::MeshComponent>();
 		entity.AddComponent<Cannis::TransformComponent>(glm::vec3(10.0f, 0.0f, 0.0f), glm::vec3(15.0f, 3.0f, 17.0f), glm::vec3(1));
 		int test = entity.GetComponent<Cannis::TransformComponent>().position.x;
 		entity.RemoveComponent<Cannis::MeshComponent>();
 		entity.GetComponent<Cannis::TransformComponent>().position = glm::vec3(15.0f, 12.0f, 17.0f);
 		test = entity.GetComponent<Cannis::TransformComponent>().position.x;
-		entity.Destroy();
+
+		Cannis::EntityHandle triangle(GetCoordinator(), "Triangle");
+		triangle.AddComponent<Cannis::TransformComponent>(glm::vec3(0), glm::vec3(90, 45, 360), glm::vec3(2));
+
 	}
 
 	~Sandbox() {

@@ -34,7 +34,11 @@ namespace Cannis {
 
 		//Entity Management
 		Entity& CreateEntity();
+		Entity& CreateEntity(std::string p_name);
 		void DestroyEntity(const Entity& p_entity);
+		inline const std::vector<Entity>& GetEntities() const {
+			return m_entityManager.GetEntities();
+		}
 
 		//Component Management
 		template<typename ComponentType>

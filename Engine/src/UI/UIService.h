@@ -2,6 +2,7 @@
 
 #include "ccpch.h"
 #include "Core/Core.h"
+#include "ECS/World/World.h"
 
 #include "Subsystem/Subsystem.h"
 #include "Events/MouseEvent.h"
@@ -16,13 +17,15 @@ namespace Cannis {
 
 		void Begin();
 		void End();
-		void Update();
+		void Update(std::shared_ptr<WorldCoordinator> p_world);
 		void Shutdown();
 
 		void SubscribeToEvent(const std::shared_ptr<SysEventDispatcher>& p_sysEventDispatcher);
 
 
 	private:
+		void CreateEditor(std::shared_ptr<WorldCoordinator>& p_world);
+
 		// Window events
 		void OnWindowClose(const SysEvent& p_event);
 		void OnWindowResize(const SysEvent& p_event);

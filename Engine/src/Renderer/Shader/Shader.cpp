@@ -1,126 +1,26 @@
 #include "ccpch.h"
 
 #include "Shader.h"
+#include "Renderer/Renderer.h"
+#include "Platform/OpenGL/Shader/OpenGLShader.h"
 
 #include <glad/glad.h>
 
 
 namespace Cannis {
-	GLenum GetCorrectShaderEnum(ShaderType p_shaderType) {
-		switch (p_shaderType) {
-			case ShaderType::Vertex:
-				return GL_VERTEX_SHADER;
+	std::unique_ptr<Shader> Shader::Create(const std::string& p_vertexSource, const std::string& p_fragmentSource) {
+		switch (Renderer::GetAPI()) {
+			case RendererAPI::None:
+				CC_CORE_ASSERT(false, "No API was chosen");
+				return nullptr;
+				break;
 
-			case ShaderType::Fragment:
-				return GL_FRAGMENT_SHADER;
-
-			case ShaderType::Geometry:
-				return GL_GEOMETRY_SHADER;
-		}
-	}
-
-	Shader::Shader(const std::string& p_vertexSource, const std::string& p_fragmentSource) {
-		//std::string vertCode(GetSourceCode(p_vertexSource.c_str()));
-		//std::string fragCode(GetSourceCode(p_fragmentSource.c_str()));
-
-		unsigned int vertexShader = CreateShader(p_vertexSource.c_str(), ShaderType::Vertex);
-		unsigned int fragmentShader = CreateShader(p_fragmentSource.c_str(), ShaderType::Fragment);
-
-		CreateProgram(vertexShader, fragmentShader);
-
-		// delete the shaders as they're linked into our program now and no longer necessary
-		glDeleteShader(vertexShader);
-		glDeleteShader(fragmentShader);
-	}
-
-	Shader::~Shader() {
-		glDeleteProgram(m_ID);
-	}
-
-	void Shader::Bind() const {
-		glUseProgram(m_ID);
-	}
-
-	void Shader::UnBind() const {
-		glUseProgram(0);
-	}
-
-	std::string Shader::GetSourceCode(const char* p_filePath) {
-		string code;
-		std::ifstream shaderFile;
-
-		shaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-		try {
-			shaderFile.open(p_filePath, std::ios::in);
-
-			if (!shaderFile.is_open()) {
-				std::cout << "ERR: Failed to open the file: " << p_filePath << std::endl;
-			}
-
-			if (!shaderFile.good()) {
-				std::cout << "ERR: An error was found while trying to read the file: " << p_filePath << std::endl;
-			}
-
-			std::stringstream shaderStream;
-			// read file's buffer contents into streams
-			shaderStream << shaderFile.rdbuf();
-
-			shaderFile.close();
-
-			code = shaderStream.str();
-		}
-		catch (std::ifstream::failure e)
-		{
-			std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
+			case RendererAPI::OpenGL:
+				return std::make_unique<OpenGLShader>(p_vertexSource, p_fragmentSource);
+				break;
 		}
 
-		return code;
-	}
-
-	unsigned int Shader::CreateShader(const char* p_shaderCode, ShaderType p_type) {
-		unsigned int shader;
-
-		GLenum shaderType = GetCorrectShaderEnum(p_type);
-
-		shader = glCreateShader(shaderType);
-		glShaderSource(shader, 1, &p_shaderCode, NULL);
-		glCompileShader(shader);
-
-		//Check for shader compilation errors
-		int success;
-		glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-
-		if (!success) {
-			char infoLog[512];
-			glGetShaderInfoLog(shader, 512, NULL, infoLog);
-			CC_CORE_ERROR("{0}", infoLog);
-			CC_ASSERT(false, "ERROR::SHADER::COMPILATION_FAILED");
-		}
-
-		return shader;
-	}
-
-	void Shader::CreateProgram(unsigned int p_vertexShader, unsigned int p_fragmentShader) {
-		m_ID = glCreateProgram();
-		glAttachShader(m_ID, p_vertexShader);
-		glAttachShader(m_ID, p_fragmentShader);
-		glLinkProgram(m_ID);
-
-		int success;
-		glGetProgramiv(m_ID, GL_LINK_STATUS, &success);
-
-		if (!success) {
-			char test[512];
-			glGetProgramInfoLog(m_ID, 512, NULL, test);
-			CC_CORE_ERROR("ERROR::SHADER::PROGRAM::LINKING_FAILED");
-			CC_CORE_ERROR("{0}", test);
-		}
-
-		//Clean the shaders as they are no longer needed
-		glDetachShader(m_ID, p_vertexShader);
-		glDeleteShader(p_vertexShader);
-
-		glDetachShader(m_ID, p_fragmentShader);
-		glDeleteShader(p_fragmentShader);
+		CC_CORE_ASSERT(false, "Uknown Rendering API");
+		return nullptr;
 	}
 }

@@ -12,9 +12,8 @@ namespace Cannis {
 	
 	public:
 		EntityHandle() = default;
-		EntityHandle(std::shared_ptr<WorldCoordinator> p_world);/* : m_world(p_world) {
-			entity = p_world->CreateEntity();
-		}*/
+		EntityHandle(std::shared_ptr<WorldCoordinator> p_world);
+		EntityHandle(std::shared_ptr<WorldCoordinator> p_world, std::string p_name);
 
 		~EntityHandle() = default;
 		

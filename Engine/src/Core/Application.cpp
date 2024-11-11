@@ -27,9 +27,6 @@ namespace Cannis {
 		m_worldCoordinator->Init();
 		m_worldCoordinator->SubscribeToEvent();
 
-		glGenVertexArrays(1, &m_vertexArray);
-		glBindVertexArray(m_vertexArray);
-
 		float vertices[9] = {
 			-0.5f, -0.5f, 0.0f,
 			 0.5f, -0.5f, 0.0f,
@@ -37,30 +34,29 @@ namespace Cannis {
 		};
 
 		m_vertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices));
-
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+		m_vertexArray = std::move(VertexArray::Create(vertices, sizeof(vertices), 3 * sizeof(float)));
 
 		uint32_t indices[3] = { 0, 1, 2 };
 
 		m_indexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 
-		std::string vertexSource = "#version 330 core\n"
-			"layout (location = 0) in vec3 aPos;\n"
-			"void main()\n"
-			"{\n"
-			"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-			"}\0";
+		std::string vertexSource = 
+		"#version 330 core\n"
+		"layout (location = 0) in vec3 aPos;\n"
+		"void main()\n"
+		"{\n"
+		"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+		"}\0";
 
-		std::string fragmentSource = "#version 330 core\n"
+		std::string fragmentSource = 
+		"#version 330 core\n"
 		"out vec4 FragColor;\n"
 		"void main()\n"
 		"{\n"
 			"FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
 		"}\n\0";
 
-		m_shader = std::make_unique<Shader>(vertexSource, fragmentSource);
+		m_shader = std::move(Shader::Create(vertexSource, fragmentSource));
 	}
 
 	Application::~Application() {
@@ -73,13 +69,13 @@ namespace Cannis {
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			m_shader->Bind();
-			glBindVertexArray(m_vertexArray);
+			m_vertexArray->Bind();
 			glDrawElements(GL_TRIANGLES, m_indexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
 
 			m_worldCoordinator->Update();
 
 			m_uiService->Begin();
-			m_uiService->Update();
+			m_uiService->Update(m_worldCoordinator);
 			m_worldCoordinator->OnUIRender();
 			m_uiService->End();
 			

@@ -29,6 +29,7 @@ using std::string;
 //
 #include "Logger/Log.h"
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #ifdef CC_PLATFORM_WINDOWS
 	#include <Windows.h>
