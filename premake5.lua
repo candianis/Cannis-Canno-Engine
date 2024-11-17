@@ -39,8 +39,8 @@ project "CannisCanno"
 		"Engine/vendor/spdlog/include;",
 		"Engine/vendor/GLFW/include;",
 		"Engine/vendor/Glad/include;",
-		"Engine/vendor/Imgui",
-		"Engine/vendor/GLM"
+		"Engine/vendor/Imgui;",
+		"Engine/vendor/GLM;"
 	}
 
 	links {
@@ -93,7 +93,8 @@ project "Sandbox"
 	includedirs {
 		"Engine/vendor/spdlog/include;",
 		"Engine/src;",
-		"Engine/vendor/GLM;"
+		"Engine/vendor/GLM;",
+		"Engine/vendor/Glad/include;"
 	}
 
 	links {

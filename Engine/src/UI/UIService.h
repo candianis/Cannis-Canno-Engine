@@ -3,6 +3,7 @@
 #include "ccpch.h"
 #include "Core/Core.h"
 #include "ECS/World/World.h"
+#include "ECS/Entity/Entity.h"
 
 #include "Subsystem/Subsystem.h"
 #include "Events/MouseEvent.h"
@@ -26,6 +27,12 @@ namespace Cannis {
 	private:
 		void CreateEditor(std::shared_ptr<WorldCoordinator>& p_world);
 
+		void CreateSceneEditor();
+
+		//Inspector & Component Creation
+		void CreateInspector(std::shared_ptr<WorldCoordinator>& p_world);
+		void CreateTransformComponent(std::shared_ptr<WorldCoordinator>& p_world);
+
 		// Window events
 		void OnWindowClose(const SysEvent& p_event);
 		void OnWindowResize(const SysEvent& p_event);
@@ -42,5 +49,7 @@ namespace Cannis {
 		void OnKeyTypedEvent(const SysEvent& p_event);
 
 		float m_time;
+
+		std::shared_ptr<Entity> m_selectedEntity;
 	};
 }

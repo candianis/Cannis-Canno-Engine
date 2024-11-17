@@ -1,15 +1,23 @@
 #pragma once
 
 #include "ccpch.h"
+#include "Renderer/Buffer/VertexBuffer/VertexBuffer.h"
+#include "Renderer/Buffer/IndexBuffer/IndexBuffer.h"
 
 namespace Cannis {
 	class VertexArray {
 	public:
 		virtual ~VertexArray() = default;
 
-		virtual void Bind() = 0;
-		virtual void UnBind() = 0;
+		virtual void Bind() const = 0;
+		virtual void UnBind() const = 0;
 
-		static std::unique_ptr<VertexArray> Create(float* p_vertices, size_t p_size, size_t p_stride);
+		virtual void AddVertexBuffer(const std::shared_ptr<VertexBuffer>& p_vertexBuffer) = 0;
+		virtual void SetIndexBuffer(const std::shared_ptr<IndexBuffer>& p_indexBuffer) = 0;
+
+		virtual const std::vector<std::shared_ptr<VertexBuffer>>& GetVertexBuffers() const = 0;
+		virtual const std::shared_ptr<IndexBuffer>& GetIndexBuffer() const = 0;
+
+		static std::unique_ptr<VertexArray> Create();
 	};
 }

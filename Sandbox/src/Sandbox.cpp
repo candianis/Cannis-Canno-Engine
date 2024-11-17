@@ -40,21 +40,31 @@ public:
 		CC_CLIENT_ERROR("Testing");
 
 		AddSubsystem<SandboxSystem>();
-		GetCoordinator()->RegisterComponent<Cannis::TransformComponent>();
-		GetCoordinator()->RegisterComponent<Cannis::MeshComponent>();
 		
 		//
-		Cannis::EntityHandle entity(GetCoordinator(), "New Entity");
-		entity.AddComponent<Cannis::MeshComponent>();
-		entity.AddComponent<Cannis::TransformComponent>(glm::vec3(10.0f, 0.0f, 0.0f), glm::vec3(15.0f, 3.0f, 17.0f), glm::vec3(1));
-		int test = entity.GetComponent<Cannis::TransformComponent>().position.x;
-		entity.RemoveComponent<Cannis::MeshComponent>();
-		entity.GetComponent<Cannis::TransformComponent>().position = glm::vec3(15.0f, 12.0f, 17.0f);
-		test = entity.GetComponent<Cannis::TransformComponent>().position.x;
-
 		Cannis::EntityHandle triangle(GetCoordinator(), "Triangle");
-		triangle.AddComponent<Cannis::TransformComponent>(glm::vec3(0), glm::vec3(90, 45, 360), glm::vec3(2));
+		triangle.SetPosition(glm::vec3(10.0f, 0.0f, 0.0f));
+		triangle.SetRotation(glm::vec3(15.0f, 3.0f, 17.0f));
+		triangle.SetScale(glm::vec3(1));
 
+		triangle.AddComponent<Cannis::MeshComponent>();
+		if (triangle.HasComponent<Cannis::MeshComponent>())
+			CC_CLIENT_INFO(triangle.GetInstance().name + " has Mesh component");
+
+		triangle.RemoveComponent<Cannis::MeshComponent>();
+		if (triangle.HasComponent<Cannis::MeshComponent>())
+			CC_CLIENT_INFO(triangle.GetInstance().name + " does not have Mesh component");
+
+		triangle.RemoveComponent<Cannis::MeshComponent>();
+
+		Cannis::EntityHandle square(GetCoordinator(), "Square");
+		square.SetPosition(glm::vec3(0));
+		square.SetRotation(glm::vec3(90, 45, 360));
+		square.SetScale(glm::vec3(2));
+		square.AddComponent<Cannis::GUIComponent>();
+
+		if (!square.HasComponent<Cannis::TransformComponent>())
+			CC_CLIENT_INFO("This component does not have a Transform component");
 	}
 
 	~Sandbox() {

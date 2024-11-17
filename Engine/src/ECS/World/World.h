@@ -42,9 +42,6 @@ namespace Cannis {
 
 		//Component Management
 		template<typename ComponentType>
-		void RegisterComponent();
-
-		template<typename ComponentType>
 		void AddComponent(const Entity& p_entity, ComponentType& p_component);
 
 		template<typename ComponentType, typename ...ComponentArgs>
@@ -56,6 +53,9 @@ namespace Cannis {
 		template<typename ComponentType>
 		ComponentType& GetComponent(const Entity& p_entity);
 
+		template<typename ComponentType>
+		bool HasComponent(const Entity& p_entity);
+
 		// ---- System Management
 		template<typename SystemType>
 		void AddSubsystem();
@@ -66,11 +66,6 @@ namespace Cannis {
 		template<typename SystemType>
 		void SetSubsystemSignature(const Signature& p_signature);
 	};
-
-	template<typename ComponentType>
-	inline void WorldCoordinator::RegisterComponent() {
-		m_componentManager.RegisterComponent<ComponentType>();
-	}
 
 	template<typename ComponentType>
 	inline void WorldCoordinator::AddComponent(const Entity& p_entity, ComponentType& p_component) {
@@ -85,6 +80,11 @@ namespace Cannis {
 
 	template<typename ComponentType, typename ...ComponentArgs>
 	inline void WorldCoordinator::AddComponent(const Entity& p_entity, ComponentArgs && ...Args) {
+		if (HasComponent<ComponentType>(p_entity)) {
+			CC_CLIENT_WARN(p_entity.name + " already has that Component");
+			return;
+		}
+
 		m_componentManager.AddComponent<ComponentType>(p_entity, std::forward<ComponentArgs>(Args)...);
 
 		Signature signature = m_entityManager.GetSignature(p_entity);
@@ -97,6 +97,11 @@ namespace Cannis {
 
 	template<typename ComponentType>
 	inline void WorldCoordinator::RemoveComponent(const Entity& p_entity) {
+		if (!HasComponent<ComponentType>(p_entity)) {
+			CC_CLIENT_WARN(p_entity.name + " does not have Component");
+			return;
+		}
+
 		m_componentManager.RemoveComponent<ComponentType>(p_entity);
 		Signature& curSignature = m_entityManager.GetSignature(p_entity);
 		curSignature.set(m_componentManager.GetComponentID<ComponentType>(), false);
@@ -109,6 +114,16 @@ namespace Cannis {
 	template<typename ComponentType>
 	inline ComponentType& WorldCoordinator::GetComponent(const Entity& p_entity) {
 		return m_componentManager.GetComponent<ComponentType>(p_entity);
+	}
+
+	template<typename ComponentType>
+	inline bool WorldCoordinator::HasComponent(const Entity& p_entity) {
+		Signature componentSignature;
+		componentSignature.set(m_componentManager.GetComponentID<ComponentType>());
+
+		const Signature& entitySignature = m_entityManager.GetSignature(p_entity);
+		
+		return (entitySignature & componentSignature) == componentSignature;
 	}
 	
 	template<typename SystemType>

@@ -1,6 +1,7 @@
 #include "ccpch.h"
 #include "Core/Application.h"
 #include "ECS/Component/TransformComponent.hpp"
+#include "ECS/Component/GUIComponent.hpp"
 
 #include <imgui.h>
 #include <backends/imgui_impl_opengl3.h>
@@ -62,7 +63,7 @@ namespace Cannis {
 	void UIService::End() {
 		ImGuiIO& io = ImGui::GetIO();
 		Application& app = Application::Get();
-		io.DisplaySize = ImVec2(app.GetWindow().GetWidth(), app.GetWindow().GetHeight());
+		io.DisplaySize = ImVec2((float) app.GetWindow().GetWidth(), (float) app.GetWindow().GetHeight());
 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -106,21 +107,24 @@ namespace Cannis {
 		ImGui::Begin("Scene", &showEntitiesWindow);
 
 		size_t i = 0;
-		for (const Entity entity : p_world->GetEntities()) {
-			ImGui::PushID(i);
-			//auto& signature = p_world->getsi
-			if (ImGui::CollapsingHeader(entity.name.c_str())) {
-				//Go through each component 
+		
+		//static bool selection[2] = { false, true };
+		for (const Entity& entity : p_world->GetEntities()) {
+			if (p_world->HasComponent<GUIComponent>(entity))
+				CC_CLIENT_INFO(entity.name + " does not have a GUI component");
 
-				TransformComponent& transform = p_world->GetComponent<TransformComponent>(entity);
+			GUIComponent& gui = p_world->GetComponent<GUIComponent>(entity);
+			if (ImGui::Selectable(entity.name.c_str(), &gui.isSelected)) {
+				CC_CORE_INFO("Selected: {0}", entity.GetID());
+				if (m_selectedEntity) {
+					p_world->GetComponent<GUIComponent>(*m_selectedEntity).isSelected = false;
+				}
 
-				ImGui::SeparatorText("Transform");
-				ImGui::InputFloat3("Position", glm::value_ptr(transform.position));
-				ImGui::InputFloat3("Rotation", glm::value_ptr(transform.rotation));
-				ImGui::InputFloat3("Scale", glm::value_ptr(transform.scale));
-				ImGui::Spacing();
+				//m_selectedEntity.reset();
+				m_selectedEntity = std::make_shared<Entity>(entity);
 			}
-			ImGui::PopID();
+
+			ImGui::Spacing();
 			i++;
 		}
 		ImGui::End();
@@ -129,9 +133,72 @@ namespace Cannis {
 
 		ImGui::End();
 
-		ImGui::Begin("Inspector", &showEntitiesWindow);
+		CreateInspector(p_world);
+	}
 
+	void UIService::CreateSceneEditor() {
+
+	}
+
+	void UIService::CreateInspector(std::shared_ptr<WorldCoordinator>& p_world) {
+		bool showInspector = true;
+		ImGui::Begin("Inspector", &showInspector);
+		CreateTransformComponent(p_world);
 		ImGui::End();
+	}
+
+	void UIService::CreateTransformComponent(std::shared_ptr<WorldCoordinator>& p_world) {
+		if (m_selectedEntity == nullptr) {
+			//CC_CORE_INFO("No Entity Selected");
+			return;
+		}
+
+		if (!p_world->HasComponent<TransformComponent>(*m_selectedEntity)) {
+			//CC_CLIENT_INFO(m_selectedEntity->name + " does not have a transform component");
+			return;
+		}
+
+		if (ImGui::CollapsingHeader(m_selectedEntity->name.c_str())) {
+			//Go through each component 
+			if (ImGui::TreeNode("Transform")) {
+				TransformComponent& transform = p_world->GetComponent<TransformComponent>(*m_selectedEntity);
+
+				// ----- Position -----//
+				ImGui::PushID(0);
+				ImGui::PushItemWidth(80);
+				ImGui::SeparatorText("Position");
+				ImGui::InputFloat("X", &transform.position.x); ImGui::SameLine();
+				ImGui::InputFloat("Y", &transform.position.y); ImGui::SameLine();
+				ImGui::InputFloat("Z", &transform.position.z);
+				ImGui::PopItemWidth();
+				ImGui::PopID();
+				ImGui::Spacing();
+
+				// ----- Rotation ------//
+				ImGui::PushID(1);
+				ImGui::PushItemWidth(80);
+				ImGui::SeparatorText("Rotation");
+				ImGui::InputFloat("X", &transform.rotation.x); ImGui::SameLine();
+				ImGui::InputFloat("Y", &transform.rotation.y); ImGui::SameLine();
+				ImGui::InputFloat("Z", &transform.rotation.z);
+				ImGui::PopItemWidth();
+				ImGui::PopID();
+				ImGui::Spacing();
+
+				// ----- Scale -----//
+				ImGui::PushID(2);
+				ImGui::PushItemWidth(80);
+				ImGui::SeparatorText("Scale");
+				ImGui::InputFloat("X", &transform.scale.x); ImGui::SameLine();
+				ImGui::InputFloat("Y", &transform.scale.y); ImGui::SameLine();
+				ImGui::InputFloat("Z", &transform.scale.z);
+				ImGui::PopItemWidth();
+				ImGui::PopID();
+				ImGui::Spacing();
+
+				ImGui::TreePop();
+			}
+		}
 	}
 
 	void UIService::OnWindowClose(const SysEvent& p_event) {
@@ -145,7 +212,7 @@ namespace Cannis {
 		const WindowResizeEvent& curEvent = static_cast<const WindowResizeEvent&>(p_event);
 
 		ImGuiIO& io = ImGui::GetIO();
-		io.DisplaySize = ImVec2(curEvent.GetWidth(), curEvent.GetHeight());
+		io.DisplaySize = ImVec2((float) curEvent.GetWidth(), (float) curEvent.GetHeight());
 		io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
 		glViewport(0, 0, curEvent.GetWidth(), curEvent.GetHeight());
 	}

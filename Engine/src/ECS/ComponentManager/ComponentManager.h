@@ -10,14 +10,17 @@
 namespace Cannis {
 	class CANNIS_API ComponentManager {
 	public:
-		ComponentManager() : m_nextComponentID(0) {}
+		ComponentManager();
 		~ComponentManager() = default;
 
 		template<typename ComponentType>
 		void RegisterComponent();
 
+		// @notes Cannot be const as it renders the componentTypes unordered_map useless 
+		// [] operators cannot be used and do not return a value
+		// .at() returns const unsigned char instead of uint8_t or 
 		template<typename ComponentType>
-		uint8_t& GetComponentID() const;
+		uint8_t& GetComponentID();
 
 		template<typename ComponentType>
 		void AddComponent(const Entity& p_entity, ComponentType& p_component);
@@ -45,30 +48,20 @@ namespace Cannis {
 		CC_ASSERT(m_componentTypes.find(std::type_index(typeid(ComponentType))), "Registering component more than once");
 
 		//Register the new component 
-		//m_componentTypes.insert(std::make_pair(std::type_index(typeid(ComponentType)), m_nextComponentID));
 		m_componentTypes.insert({ std::type_index(typeid(ComponentType)), m_nextComponentID });
 		
-		//m_test.insert({ std::type_index(typeid(ComponentType)), std::make_shared<ComponentType>() });
-
 		//Create a new array of components of the type
 		std::type_index componentID = std::type_index(typeid(ComponentType));
 		std::shared_ptr<ComponentArray<ComponentType>> newComponentArray = std::make_shared<ComponentArray<ComponentType>>();
 		m_componentArrays.emplace(std::make_pair(componentID, newComponentArray));
-		//m_componentArrays.insert({ std::type_index(typeid(ComponentType)), newComponentArray });
-
-		//m_componentLists[0] = newComponentArray;
 
 		++m_nextComponentID;
 	}
 
 	template<typename ComponentType>
-	inline uint8_t& ComponentManager::GetComponentID() const {
+	inline uint8_t& ComponentManager::GetComponentID() {
 		CC_ASSERT(m_componentTypes.find(std::type_index(typeid(ComponentType))) != m_componentTypes.end());
-
-		//Used .at as [] operator only insert instead of returning a value
-		uint8_t componentID = m_componentTypes.at(std::type_index(typeid(ComponentType)));
-
-		return componentID;
+		return m_componentTypes[std::type_index(typeid(ComponentType))];
 	}
 
 	template<typename ComponentType>

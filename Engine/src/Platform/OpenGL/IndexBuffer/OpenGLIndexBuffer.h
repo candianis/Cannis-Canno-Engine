@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ccpch.h"
-#include "Renderer/IndexBuffer/IndexBuffer.h"
+#include "Renderer/Buffer/IndexBuffer/IndexBuffer.h"
 
 namespace Cannis {
 	class OpenGLIndexBuffer : public IndexBuffer {

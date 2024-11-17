@@ -5,7 +5,7 @@
 #include "Platform/OpenGL/VertexArray/OpenGLVertexArray.h"
 
 namespace Cannis {
-	std::unique_ptr<VertexArray> VertexArray::Create(float* p_vertices, size_t p_size, size_t p_stride) {
+	std::unique_ptr<VertexArray> VertexArray::Create() {
 		switch (Renderer::GetAPI()) {
 			case RendererAPI::None:
 				CC_CORE_ASSERT(false, "No API was chosen");
@@ -13,7 +13,7 @@ namespace Cannis {
 				break;
 
 			case RendererAPI::OpenGL:
-				return std::make_unique<OpenGLVertexArray>(p_vertices, p_size, p_stride);
+				return std::make_unique<OpenGLVertexArray>();
 				break;
 		}
 

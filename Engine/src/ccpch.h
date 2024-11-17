@@ -31,6 +31,7 @@ using std::string;
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+
 #ifdef CC_PLATFORM_WINDOWS
 	#include <Windows.h>
 #endif

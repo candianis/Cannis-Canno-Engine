@@ -1,5 +1,6 @@
 #include "ccpch.h"
 #include "World.h"
+#include "ECS/Component/TransformComponent.hpp"
 
 namespace Cannis {
 	WorldCoordinator::WorldCoordinator(std::shared_ptr<SysEventDispatcher>& p_sysDispatcher) {

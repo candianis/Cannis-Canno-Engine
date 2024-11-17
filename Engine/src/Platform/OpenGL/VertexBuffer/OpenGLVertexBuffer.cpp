@@ -22,4 +22,12 @@ namespace Cannis {
 	void OpenGLVertexBuffer::UnBind() const {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
+
+	const BufferLayout& OpenGLVertexBuffer::GetLayout() const {
+		return m_layout;
+	}
+
+	void OpenGLVertexBuffer::SetLayout(const BufferLayout& p_bufferLayout) {
+		m_layout = p_bufferLayout;
+	}
 }

@@ -12,8 +12,8 @@
 #include "ECS/World/World.h"
 
 #include "Renderer/Shader/Shader.h"
-#include "Renderer/VertexBuffer/VertexBuffer.h"
-#include "Renderer/IndexBuffer/IndexBuffer.h"
+#include "Renderer/Buffer/VertexBuffer/VertexBuffer.h"
+#include "Renderer/Buffer/IndexBuffer/IndexBuffer.h"
 #include "Renderer/VertexArray/VertexArray.h"
 
 namespace Cannis {
@@ -24,6 +24,9 @@ namespace Cannis {
 		std::shared_ptr<VertexBuffer> m_vertexBuffer;
 		std::shared_ptr<IndexBuffer> m_indexBuffer;
 		std::unique_ptr<VertexArray> m_vertexArray;
+
+		std::unique_ptr<VertexArray> m_square;
+		std::unique_ptr<Shader> m_squareShader;
 
 	private:
 		std::unique_ptr<Window> m_window;
