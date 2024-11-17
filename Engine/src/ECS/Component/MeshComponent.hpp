@@ -3,10 +3,10 @@
 #include "Component.h"
 
 namespace Cannis {
-	struct MeshComponent : IComponent {
-		MeshComponent() = default;
+	struct ModelComponent : IComponent {
+		ModelComponent() = default;
 
-		MeshComponent(uint8_t p_componentID) { 
+		ModelComponent(uint8_t p_componentID) { 
 			componentID = p_componentID; 
 		}
 	};

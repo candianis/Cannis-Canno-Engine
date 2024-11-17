@@ -110,8 +110,8 @@ namespace Cannis {
 		
 		//static bool selection[2] = { false, true };
 		for (const Entity& entity : p_world->GetEntities()) {
-			if (p_world->HasComponent<GUIComponent>(entity))
-				CC_CLIENT_INFO(entity.name + " does not have a GUI component");
+			//if (p_world->HasComponent<GUIComponent>(entity))
+			//	CC_CORE_INFO(entity.name + " does not have a GUI component");
 
 			GUIComponent& gui = p_world->GetComponent<GUIComponent>(entity);
 			if (ImGui::Selectable(entity.name.c_str(), &gui.isSelected)) {
@@ -120,7 +120,7 @@ namespace Cannis {
 					p_world->GetComponent<GUIComponent>(*m_selectedEntity).isSelected = false;
 				}
 
-				//m_selectedEntity.reset();
+				m_selectedEntity.reset();
 				m_selectedEntity = std::make_shared<Entity>(entity);
 			}
 

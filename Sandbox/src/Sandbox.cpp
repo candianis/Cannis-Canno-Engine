@@ -47,15 +47,15 @@ public:
 		triangle.SetRotation(glm::vec3(15.0f, 3.0f, 17.0f));
 		triangle.SetScale(glm::vec3(1));
 
-		triangle.AddComponent<Cannis::MeshComponent>();
-		if (triangle.HasComponent<Cannis::MeshComponent>())
+		triangle.AddComponent<Cannis::ModelComponent>();
+		if (triangle.HasComponent<Cannis::ModelComponent>())
 			CC_CLIENT_INFO(triangle.GetInstance().name + " has Mesh component");
 
-		triangle.RemoveComponent<Cannis::MeshComponent>();
-		if (triangle.HasComponent<Cannis::MeshComponent>())
+		triangle.RemoveComponent<Cannis::ModelComponent>();
+		if (triangle.HasComponent<Cannis::ModelComponent>())
 			CC_CLIENT_INFO(triangle.GetInstance().name + " does not have Mesh component");
 
-		triangle.RemoveComponent<Cannis::MeshComponent>();
+		triangle.RemoveComponent<Cannis::ModelComponent>();
 
 		Cannis::EntityHandle square(GetCoordinator(), "Square");
 		square.SetPosition(glm::vec3(0));

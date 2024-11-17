@@ -7,12 +7,12 @@
 namespace Cannis {
 	std::shared_ptr<VertexBuffer> VertexBuffer::Create(float* p_vertices, size_t p_size) {
 		switch (Renderer::GetAPI()) {
-			case RendererAPI::None:
+			case RendererAPI::API::None:
 				CC_CORE_ASSERT(false, "No API was chosen");
 				return nullptr;
 				break;
 		
-			case RendererAPI::OpenGL:
+			case RendererAPI::API::OpenGL:
 				return std::make_shared<OpenGLVertexBuffer>(p_vertices, p_size);
 				break;
 		}

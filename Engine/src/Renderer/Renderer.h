@@ -1,21 +1,21 @@
 #pragma once
 
-namespace Cannis {
-	enum RendererAPI {
-		None = 0, 
-		OpenGL = 1,
-		DirectX11 = 2,
-		DirectX12 = 3,
-		Metal = 4,
-		Vulkan = 5
-	};
+#include "Renderer/RenderCommand/RenderCommand.h"
+#include "VertexArray/VertexArray.h"
 
+namespace Cannis {
 	class Renderer {
 	public:
-		inline static RendererAPI GetAPI() { return s_rendererAPI; }
+		// 
+		static void BeginScene();
+		static void EndScene();
 
+
+		static void Submit(const std::shared_ptr<VertexArray>& p_vertexArray);
+
+
+		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 	private:
-		static RendererAPI s_rendererAPI;
 
 	};
 }

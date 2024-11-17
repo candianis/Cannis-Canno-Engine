@@ -7,12 +7,12 @@
 namespace Cannis {
 	std::shared_ptr<IndexBuffer> IndexBuffer::Create(uint32_t* p_indices, size_t p_count) {
 		switch (Renderer::GetAPI()) {
-		case RendererAPI::None:
+		case RendererAPI::API::None:
 			CC_CORE_ASSERT(false, "No API was chosen");
 			return nullptr;
 			break;
 
-		case RendererAPI::OpenGL:
+		case RendererAPI::API::OpenGL:
 			return std::make_shared<OpenGLIndexBuffer>(p_indices, p_count);
 			break;
 		}

@@ -20,13 +20,12 @@ namespace Cannis {
 	class CANNIS_API Application {
 	private:
 		static Application* s_instance;
-		std::unique_ptr<Shader> m_shader;
-		std::shared_ptr<VertexBuffer> m_vertexBuffer;
-		std::shared_ptr<IndexBuffer> m_indexBuffer;
-		std::unique_ptr<VertexArray> m_vertexArray;
 
-		std::unique_ptr<VertexArray> m_square;
-		std::unique_ptr<Shader> m_squareShader;
+		std::shared_ptr<VertexArray> m_triangle;
+		std::shared_ptr<Shader> m_shader;
+
+		std::shared_ptr<VertexArray> m_square;
+		std::shared_ptr<Shader> m_squareShader;
 
 	private:
 		std::unique_ptr<Window> m_window;

@@ -5,15 +5,15 @@
 #include "Platform/OpenGL/VertexArray/OpenGLVertexArray.h"
 
 namespace Cannis {
-	std::unique_ptr<VertexArray> VertexArray::Create() {
+	std::shared_ptr<VertexArray> VertexArray::Create() {
 		switch (Renderer::GetAPI()) {
-			case RendererAPI::None:
+			case RendererAPI::API::None:
 				CC_CORE_ASSERT(false, "No API was chosen");
 				return nullptr;
 				break;
 
-			case RendererAPI::OpenGL:
-				return std::make_unique<OpenGLVertexArray>();
+			case RendererAPI::API::OpenGL:
+				return std::make_shared<OpenGLVertexArray>();
 				break;
 		}
 

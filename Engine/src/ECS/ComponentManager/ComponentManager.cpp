@@ -9,7 +9,7 @@ namespace Cannis {
 	ComponentManager::ComponentManager() : m_nextComponentID(0) {
 		//In this order 
 		RegisterComponent<TransformComponent>();
-		RegisterComponent<MeshComponent>();
+		RegisterComponent<ModelComponent>();
 		RegisterComponent<GUIComponent>();
 	}
 	void ComponentManager::SubscribeToEvent(const std::shared_ptr<SysEventDispatcher>& p_eventDispatcher) {

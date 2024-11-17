@@ -8,7 +8,7 @@
 #include "Renderer/Buffer/BufferLayout/BufferLayout.h"
 #include "Platform/OpenGL/VertexBuffer/OpenGLVertexBuffer.h"
 
-#include <glad/glad.h>
+#include "Renderer/Renderer.h"
 
 namespace Cannis {
 	Application* Application::s_instance = nullptr;
@@ -29,7 +29,7 @@ namespace Cannis {
 		m_worldCoordinator->SubscribeToEvent();
 
 
-		m_vertexArray = std::move(VertexArray::Create());
+		m_triangle = VertexArray::Create();
 
 		float vertices[21] = {
 			-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
@@ -37,19 +37,19 @@ namespace Cannis {
 			 0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
 		};
 
-		m_vertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices));
+		std::shared_ptr<VertexBuffer> vertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices));
 		BufferLayout bufferLayout = {
 			{ "a_Position", ShaderDataType::Float3 },
 			{ "a_Color", ShaderDataType::Float4 }
 		};
 
-		m_vertexBuffer->SetLayout(bufferLayout);
-		m_vertexArray->AddVertexBuffer(m_vertexBuffer);
+		vertexBuffer->SetLayout(bufferLayout);
+		m_triangle->AddVertexBuffer(vertexBuffer);
 
 		uint32_t indices[3] = { 0, 1, 2 };
 
-		m_indexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
-		m_vertexArray->SetIndexBuffer(m_indexBuffer);
+		std::shared_ptr<IndexBuffer> indexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
+		m_triangle->SetIndexBuffer(indexBuffer);
 
 		std::string vertexSource =
 			"#version 330 core\n"
@@ -130,16 +130,18 @@ namespace Cannis {
 
 	void Application::Run() {
 		while (m_running) {
-			glClearColor(0.2f, 0.2f, 0.2f, 1);
-			glClear(GL_COLOR_BUFFER_BIT);
+			RenderCommand::SetClearColor(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f));
+			RenderCommand::Clear();
 
+			Renderer::BeginScene();
+			
 			m_squareShader->Bind();
-			m_square->Bind();
-			glDrawElements(GL_TRIANGLES, m_square->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+			Renderer::Submit(m_square);
 
 			m_shader->Bind();
-			m_vertexArray->Bind();
-			glDrawElements(GL_TRIANGLES, GLsizei(m_indexBuffer->GetCount()), GL_UNSIGNED_INT, nullptr);
+			Renderer::Submit(m_triangle);
+
+			Renderer::EndScene();
 
 			m_worldCoordinator->Update();
 
