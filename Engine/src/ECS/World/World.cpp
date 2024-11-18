@@ -12,11 +12,11 @@ namespace Cannis {
 	}
 
 	void WorldCoordinator::Init() {
-		m_root.Init();
+		m_root.Init(m_componentManager);
 	}
 
 	void WorldCoordinator::Update() {
-		m_root.Update();
+		m_root.Update(m_componentManager);
 	}
 
 	void WorldCoordinator::Shutdown() {

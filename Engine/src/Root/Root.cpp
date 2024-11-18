@@ -1,9 +1,11 @@
 #include "ccpch.h"
 #include "Root.h"
 
+#include "ECS/Systems/RenderSystem/RenderSystem.h"
+
 namespace Cannis {
-	void Root::Init() {
-		
+	void Root::Init(ComponentManager& p_componentManager) {
+		m_subsystems.insert(std::make_pair(std::type_index(typeid(RenderSystem)), std::make_shared<RenderSystem>(p_componentManager)));
 	}
 
 	void Root::SubscribeSystemsToEvents(const std::shared_ptr<SysEventDispatcher>& p_sysEventDispatcher) {
@@ -33,11 +35,11 @@ namespace Cannis {
 		}
 	}
 
-	void Root::Update() {
+	void Root::Update(ComponentManager& p_componentManager) {
 		for (const auto& pair : m_subsystems) {
 			const auto& curSys = pair.second;
 
-			curSys->Update();
+			curSys->Update(p_componentManager);
 		}
 	}
 

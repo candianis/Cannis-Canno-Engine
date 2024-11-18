@@ -6,6 +6,7 @@
 #include "Subsystem/Subsystem.h"
 #include "Events/SysEventDispatcher/SysEventDispatcher.h"
 #include "Events/ECSEvents/ECSEvent.h"
+#include "ECS/ComponentManager/ComponentManager.h"
 
 namespace Cannis {
 	class CANNIS_API Root {
@@ -16,8 +17,8 @@ namespace Cannis {
 	public:
 		Root() = default;
 
-		void Init();
-		void Update();
+		void Init(ComponentManager& p_componentManager);
+		void Update(ComponentManager& p_componentManager);
 		void Shutdown();
 		void OnUIRender();
 

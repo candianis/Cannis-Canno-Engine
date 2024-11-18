@@ -28,7 +28,6 @@ namespace Cannis {
 		m_worldCoordinator->Init();
 		m_worldCoordinator->SubscribeToEvent();
 
-
 		m_triangle = VertexArray::Create();
 
 		float vertices[21] = {
@@ -47,35 +46,15 @@ namespace Cannis {
 		m_triangle->AddVertexBuffer(vertexBuffer);
 
 		uint32_t indices[3] = { 0, 1, 2 };
+		size_t test = sizeof(indices) / sizeof(uint32_t);
 
 		std::shared_ptr<IndexBuffer> indexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 		m_triangle->SetIndexBuffer(indexBuffer);
 
-		std::string vertexSource =
-			"#version 330 core\n"
-			"layout (location = 0) in vec3 a_Position;\n"
-			"layout (location = 1) in vec4 a_Color;\n"
-			"out vec3 v_Position;\n"
-			"out vec4 v_Color;\n"
+		std::string vertexSource = "../Engine/assets/Shaders/ColorPos/colorPos.vert";
 
-			"void main()\n"
-			"{\n"
-			"v_Position = a_Position;"
-			"v_Color = a_Color;"
-			"   gl_Position = vec4(a_Position, 1.0);\n"
-			"}\0";
+		std::string fragmentSource = "../Engine/assets/Shaders/ColorPos/colorPos.frag";
 
-		std::string fragmentSource =
-			"#version 330 core\n"
-			"layout (location = 0) out vec4 color;"
-			"in vec3 v_Position;\n"
-			"in vec4 v_Color;\n"
-
-			"void main()\n"
-			"{\n"
-			"color = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-			"color = v_Color;"
-			"}\n\0";
 
 		m_shader = std::move(Shader::Create(vertexSource, fragmentSource));
 
@@ -100,26 +79,8 @@ namespace Cannis {
 		std::shared_ptr<IndexBuffer> squareIB = IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
 		m_square->SetIndexBuffer(squareIB);
 
-		std::string vertexSourceSquare =
-			"#version 450 core\n"
-			"layout (location = 0) in vec3 a_Position;\n"
-			"out vec3 v_Position;\n"
-
-			"void main()\n"
-			"{\n"
-			"	v_Position = a_Position;"
-			"   gl_Position = vec4(a_Position, 1.0);\n"
-			"}\0";
-
-		std::string fragmentSourceSquare =
-			"#version 450 core\n"
-			"layout (location = 0) out vec4 color;"
-			"in vec3 v_Position;\n"
-
-			"void main()\n"
-			"{\n"
-				"color = vec4(0.2, 0.3f, 0.8f, 1.0f);\n"
-			"}\n\0";
+		std::string vertexSourceSquare = "../Engine/assets/Shaders/Simple/simpleShader.vert";
+		std::string fragmentSourceSquare = "../Engine/assets/Shaders/Simple/simpleShader.frag";
 
 		m_squareShader = std::move(Shader::Create(vertexSourceSquare, fragmentSourceSquare));
 	}
@@ -130,18 +91,6 @@ namespace Cannis {
 
 	void Application::Run() {
 		while (m_running) {
-			RenderCommand::SetClearColor(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f));
-			RenderCommand::Clear();
-
-			Renderer::BeginScene();
-			
-			m_squareShader->Bind();
-			Renderer::Submit(m_square);
-
-			m_shader->Bind();
-			Renderer::Submit(m_triangle);
-
-			Renderer::EndScene();
 
 			m_worldCoordinator->Update();
 

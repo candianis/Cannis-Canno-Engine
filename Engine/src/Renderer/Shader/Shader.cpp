@@ -6,9 +6,9 @@
 
 #include <glad/glad.h>
 
-
+ 
 namespace Cannis {
-	std::unique_ptr<Shader> Shader::Create(const std::string& p_vertexSource, const std::string& p_fragmentSource) {
+	std::shared_ptr<Shader> Shader::Create(const std::string& p_vertexSource, const std::string& p_fragmentSource) {
 		switch (Renderer::GetAPI()) {
 			case RendererAPI::API::None:
 				CC_CORE_ASSERT(false, "No API was chosen");
@@ -16,7 +16,7 @@ namespace Cannis {
 				break;
 
 			case RendererAPI::API::OpenGL:
-				return std::make_unique<OpenGLShader>(p_vertexSource, p_fragmentSource);
+				return std::make_shared<OpenGLShader>(p_vertexSource, p_fragmentSource);
 				break;
 		}
 

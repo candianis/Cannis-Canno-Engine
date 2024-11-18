@@ -2,8 +2,9 @@
 #include "ComponentManager.h"
 
 #include "ECS/Component/TransformComponent.hpp"
-#include "ECS/Component/MeshComponent.hpp"
 #include "ECS/Component/GUIComponent.hpp"
+#include "ECS/Component/ModelComponent.hpp"
+#include "ECS/Component/ShaderComponent.hpp"
 
 namespace Cannis {
 	ComponentManager::ComponentManager() : m_nextComponentID(0) {
@@ -11,7 +12,9 @@ namespace Cannis {
 		RegisterComponent<TransformComponent>();
 		RegisterComponent<ModelComponent>();
 		RegisterComponent<GUIComponent>();
+		RegisterComponent<ShaderComponent>();
 	}
+
 	void ComponentManager::SubscribeToEvent(const std::shared_ptr<SysEventDispatcher>& p_eventDispatcher) {
 		p_eventDispatcher->Subscribe(EventType::EntityDestroyed, std::bind(&ComponentManager::OnEntityDestroyed, this, std::placeholders::_1));
 	}

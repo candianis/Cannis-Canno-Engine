@@ -9,6 +9,8 @@ namespace Cannis {
 		glCreateBuffers(1, &m_ID);
 		glBindBuffer(GL_ARRAY_BUFFER, m_ID);
 		glBufferData(GL_ARRAY_BUFFER, p_size, p_vertices, GL_STATIC_DRAW);
+
+		CC_CORE_TRACE("{0}", *(p_vertices+1));
 	}
 
 	OpenGLVertexBuffer::~OpenGLVertexBuffer() {

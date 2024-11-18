@@ -22,7 +22,7 @@ public:
 		glm::mat4 cam = camera(5.0f, { 0.5f, 0.5f });
 	}
 
-	void Update() override {
+	void Update(Cannis::ComponentManager& p_componentManager) override {
 		if (Cannis::Input::IsKeyPressed(CC_KEY_G))
 			CC_CLIENT_INFO("G key is pressed");
 	}
@@ -40,22 +40,6 @@ public:
 		CC_CLIENT_ERROR("Testing");
 
 		AddSubsystem<SandboxSystem>();
-		
-		//
-		Cannis::EntityHandle triangle(GetCoordinator(), "Triangle");
-		triangle.SetPosition(glm::vec3(10.0f, 0.0f, 0.0f));
-		triangle.SetRotation(glm::vec3(15.0f, 3.0f, 17.0f));
-		triangle.SetScale(glm::vec3(1));
-
-		triangle.AddComponent<Cannis::ModelComponent>();
-		if (triangle.HasComponent<Cannis::ModelComponent>())
-			CC_CLIENT_INFO(triangle.GetInstance().name + " has Mesh component");
-
-		triangle.RemoveComponent<Cannis::ModelComponent>();
-		if (triangle.HasComponent<Cannis::ModelComponent>())
-			CC_CLIENT_INFO(triangle.GetInstance().name + " does not have Mesh component");
-
-		triangle.RemoveComponent<Cannis::ModelComponent>();
 
 		Cannis::EntityHandle square(GetCoordinator(), "Square");
 		square.SetPosition(glm::vec3(0));
@@ -63,8 +47,51 @@ public:
 		square.SetScale(glm::vec3(2));
 		square.AddComponent<Cannis::GUIComponent>();
 
-		if (!square.HasComponent<Cannis::TransformComponent>())
-			CC_CLIENT_INFO("This component does not have a Transform component");
+		float squareVertices[12] = {
+			-0.5f, -0.5f, 0.0f,
+			 0.5f, -0.5f, 0.0f,
+			 0.5f,  0.5f, 0.0f,
+			-0.5f,  0.5f, 0.0f
+		};
+
+		uint32_t squareIndices[6] = {0, 1, 2, 2, 3, 0};
+
+		Cannis::BufferLayout bufferLayoutSquare = {
+			{ "a_Position", Cannis::ShaderDataType::Float3 },
+		};
+
+		square.AddComponent<Cannis::ModelComponent>(squareVertices, sizeof(squareVertices), squareIndices, sizeof(squareIndices) / sizeof(uint32_t), bufferLayoutSquare);
+
+		std::string vertexSourceSquare = "../Engine/assets/Shaders/Simple/simpleShader.vert";
+		std::string fragmentSourceSquare = "../Engine/assets/Shaders/Simple/simpleShader.frag";
+		square.AddComponent<Cannis::ShaderComponent>(vertexSourceSquare, fragmentSourceSquare);
+
+		//
+		Cannis::EntityHandle triangle(GetCoordinator(), "Triangle");
+		triangle.SetPosition(glm::vec3(10.0f, 0.0f, 0.0f));
+		triangle.SetRotation(glm::vec3(15.0f, 3.0f, 17.0f));
+		triangle.SetScale(glm::vec3(1));
+
+		float vertices[21] = {
+			-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
+			 0.5f, -0.5f, 0.0f, 0.3f, 0.0f, 0.8f, 1.0f,
+			 0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
+		};
+
+
+		uint32_t indices[3] = { 0, 1, 2 };
+
+
+		Cannis::BufferLayout bufferLayout = {
+			{ "a_Position", Cannis::ShaderDataType::Float3 },
+			{ "a_Color", Cannis::ShaderDataType::Float4 }
+		};
+
+		triangle.AddComponent<Cannis::ModelComponent>(vertices, sizeof(vertices), indices, sizeof(indices) / sizeof(uint32_t), bufferLayout);
+
+		std::string vertexSource = "../Engine/assets/Shaders/ColorPos/colorPos.vert";
+		std::string fragmentSource = "../Engine/assets/Shaders/ColorPos/colorPos.frag";
+		triangle.AddComponent<Cannis::ShaderComponent>(vertexSource, fragmentSource);
 	}
 
 	~Sandbox() {

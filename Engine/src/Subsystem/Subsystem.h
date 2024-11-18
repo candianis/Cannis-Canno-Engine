@@ -7,15 +7,16 @@
 #include "ECS/ECSOptions.h"
 #include "Events/SysEvent.h"
 #include "Events/SysEventDispatcher/SysEventDispatcher.h"
+#include "ECS/ComponentManager/ComponentManager.h"
 
 namespace Cannis {
 	// @brief Engine susbsytems
-	class CANNIS_API Subsystem {
+	class Subsystem {
 	public:
 		Subsystem(const std::string& p_name = "Subsystem");
 		virtual ~Subsystem();
 
-		virtual void Update() {}
+		virtual void Update(ComponentManager& p_componentManager) {}
 		virtual void Shutdown() {}
 		virtual void OnUIRender() {}
 		virtual void OnEvent(SysEvent& p_event) {}

@@ -19,11 +19,11 @@ namespace Cannis {
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& p_vertexSource, const std::string& p_fragmentSource) {
-		//std::string vertCode(GetSourceCode(p_vertexSource.c_str()));
-		//std::string fragCode(GetSourceCode(p_fragmentSource.c_str()));
+		std::string vertCode(GetSourceCode(p_vertexSource.c_str()));
+		std::string fragCode(GetSourceCode(p_fragmentSource.c_str()));
 
-		unsigned int vertexShader = CreateShader(p_vertexSource.c_str(), ShaderType::Vertex);
-		unsigned int fragmentShader = CreateShader(p_fragmentSource.c_str(), ShaderType::Fragment);
+		unsigned int vertexShader = CreateShader(vertCode.c_str(), ShaderType::Vertex);
+		unsigned int fragmentShader = CreateShader(fragCode.c_str(), ShaderType::Fragment);
 
 		CreateProgram(vertexShader, fragmentShader);
 
@@ -92,8 +92,9 @@ namespace Cannis {
 		if (!success) {
 			char infoLog[512];
 			glGetShaderInfoLog(shader, 512, NULL, infoLog);
+			std::string shaderTypeName = p_type == ShaderType::Vertex ? "VERTEX" : "FRAGMENT";
+			CC_CORE_ERROR("ERROR::SHADER::{0}::COMPILATION_FAILED", shaderTypeName);
 			CC_CORE_ERROR("{0}", infoLog);
-			CC_ASSERT(false, "ERROR::SHADER::COMPILATION_FAILED");
 		}
 
 		return shader;

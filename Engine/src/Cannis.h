@@ -15,7 +15,10 @@
 #include "ECS/ComponentArray/ComponentArray.h"
 #include "ECS/Component/TransformComponent.hpp"
 #include "ECS/Component/GUIComponent.hpp"
-#include "ECS/Component/MeshComponent.hpp"
+#include "ECS/Component/ModelComponent.hpp"
+#include "ECS/Component/ShaderComponent.hpp"
 #include "Subsystem/Subsystem.h"
+
+#include "Renderer/Buffer/BufferLayout/BufferLayout.h"
 
 #include "Core/EntryPoint.h"
