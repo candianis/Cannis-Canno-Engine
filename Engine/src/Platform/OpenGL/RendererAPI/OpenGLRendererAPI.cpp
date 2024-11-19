@@ -4,6 +4,10 @@
 #include <glad/glad.h>
 
 namespace Cannis {
+	void OpenGLRendererAPI::Init() {
+		glEnable(GL_DEPTH_TEST);
+	}
+
 	void OpenGLRendererAPI::SetClearColor(const glm::vec4& p_color) {
 		glClearColor(p_color.r, p_color.g, p_color.b, p_color.a);
 	}

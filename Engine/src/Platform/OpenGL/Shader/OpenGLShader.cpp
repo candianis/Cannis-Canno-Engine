@@ -44,6 +44,14 @@ namespace Cannis {
 		glUseProgram(0);
 	}
 
+	void OpenGLShader::UploadUniform(const std::string& p_name, const glm::vec3& p_vector) {
+		glUniform3f(glGetUniformLocation(m_ID, p_name.c_str()), p_vector.x, p_vector.y, p_vector.z);
+	}
+
+	void OpenGLShader::UploadUniform(const std::string& p_name, const glm::mat4& p_matrix) {
+		glUniformMatrix4fv(glGetUniformLocation(m_ID, p_name.c_str()), 1, GL_FALSE, glm::value_ptr(p_matrix));
+	}
+
 	string OpenGLShader::GetSourceCode(const char* p_filePath) {
 		string code;
 		std::ifstream shaderFile;

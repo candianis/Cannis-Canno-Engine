@@ -41,57 +41,106 @@ public:
 
 		AddSubsystem<SandboxSystem>();
 
-		Cannis::EntityHandle square(GetCoordinator(), "Square");
-		square.SetPosition(glm::vec3(0));
-		square.SetRotation(glm::vec3(90, 45, 360));
-		square.SetScale(glm::vec3(2));
-		square.AddComponent<Cannis::GUIComponent>();
+		//Cannis::EntityHandle square(GetCoordinator(), "Square");
+		//square.SetPosition(glm::vec3(0));
+		//square.SetRotation(glm::vec3(90, 45, 360));
+		//square.SetScale(glm::vec3(2));
+		//square.AddComponent<Cannis::GUIComponent>();
 
-		float squareVertices[12] = {
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.5f,  0.5f, 0.0f,
-			-0.5f,  0.5f, 0.0f
+		//float squareVertices[12] = {
+		//	-0.5f, -0.5f, 0.0f,
+		//	 0.5f, -0.5f, 0.0f,
+		//	 0.5f,  0.5f, 0.0f,
+		//	-0.5f,  0.5f, 0.0f
+		//};
+
+		//uint32_t squareIndices[6] = {0, 1, 2, 2, 3, 0};
+
+		//Cannis::BufferLayout bufferLayoutSquare = {
+		//	{ "a_Position", Cannis::ShaderDataType::Float3 },
+		//};
+
+		//square.AddComponent<Cannis::ModelComponent>(squareVertices, sizeof(squareVertices), squareIndices, sizeof(squareIndices) / sizeof(uint32_t), bufferLayoutSquare);
+
+		//std::string vertexSourceSquare = "../Engine/assets/Shaders/Simple/simpleShader.vert";
+		//std::string fragmentSourceSquare = "../Engine/assets/Shaders/Simple/simpleShader.frag";
+		//square.AddComponent<Cannis::ShaderComponent>(vertexSourceSquare, fragmentSourceSquare);
+
+		////
+		//Cannis::EntityHandle triangle(GetCoordinator(), "Triangle");
+		//triangle.SetPosition(glm::vec3(10.0f, 0.0f, 0.0f));
+		//triangle.SetRotation(glm::vec3(15.0f, 3.0f, 17.0f));
+		//triangle.SetScale(glm::vec3(1));
+
+		//float vertices[21] = {
+		//	-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
+		//	 0.5f, -0.5f, 0.0f, 0.3f, 0.0f, 0.8f, 1.0f,
+		//	 0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
+		//};
+
+
+		//uint32_t indices[3] = { 0, 1, 2 };
+
+
+		//Cannis::BufferLayout bufferLayout = {
+		//	{ "a_Position", Cannis::ShaderDataType::Float3 },
+		//	{ "a_Color", Cannis::ShaderDataType::Float4 }
+		//};
+
+		//triangle.AddComponent<Cannis::ModelComponent>(vertices, sizeof(vertices), indices, sizeof(indices) / sizeof(uint32_t), bufferLayout);
+
+		//std::string vertexSource = "../Engine/assets/Shaders/ColorPos/colorPos.vert";
+		//std::string fragmentSource = "../Engine/assets/Shaders/ColorPos/colorPos.frag";
+		//triangle.AddComponent<Cannis::ShaderComponent>(vertexSource, fragmentSource);
+
+		Cannis::EntityHandle cube(GetCoordinator(), "Cube");
+		float vertices[] = {
+			// front
+			-1.0, -1.0,  1.0, 1.0, 0.0, 0.0, 1.0,
+			 1.0, -1.0,  1.0, 0.0, 1.0, 0.0, 1.0,
+			 1.0,  1.0,  1.0, 0.0, 0.0, 1.0, 1.0,
+			-1.0,  1.0,  1.0, 1.0, 1.0, 1.0, 1.0,
+			// back
+			-1.0, -1.0, -1.0, 1.0, 0.0, 0.0, 1.0,
+			 1.0, -1.0, -1.0, 0.0, 1.0, 0.0, 1.0,
+			 1.0,  1.0, -1.0, 0.0, 0.0, 1.0, 1.0,
+			-1.0,  1.0, -1.0, 1.0, 1.0, 1.0, 1.0
 		};
 
-		uint32_t squareIndices[6] = {0, 1, 2, 2, 3, 0};
-
-		Cannis::BufferLayout bufferLayoutSquare = {
-			{ "a_Position", Cannis::ShaderDataType::Float3 },
+		uint32_t indices[] = { 
+			// front
+			0, 1, 2,
+			2, 3, 0,
+			// right
+			1, 5, 6,
+			6, 2, 1,
+			// back
+			7, 6, 5,
+			5, 4, 7,
+			// left
+			4, 0, 3,
+			3, 7, 4,
+			// bottom
+			4, 5, 1,
+			1, 0, 4,
+			// top
+			3, 2, 6,
+			6, 7, 3
 		};
-
-		square.AddComponent<Cannis::ModelComponent>(squareVertices, sizeof(squareVertices), squareIndices, sizeof(squareIndices) / sizeof(uint32_t), bufferLayoutSquare);
-
-		std::string vertexSourceSquare = "../Engine/assets/Shaders/Simple/simpleShader.vert";
-		std::string fragmentSourceSquare = "../Engine/assets/Shaders/Simple/simpleShader.frag";
-		square.AddComponent<Cannis::ShaderComponent>(vertexSourceSquare, fragmentSourceSquare);
-
-		//
-		Cannis::EntityHandle triangle(GetCoordinator(), "Triangle");
-		triangle.SetPosition(glm::vec3(10.0f, 0.0f, 0.0f));
-		triangle.SetRotation(glm::vec3(15.0f, 3.0f, 17.0f));
-		triangle.SetScale(glm::vec3(1));
-
-		float vertices[21] = {
-			-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
-			 0.5f, -0.5f, 0.0f, 0.3f, 0.0f, 0.8f, 1.0f,
-			 0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
-		};
-
-
-		uint32_t indices[3] = { 0, 1, 2 };
-
 
 		Cannis::BufferLayout bufferLayout = {
 			{ "a_Position", Cannis::ShaderDataType::Float3 },
-			{ "a_Color", Cannis::ShaderDataType::Float4 }
+			{ "a_Color", Cannis::ShaderDataType::Float4}
 		};
 
-		triangle.AddComponent<Cannis::ModelComponent>(vertices, sizeof(vertices), indices, sizeof(indices) / sizeof(uint32_t), bufferLayout);
+		cube.AddComponent<Cannis::ModelComponent>(vertices, sizeof(vertices), indices, sizeof(indices) / sizeof(uint32_t), bufferLayout);
 
-		std::string vertexSource = "../Engine/assets/Shaders/ColorPos/colorPos.vert";
-		std::string fragmentSource = "../Engine/assets/Shaders/ColorPos/colorPos.frag";
-		triangle.AddComponent<Cannis::ShaderComponent>(vertexSource, fragmentSource);
+		std::string vertexSourceSquare = "../Engine/assets/Shaders/Simple/simpleShader.vert";
+		std::string fragmentSourceSquare = "../Engine/assets/Shaders/Simple/simpleShader.frag";
+		cube.AddComponent<Cannis::ShaderComponent>(vertexSourceSquare, fragmentSourceSquare);
+
+		cube.SetRotation(glm::vec3(45.0f, 90.0f, 0.0f));
+		cube.SetScale(glm::vec3(0.5f));
 	}
 
 	~Sandbox() {

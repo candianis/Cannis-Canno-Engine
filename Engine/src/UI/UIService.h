@@ -29,6 +29,8 @@ namespace Cannis {
 
 		void CreateSceneEditor();
 
+		void CreateCameraEditor(std::shared_ptr<WorldCoordinator>& p_world);
+
 		//Inspector & Component Creation
 		void CreateInspector(std::shared_ptr<WorldCoordinator>& p_world);
 		void CreateTransformComponent(std::shared_ptr<WorldCoordinator>& p_world);

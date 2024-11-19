@@ -6,6 +6,7 @@
 namespace Cannis {
 	class OpenGLRendererAPI :public  RendererAPI {
 	public:
+		void Init() override;
 		void SetClearColor(const glm::vec4& p_color) override;
 		void Clear() override;
 

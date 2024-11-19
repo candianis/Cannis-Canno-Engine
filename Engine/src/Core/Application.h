@@ -21,12 +21,6 @@ namespace Cannis {
 	private:
 		static Application* s_instance;
 
-		std::shared_ptr<VertexArray> m_triangle;
-		std::shared_ptr<Shader> m_shader;
-
-		std::shared_ptr<VertexArray> m_square;
-		std::shared_ptr<Shader> m_squareShader;
-
 	private:
 		std::unique_ptr<Window> m_window;
 		std::shared_ptr<SysEventDispatcher> m_eventDispatcher;

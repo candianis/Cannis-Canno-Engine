@@ -1,5 +1,6 @@
 #include "ccpch.h"
 #include "RenderSystem.h"
+#include "Core/Application.h"
 
 #include "Renderer/Renderer.h"
 #include "ECS/Component/TransformComponent.hpp"
@@ -7,20 +8,29 @@
 #include "ECS/Component/ShaderComponent.hpp"
 
 namespace Cannis {
-	RenderSystem::RenderSystem(ComponentManager& p_componentManager) : Subsystem("RenderSystem") {
+	RenderSystem::RenderSystem(ComponentManager& p_componentManager) : Subsystem("RenderSystem"), camera(glm::vec3(0.0f)) {
 		Signature newSignature = GetSignature();
 		newSignature.set(p_componentManager.GetComponentID<TransformComponent>());
 		newSignature.set(p_componentManager.GetComponentID<ModelComponent>());
 		newSignature.set(p_componentManager.GetComponentID<ShaderComponent>());
 
 		SetSignature(newSignature);
+
+		Application& app = Application::Get();
+		camera.SetPerspective(45.0f, (float)app.GetWindow().GetWidth() / (float)app.GetWindow().GetHeight(), 0.1f, 1000.0f);
 	}
 
 	RenderSystem::~RenderSystem() {
 
 	}
 
+	void RenderSystem::Init() {
+		RenderCommand::Init();
+	}
+
 	void RenderSystem::Update(ComponentManager& p_componentManager) {
+		camera.Update();
+
 		RenderCommand::SetClearColor(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f));
 		RenderCommand::Clear();
 
@@ -32,6 +42,31 @@ namespace Cannis {
 			ModelComponent& modelComponent = p_componentManager.GetComponent<ModelComponent>(entity);
 
 			shaderComponent.shader->Bind();
+
+			//glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+			shaderComponent.shader->UploadUniform("projection", camera.GetProjectionMatrix());
+			
+			//glm::mat4 view = glm::mat4(1.0f);
+			//view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+			shaderComponent.shader->UploadUniform("view", camera.GetViewMatrix());
+			
+			modelComponent.modelMatrix = glm::mat4(1.0f);
+
+			// Y rotation
+			modelComponent.modelMatrix = glm::rotate(modelComponent.modelMatrix, glm::radians(transform.rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+			// X rotation
+			modelComponent.modelMatrix = glm::rotate(modelComponent.modelMatrix, glm::radians(transform.rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+			// Z rotation
+			modelComponent.modelMatrix = glm::rotate(modelComponent.modelMatrix, glm::radians(transform.rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+
+			// Scale
+			modelComponent.modelMatrix = glm::scale(modelComponent.modelMatrix, transform.scale);
+
+			// Translation
+			modelComponent.modelMatrix = glm::translate(modelComponent.modelMatrix, transform.position);
+
+			shaderComponent.shader->UploadUniform("model", modelComponent.modelMatrix);
+
 			Renderer::Submit(modelComponent.vertexArray);
 		}
 

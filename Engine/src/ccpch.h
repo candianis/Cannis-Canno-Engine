@@ -30,6 +30,7 @@ using std::string;
 #include "Logger/Log.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/matrix.hpp>
 
 
 #ifdef CC_PLATFORM_WINDOWS

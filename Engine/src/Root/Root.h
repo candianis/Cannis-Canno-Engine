@@ -8,6 +8,8 @@
 #include "Events/ECSEvents/ECSEvent.h"
 #include "ECS/ComponentManager/ComponentManager.h"
 
+#include "ECS/Systems/RenderSystem/RenderSystem.h"
+
 namespace Cannis {
 	class CANNIS_API Root {
 	private:
@@ -46,7 +48,8 @@ namespace Cannis {
 		const auto& sysIndex = std::type_index(typeid(SystemType));
 		CC_ASSERT(m_subsystems.find(sysIndex) != m_subsystems.end());
 
-		return m_subsystems[sysIndex];
+		// A static_pointer_cast hast to be done before returning as it is not implicitly convertible
+		return std::static_pointer_cast<SystemType>(m_subsystems[sysIndex]);
 	}
 
 	template<typename SystemType>

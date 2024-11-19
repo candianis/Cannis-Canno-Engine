@@ -6,6 +6,10 @@
 namespace Cannis {
 	class RenderCommand {
 	public:
+		inline static void Init() {
+			s_rendererAPI->Init();
+		}
+
 		inline static void SetClearColor(const glm::vec4& p_color) {
 			s_rendererAPI->SetClearColor(p_color);
 		}

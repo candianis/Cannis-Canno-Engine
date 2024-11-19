@@ -6,6 +6,12 @@
 namespace Cannis {
 	void Root::Init(ComponentManager& p_componentManager) {
 		m_subsystems.insert(std::make_pair(std::type_index(typeid(RenderSystem)), std::make_shared<RenderSystem>(p_componentManager)));
+
+		for (const auto& pair : m_subsystems) {
+			const auto& curSys = pair.second;
+
+			curSys->Init();
+		}
 	}
 
 	void Root::SubscribeSystemsToEvents(const std::shared_ptr<SysEventDispatcher>& p_sysEventDispatcher) {

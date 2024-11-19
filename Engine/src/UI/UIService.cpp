@@ -2,6 +2,7 @@
 #include "Core/Application.h"
 #include "ECS/Component/TransformComponent.hpp"
 #include "ECS/Component/GUIComponent.hpp"
+#include "ECS/Systems/RenderSystem/RenderSystem.h"
 
 #include <imgui.h>
 #include <backends/imgui_impl_opengl3.h>
@@ -85,7 +86,7 @@ namespace Cannis {
 		ImGui::Begin("Scene", &showEntitiesWindow);
 
 		size_t i = 0;
-		
+
 		//static bool selection[2] = { false, true };
 		for (const Entity& entity : p_world->GetEntities()) {
 			//if (p_world->HasComponent<GUIComponent>(entity))
@@ -112,10 +113,41 @@ namespace Cannis {
 		ImGui::End();
 
 		CreateInspector(p_world);
+
+		CreateCameraEditor(p_world);
 	}
 
 	void UIService::CreateSceneEditor() {
 
+	}
+
+	void UIService::CreateCameraEditor(std::shared_ptr<WorldCoordinator>& p_world) {
+		auto renderSys = p_world->GetSubsystem<RenderSystem>();
+
+		Camera& cam = renderSys->camera;
+
+		ImGui::Begin("Camera");
+
+		ImGui::SeparatorText("Transform");
+		ImGui::PushItemWidth(80);
+		ImGui::SeparatorText("Position");
+		ImGui::InputFloat("X", &cam.position.x); ImGui::SameLine();
+		ImGui::InputFloat("Y", &cam.position.y); ImGui::SameLine();
+		ImGui::InputFloat("Z", &cam.position.z);
+		ImGui::PopItemWidth();
+		ImGui::Spacing();
+
+		ImGui::SeparatorText("Rotation");
+		ImGui::PushItemWidth(80);
+		ImGui::DragFloat("Yaw", &cam.yaw, 1.0f, -360.0f, 360.0f); ImGui::SameLine();
+		ImGui::DragFloat("Pitch", &cam.pitch, 1.0f, -360.0f, 360.0f);
+		ImGui::PopItemWidth();
+			
+		ImGui::SeparatorText("Perspective Settings");
+		ImGui::DragFloat("FOV", &cam.fov, 1.0f, 45.0f, 65.0f);
+		ImGui::Spacing;
+
+		ImGui::End();
 	}
 
 	void UIService::CreateInspector(std::shared_ptr<WorldCoordinator>& p_world) {
@@ -156,9 +188,9 @@ namespace Cannis {
 				ImGui::PushID(1);
 				ImGui::PushItemWidth(80);
 				ImGui::SeparatorText("Rotation");
-				ImGui::InputFloat("X", &transform.rotation.x); ImGui::SameLine();
-				ImGui::InputFloat("Y", &transform.rotation.y); ImGui::SameLine();
-				ImGui::InputFloat("Z", &transform.rotation.z);
+				ImGui::DragFloat("X", &transform.rotation.x, 1.0f, -360.0f, 360.0f); ImGui::SameLine();
+				ImGui::DragFloat("Y", &transform.rotation.y, 1.0f, -360.0f, 360.0f); ImGui::SameLine();
+				ImGui::DragFloat("Z", &transform.rotation.z, 1.0f, -360.0f, 360.0f);
 				ImGui::PopItemWidth();
 				ImGui::PopID();
 				ImGui::Spacing();

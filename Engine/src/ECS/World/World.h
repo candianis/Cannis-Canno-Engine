@@ -10,6 +10,8 @@
 #include "Events/SysEventDispatcher/SysEventDispatcher.h"
 #include "Events/ECSEvents/ECSEvent.h"
 
+#include "ECS/Systems/RenderSystem/RenderSystem.h"
+
 namespace Cannis {
 	class CANNIS_API WorldCoordinator {
 	private:

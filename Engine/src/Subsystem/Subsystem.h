@@ -16,6 +16,7 @@ namespace Cannis {
 		Subsystem(const std::string& p_name = "Subsystem");
 		virtual ~Subsystem();
 
+		virtual void Init() {}
 		virtual void Update(ComponentManager& p_componentManager) {}
 		virtual void Shutdown() {}
 		virtual void OnUIRender() {}
