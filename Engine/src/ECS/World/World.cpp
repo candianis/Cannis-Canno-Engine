@@ -15,8 +15,8 @@ namespace Cannis {
 		m_root.Init(m_componentManager);
 	}
 
-	void WorldCoordinator::Update() {
-		m_root.Update(m_componentManager);
+	void WorldCoordinator::Update(const Timestep p_timestep) {
+		m_root.Update(m_componentManager, p_timestep);
 	}
 
 	void WorldCoordinator::Shutdown() {

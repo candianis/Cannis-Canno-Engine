@@ -8,7 +8,7 @@
 #include "ECS/Component/ShaderComponent.hpp"
 
 namespace Cannis {
-	RenderSystem::RenderSystem(ComponentManager& p_componentManager) : Subsystem("RenderSystem"), camera(glm::vec3(0.0f)) {
+	RenderSystem::RenderSystem(ComponentManager& p_componentManager) : Subsystem("RenderSystem"), camera(glm::vec3(0.0f, 0.0f, 8.0f)) {
 		Signature newSignature = GetSignature();
 		newSignature.set(p_componentManager.GetComponentID<TransformComponent>());
 		newSignature.set(p_componentManager.GetComponentID<ModelComponent>());
@@ -23,34 +23,28 @@ namespace Cannis {
 	RenderSystem::~RenderSystem() {
 
 	}
-
+	
 	void RenderSystem::Init() {
 		RenderCommand::Init();
 	}
 
-	void RenderSystem::Update(ComponentManager& p_componentManager) {
+	void RenderSystem::Update(ComponentManager& p_componentManager, const Timestep p_timestep) {
 		camera.Update();
 
 		RenderCommand::SetClearColor(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f));
 		RenderCommand::Clear();
 
-		Renderer::BeginScene();
+		Renderer::BeginScene(camera);
 
 		for (const Entity& entity : m_entities) {
 			TransformComponent& transform = p_componentManager.GetComponent<TransformComponent>(entity);
 			ShaderComponent& shaderComponent = p_componentManager.GetComponent<ShaderComponent>(entity);
 			ModelComponent& modelComponent = p_componentManager.GetComponent<ModelComponent>(entity);
-
-			shaderComponent.shader->Bind();
-
-			//glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
-			shaderComponent.shader->UploadUniform("projection", camera.GetProjectionMatrix());
-			
-			//glm::mat4 view = glm::mat4(1.0f);
-			//view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-			shaderComponent.shader->UploadUniform("view", camera.GetViewMatrix());
 			
 			modelComponent.modelMatrix = glm::mat4(1.0f);
+
+			// Translation
+			modelComponent.modelMatrix = glm::translate(modelComponent.modelMatrix, transform.position);
 
 			// Y rotation
 			modelComponent.modelMatrix = glm::rotate(modelComponent.modelMatrix, glm::radians(transform.rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -62,12 +56,13 @@ namespace Cannis {
 			// Scale
 			modelComponent.modelMatrix = glm::scale(modelComponent.modelMatrix, transform.scale);
 
-			// Translation
-			modelComponent.modelMatrix = glm::translate(modelComponent.modelMatrix, transform.position);
 
-			shaderComponent.shader->UploadUniform("model", modelComponent.modelMatrix);
+			shaderComponent.shader->Bind();
+			shaderComponent.shader->UploadUniform("u_model", modelComponent.modelMatrix);
 
-			Renderer::Submit(modelComponent.vertexArray);
+			Renderer::Submit(shaderComponent.shader, modelComponent.vertexArray);
+
+			shaderComponent.shader->UnBind();
 		}
 
 		Renderer::EndScene();

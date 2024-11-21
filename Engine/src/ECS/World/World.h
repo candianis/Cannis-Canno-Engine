@@ -28,7 +28,7 @@ namespace Cannis {
 		~WorldCoordinator();
 
 		void Init();
-		void Update();
+		void Update(const Timestep p_timestep);
 		void Shutdown();
 		void OnUIRender();
 

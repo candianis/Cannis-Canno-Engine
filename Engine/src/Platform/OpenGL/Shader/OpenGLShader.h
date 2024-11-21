@@ -14,7 +14,20 @@ namespace Cannis {
 		void UnBind() const override;
 		inline uint32_t GetID() const { return m_ID; }
 
+		void UploadUniform(const std::string& p_name, const int p_value) override;
+
+		void UploadUniform(const std::string& p_name, const float p_value) override;
+
+		void UploadUniform(const std::string& p_name, const glm::vec2& p_vector) override;
+		void UploadUniform(const std::string& p_name, const float p_x, const float p_y) override;
+
 		void UploadUniform(const std::string& p_name, const glm::vec3& p_vector) override;
+		void UploadUniform(const std::string& p_name, const float p_x, const float p_y, const float p_z) override;
+		
+		void UploadUniform(const std::string& p_name, const glm::vec4& p_vector) override;
+		void UploadUniform(const std::string& p_name, const float p_x, const float p_y, const float p_z, const float p_w) override;
+
+		void UploadUniform(const std::string& p_name, const glm::mat3& p_matrix) override;
 		void UploadUniform(const std::string& p_name, const glm::mat4& p_matrix) override;
 
 	private:

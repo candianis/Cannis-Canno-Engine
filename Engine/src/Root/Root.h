@@ -20,7 +20,7 @@ namespace Cannis {
 		Root() = default;
 
 		void Init(ComponentManager& p_componentManager);
-		void Update(ComponentManager& p_componentManager);
+		void Update(ComponentManager& p_componentManager, const Timestep p_timestep);
 		void Shutdown();
 		void OnUIRender();
 

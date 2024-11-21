@@ -11,7 +11,7 @@ namespace Cannis {
 		~RenderSystem();
 		
 		void Init() override;
-		void Update(ComponentManager& p_componentManager) override;
+		void Update(ComponentManager& p_componentManager, const Timestep p_timestep) override;
 		void Shutdown() override;
 		void OnEvent(SysEvent& p_event);
 

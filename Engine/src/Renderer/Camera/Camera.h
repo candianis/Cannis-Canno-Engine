@@ -31,7 +31,6 @@ namespace Cannis {
 	private:
 		glm::mat4 m_projectionMatrix;
 		glm::mat4 m_viewMatrix;
-		glm::mat4 m_viewProjectionMatrix;
 
 		//Attributes
 		glm::vec3 m_front;

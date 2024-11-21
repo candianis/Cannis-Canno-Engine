@@ -8,6 +8,7 @@
 #include "Events/SysEvent.h"
 #include "Events/SysEventDispatcher/SysEventDispatcher.h"
 #include "ECS/ComponentManager/ComponentManager.h"
+#include "Core/TimeStep//Timestep.h"
 
 namespace Cannis {
 	// @brief Engine susbsytems
@@ -17,7 +18,7 @@ namespace Cannis {
 		virtual ~Subsystem();
 
 		virtual void Init() {}
-		virtual void Update(ComponentManager& p_componentManager) {}
+		virtual void Update(ComponentManager& p_componentManager, const Timestep p_timestep) {}
 		virtual void Shutdown() {}
 		virtual void OnUIRender() {}
 		virtual void OnEvent(SysEvent& p_event) {}

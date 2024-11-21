@@ -41,11 +41,11 @@ namespace Cannis {
 		}
 	}
 
-	void Root::Update(ComponentManager& p_componentManager) {
+	void Root::Update(ComponentManager& p_componentManager, const Timestep p_timestep) {
 		for (const auto& pair : m_subsystems) {
 			const auto& curSys = pair.second;
 
-			curSys->Update(p_componentManager);
+			curSys->Update(p_componentManager, p_timestep);
 		}
 	}
 

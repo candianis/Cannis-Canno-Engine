@@ -30,7 +30,6 @@ namespace Cannis {
 
 		if ((curEvent.GetSignature() & m_desiredComponentSignature) == m_desiredComponentSignature) {
 			m_entities.insert(curEvent.GetEntity());
-			CC_CORE_INFO("Added Entity({0}) to " + m_debugName, curEvent.GetEntity().GetID());
 			return;
 		}
 

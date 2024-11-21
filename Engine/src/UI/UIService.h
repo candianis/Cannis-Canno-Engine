@@ -18,20 +18,20 @@ namespace Cannis {
 
 		void Begin();
 		void End();
-		void Update(std::shared_ptr<WorldCoordinator> p_world);
+		void Update(std::shared_ptr<WorldCoordinator> p_world, const Timestep p_timestep);
 		void Shutdown();
 
 		void SubscribeToEvent(const std::shared_ptr<SysEventDispatcher>& p_sysEventDispatcher);
 
 
 	private:
-		void CreateEditor(std::shared_ptr<WorldCoordinator>& p_world);
+		void CreateEditor(std::shared_ptr<WorldCoordinator>& p_world, const Timestep p_timestep);
 
-		void CreateSceneEditor();
-
+		void CreateEngineInfo(const Timestep p_timestep);
 		void CreateCameraEditor(std::shared_ptr<WorldCoordinator>& p_world);
 
-		//Inspector & Component Creation
+		//Scene(Entities), Inspector & Component Creation
+		void CreateSceneEditor();
 		void CreateInspector(std::shared_ptr<WorldCoordinator>& p_world);
 		void CreateTransformComponent(std::shared_ptr<WorldCoordinator>& p_world);
 

@@ -55,11 +55,11 @@ namespace Cannis {
 		}
 	}
 
-	void UIService::Update(std::shared_ptr<WorldCoordinator> p_world) {
+	void UIService::Update(std::shared_ptr<WorldCoordinator> p_world, const Timestep p_timestep) {
 		static bool show_demo_window = false;
 		ImGui::ShowDemoWindow(&show_demo_window);
 
-		CreateEditor(p_world);
+		CreateEditor(p_world, p_timestep);
 	}
 
 	void UIService::Shutdown() {
@@ -81,7 +81,7 @@ namespace Cannis {
 		p_sysEventDispatcher->Subscribe(EventType::MouseScrolled, std::bind(&UIService::OnMouseScrolledEvent, this, std::placeholders::_1));
 	}
 
-	void UIService::CreateEditor(std::shared_ptr<WorldCoordinator>& p_world) {
+	void UIService::CreateEditor(std::shared_ptr<WorldCoordinator>& p_world, const Timestep p_timestep) {
 		bool showEntitiesWindow = true;
 		ImGui::Begin("Scene", &showEntitiesWindow);
 
@@ -89,12 +89,8 @@ namespace Cannis {
 
 		//static bool selection[2] = { false, true };
 		for (const Entity& entity : p_world->GetEntities()) {
-			//if (p_world->HasComponent<GUIComponent>(entity))
-			//	CC_CORE_INFO(entity.name + " does not have a GUI component");
-
 			GUIComponent& gui = p_world->GetComponent<GUIComponent>(entity);
 			if (ImGui::Selectable(entity.name.c_str(), &gui.isSelected)) {
-				CC_CORE_INFO("Selected: {0}", entity.GetID());
 				if (m_selectedEntity) {
 					p_world->GetComponent<GUIComponent>(*m_selectedEntity).isSelected = false;
 				}
@@ -115,10 +111,20 @@ namespace Cannis {
 		CreateInspector(p_world);
 
 		CreateCameraEditor(p_world);
+
+		CreateEngineInfo(p_timestep);
 	}
 
 	void UIService::CreateSceneEditor() {
 
+	}
+
+	void UIService::CreateEngineInfo(const Timestep p_timestep) {
+		ImGui::Begin("Engine Info");
+		ImGui::Text("Delta Time: %fs", p_timestep.GetSeconds());
+		ImGui::Text("Delta Time (miliseconds): %fms", p_timestep.GetMilliseconds());
+
+		ImGui::End();
 	}
 
 	void UIService::CreateCameraEditor(std::shared_ptr<WorldCoordinator>& p_world) {
@@ -145,7 +151,7 @@ namespace Cannis {
 			
 		ImGui::SeparatorText("Perspective Settings");
 		ImGui::DragFloat("FOV", &cam.fov, 1.0f, 45.0f, 65.0f);
-		ImGui::Spacing;
+		ImGui::Spacing();
 
 		ImGui::End();
 	}
@@ -159,12 +165,6 @@ namespace Cannis {
 
 	void UIService::CreateTransformComponent(std::shared_ptr<WorldCoordinator>& p_world) {
 		if (m_selectedEntity == nullptr) {
-			//CC_CORE_INFO("No Entity Selected");
-			return;
-		}
-
-		if (!p_world->HasComponent<TransformComponent>(*m_selectedEntity)) {
-			//CC_CLIENT_INFO(m_selectedEntity->name + " does not have a transform component");
 			return;
 		}
 
@@ -212,8 +212,6 @@ namespace Cannis {
 	}
 
 	void UIService::OnWindowClose(const SysEvent& p_event) {
-		CC_CORE_INFO("UI subsystem was informed the window is closing");
-
 		const WindowCloseEvent& curEvent = static_cast<const WindowCloseEvent&>(p_event);
 		
 	}

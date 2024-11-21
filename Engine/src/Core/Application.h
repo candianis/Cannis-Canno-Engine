@@ -28,6 +28,8 @@ namespace Cannis {
 		std::unique_ptr<UIService> m_uiService;
 		bool m_running;
 
+		float m_lastTime;
+
 		void OnWindowClose(const SysEvent& p_event);
 
 	public:

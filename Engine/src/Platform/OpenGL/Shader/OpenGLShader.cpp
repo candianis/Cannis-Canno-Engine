@@ -44,8 +44,45 @@ namespace Cannis {
 		glUseProgram(0);
 	}
 
+	void OpenGLShader::UploadUniform(const std::string& p_name, const int p_value) {
+		glUniform1i(glGetUniformLocation(m_ID, p_name.c_str()), p_value);
+	}
+
+	// ----- Float ----- //
+	void OpenGLShader::UploadUniform(const std::string& p_name, const float p_value) {
+		glUniform1f(glGetUniformLocation(m_ID, p_name.c_str()), p_value);
+	}
+
+	// ----- Vector2 ----- //
+	void OpenGLShader::UploadUniform(const std::string& p_name, const glm::vec2& p_vector) {
+		glUniform2f(glGetUniformLocation(m_ID, p_name.c_str()), p_vector.x, p_vector.y);
+	}
+
+	void OpenGLShader::UploadUniform(const std::string& p_name, const float p_x, const float p_y) {
+		glUniform2f(glGetUniformLocation(m_ID, p_name.c_str()), p_x, p_y);
+	}
+
+	// ----- Vector3 ----- //
 	void OpenGLShader::UploadUniform(const std::string& p_name, const glm::vec3& p_vector) {
 		glUniform3f(glGetUniformLocation(m_ID, p_name.c_str()), p_vector.x, p_vector.y, p_vector.z);
+	}
+
+	void OpenGLShader::UploadUniform(const std::string& p_name, const float p_x, const float p_y, const float p_z) {
+		glUniform3f(glGetUniformLocation(m_ID, p_name.c_str()), p_x, p_y, p_z);
+	}
+
+	// ----- Vector4 ----- //
+	void OpenGLShader::UploadUniform(const std::string& p_name, const glm::vec4& p_vector) {
+		glUniform4f(glGetUniformLocation(m_ID, p_name.c_str()), p_vector.x, p_vector.y, p_vector.z, p_vector.w);
+	}
+
+	void OpenGLShader::UploadUniform(const std::string& p_name, const float p_x, const float p_y, const float p_z, const float p_w) {
+		glUniform4f(glGetUniformLocation(m_ID, p_name.c_str()), p_x, p_y, p_z, p_w);
+	}
+
+	// ----- Matrices ----- //
+	void OpenGLShader::UploadUniform(const std::string& p_name, const glm::mat3& p_matrix) {
+		glUniformMatrix3fv(glGetUniformLocation(m_ID, p_name.c_str()), 1, GL_FALSE, glm::value_ptr(p_matrix));
 	}
 
 	void OpenGLShader::UploadUniform(const std::string& p_name, const glm::mat4& p_matrix) {
