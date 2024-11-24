@@ -13,13 +13,15 @@ namespace Cannis {
 
 	}
 
-	void Renderer::Submit(const std::shared_ptr<Shader>& p_shader, const std::shared_ptr<VertexArray>& p_vertexArray) {
+	void Renderer::Submit(const std::shared_ptr<Shader>& p_shader, const std::shared_ptr<Model>& p_model) {
 		//Save both the shader and the VA so that they are drawn after the lights have been submitted
 		
 		p_shader->Bind();
 		p_shader->UploadUniform("u_viewProjection", m_sceneData->viewProjectionMatrix);
 
-		p_vertexArray->Bind();
-		RenderCommand::DrawIndexed(p_vertexArray);
+		for (size_t i = 0; i < p_model->GetMeshes().size(); i++) {
+			p_model->GetMeshes()[i]->Bind(p_shader->GetID());
+			RenderCommand::DrawIndexed(p_model->GetMeshes()[i]->GetVAO());
+		}
 	}
 }

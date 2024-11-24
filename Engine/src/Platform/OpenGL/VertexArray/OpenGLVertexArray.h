@@ -1,8 +1,8 @@
 #pragma once
 
 #include "ccpch.h"
-
 #include "Renderer/VertexArray/VertexArray.h"
+
 
 namespace Cannis {
 	class OpenGLVertexArray : public VertexArray {

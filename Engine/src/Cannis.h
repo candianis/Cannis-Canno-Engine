@@ -1,6 +1,7 @@
 #pragma once
 
 // For use by applications
+#include "ccpch.h"
 
 #include "Core/Application.h"
 #include "Logger/Log.h"	
@@ -16,6 +17,8 @@
 #include "ECS/Component/TransformComponent.hpp"
 #include "ECS/Component/GUIComponent.hpp"
 #include "ECS/Component/ModelComponent.hpp"
+#include "ECS/Component/MaterialComponent.hpp"
+#include "ECS/Component/LightComponent.hpp"
 #include "ECS/Component/ShaderComponent.hpp"
 #include "Subsystem/Subsystem.h"
 

@@ -29,6 +29,7 @@ project "CannisCanno"
 
 	files {
 		"Engine/src/**.h",
+		"Engine/src/**.hpp",
 		"Engine/src/**.cpp",
 		"Engine/vendor/GLM/glm/**.hpp",
 		"Engine/vendor/GLM/glm/**.inl",
@@ -40,7 +41,9 @@ project "CannisCanno"
 		"Engine/vendor/GLFW/include;",
 		"Engine/vendor/Glad/include;",
 		"Engine/vendor/Imgui;",
-		"Engine/vendor/GLM;"
+		"Engine/vendor/GLM;",
+		"Engine/vendor/Assimp/include;",
+		"Engine/vendor/stb_image/include;"
 	}
 
 	links {
@@ -48,7 +51,8 @@ project "CannisCanno"
 		"Glad",
 		"Imgui",
 		"opengl32.lib",
-		"dwmapi.lib"
+		"dwmapi.lib",
+		"Engine/vendor/Assimp/bin/assimp-vc143-mtd.lib"
 	}
 
 	filter "system:windows"
@@ -94,7 +98,9 @@ project "Sandbox"
 		"Engine/vendor/spdlog/include;",
 		"Engine/src;",
 		"Engine/vendor/GLM;",
-		"Engine/vendor/Glad/include;"
+		"Engine/vendor/Glad/include;",		
+		"Engine/vendor/Assimp/include;",
+		"Engine/vendor/stb_image/include;"
 	}
 
 	links {

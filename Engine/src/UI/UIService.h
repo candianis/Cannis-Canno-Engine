@@ -30,10 +30,14 @@ namespace Cannis {
 		void CreateEngineInfo(const Timestep p_timestep);
 		void CreateCameraEditor(std::shared_ptr<WorldCoordinator>& p_world);
 
-		//Scene(Entities), Inspector & Component Creation
+		// Create Editor and Entity Inspector
 		void CreateSceneEditor();
 		void CreateInspector(std::shared_ptr<WorldCoordinator>& p_world);
+
+		// Create Component UI
 		void CreateTransformComponent(std::shared_ptr<WorldCoordinator>& p_world);
+		void CreateMaterialComponent(std::shared_ptr<WorldCoordinator>& p_world);
+		void CreateLightComponent(std::shared_ptr<WorldCoordinator>& p_world);
 
 		// Window events
 		void OnWindowClose(const SysEvent& p_event);

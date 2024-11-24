@@ -6,7 +6,7 @@
 namespace Cannis {
 	class OpenGLVertexBuffer : public VertexBuffer {
 	public:
-		OpenGLVertexBuffer(float* p_vertices, size_t p_size);
+		OpenGLVertexBuffer(std::vector<Vertex>& p_vertices, size_t p_size);
 		virtual ~OpenGLVertexBuffer();
 
 		void Bind() const override;

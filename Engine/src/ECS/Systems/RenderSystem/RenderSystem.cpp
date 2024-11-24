@@ -6,6 +6,11 @@
 #include "ECS/Component/TransformComponent.hpp"
 #include "ECS/Component/ModelComponent.hpp"
 #include "ECS/Component/ShaderComponent.hpp"
+#include "ECS/Component/LightComponent.hpp"
+#include "ECS/Component//MaterialComponent.hpp"
+
+#include "Renderer/Shader/Shader.h"
+#include "Renderer/Model/Model.h"
 
 namespace Cannis {
 	RenderSystem::RenderSystem(ComponentManager& p_componentManager) : Subsystem("RenderSystem"), camera(glm::vec3(0.0f, 0.0f, 8.0f)) {
@@ -13,6 +18,8 @@ namespace Cannis {
 		newSignature.set(p_componentManager.GetComponentID<TransformComponent>());
 		newSignature.set(p_componentManager.GetComponentID<ModelComponent>());
 		newSignature.set(p_componentManager.GetComponentID<ShaderComponent>());
+		//newSignature.set(p_componentManager.GetComponentID<LightComponent>());
+		//newSignature.set(p_componentManager.GetComponentID<MaterialComponent>());
 
 		SetSignature(newSignature);
 
@@ -39,8 +46,9 @@ namespace Cannis {
 		for (const Entity& entity : m_entities) {
 			TransformComponent& transform = p_componentManager.GetComponent<TransformComponent>(entity);
 			ShaderComponent& shaderComponent = p_componentManager.GetComponent<ShaderComponent>(entity);
-			ModelComponent& modelComponent = p_componentManager.GetComponent<ModelComponent>(entity);
 			
+			ModelComponent& modelComponent = p_componentManager.GetComponent<ModelComponent>(entity);
+
 			modelComponent.modelMatrix = glm::mat4(1.0f);
 
 			// Translation
@@ -56,12 +64,10 @@ namespace Cannis {
 			// Scale
 			modelComponent.modelMatrix = glm::scale(modelComponent.modelMatrix, transform.scale);
 
-
 			shaderComponent.shader->Bind();
 			shaderComponent.shader->UploadUniform("u_model", modelComponent.modelMatrix);
 
-			Renderer::Submit(shaderComponent.shader, modelComponent.vertexArray);
-
+			Renderer::Submit(shaderComponent.shader, modelComponent.model);
 			shaderComponent.shader->UnBind();
 		}
 

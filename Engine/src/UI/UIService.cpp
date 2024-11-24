@@ -1,8 +1,11 @@
 #include "ccpch.h"
 #include "Core/Application.h"
+
+#include "ECS/Systems/RenderSystem/RenderSystem.h"
 #include "ECS/Component/TransformComponent.hpp"
 #include "ECS/Component/GUIComponent.hpp"
-#include "ECS/Systems/RenderSystem/RenderSystem.h"
+#include "ECS/Component/MaterialComponent.hpp"
+#include "ECS/Component/LightComponent.hpp"
 
 #include <imgui.h>
 #include <backends/imgui_impl_opengl3.h>
@@ -159,55 +162,126 @@ namespace Cannis {
 	void UIService::CreateInspector(std::shared_ptr<WorldCoordinator>& p_world) {
 		bool showInspector = true;
 		ImGui::Begin("Inspector", &showInspector);
-		CreateTransformComponent(p_world);
+
+		if (m_selectedEntity != nullptr) {
+			if (ImGui::CollapsingHeader(m_selectedEntity->name.c_str())) {
+				CreateTransformComponent(p_world);
+				CreateMaterialComponent(p_world);
+				CreateLightComponent(p_world);
+			}
+		}
+
 		ImGui::End();
 	}
 
 	void UIService::CreateTransformComponent(std::shared_ptr<WorldCoordinator>& p_world) {
-		if (m_selectedEntity == nullptr) {
+		//Go through each component 
+		if (ImGui::TreeNode("Transform")) {
+			TransformComponent& transform = p_world->GetComponent<TransformComponent>(*m_selectedEntity);
+
+			// ----- Position -----//
+			ImGui::PushID(0);
+			ImGui::PushItemWidth(80);
+			ImGui::SeparatorText("Position");
+			ImGui::InputFloat("X", &transform.position.x); ImGui::SameLine();
+			ImGui::InputFloat("Y", &transform.position.y); ImGui::SameLine();
+			ImGui::InputFloat("Z", &transform.position.z);
+			ImGui::PopItemWidth();
+			ImGui::PopID();
+			ImGui::Spacing();
+
+			// ----- Rotation ------//
+			ImGui::PushID(1);
+			ImGui::PushItemWidth(80);
+			ImGui::SeparatorText("Rotation");
+			ImGui::DragFloat("X", &transform.rotation.x, 1.0f, -360.0f, 360.0f); ImGui::SameLine();
+			ImGui::DragFloat("Y", &transform.rotation.y, 1.0f, -360.0f, 360.0f); ImGui::SameLine();
+			ImGui::DragFloat("Z", &transform.rotation.z, 1.0f, -360.0f, 360.0f);
+			ImGui::PopItemWidth();
+			ImGui::PopID();
+			ImGui::Spacing();
+
+			// ----- Scale -----//
+			ImGui::PushID(2);
+			ImGui::PushItemWidth(80);
+			ImGui::SeparatorText("Scale");
+			ImGui::InputFloat("X", &transform.scale.x); ImGui::SameLine();
+			ImGui::InputFloat("Y", &transform.scale.y); ImGui::SameLine();
+			ImGui::InputFloat("Z", &transform.scale.z);
+			ImGui::PopItemWidth();
+			ImGui::PopID();
+			ImGui::Spacing();
+
+			ImGui::TreePop();
+		}
+	}
+
+	void UIService::CreateMaterialComponent(std::shared_ptr<WorldCoordinator>& p_world) {
+		if (!p_world->HasComponent<MaterialComponent>(*m_selectedEntity)) {
 			return;
 		}
 
-		if (ImGui::CollapsingHeader(m_selectedEntity->name.c_str())) {
-			//Go through each component 
-			if (ImGui::TreeNode("Transform")) {
-				TransformComponent& transform = p_world->GetComponent<TransformComponent>(*m_selectedEntity);
+		if (ImGui::TreeNode("Material")) {
+			MaterialComponent& material = p_world->GetComponent<MaterialComponent>(*m_selectedEntity);
 
-				// ----- Position -----//
-				ImGui::PushID(0);
-				ImGui::PushItemWidth(80);
-				ImGui::SeparatorText("Position");
-				ImGui::InputFloat("X", &transform.position.x); ImGui::SameLine();
-				ImGui::InputFloat("Y", &transform.position.y); ImGui::SameLine();
-				ImGui::InputFloat("Z", &transform.position.z);
-				ImGui::PopItemWidth();
-				ImGui::PopID();
-				ImGui::Spacing();
+			// Specular
+			ImGui::PushItemWidth(80);
+			ImGui::SeparatorText("Specular");
+			ImGui::DragFloat("X", &material.specular.x, 1.0f, 0, 100.0f); ImGui::SameLine();
+			ImGui::DragFloat("Y", &material.specular.y, 1.0f, 0, 100.0f); ImGui::SameLine();
+			ImGui::DragFloat("Z", &material.specular.z, 1.0f, 0, 100.0f);
+			ImGui::PopItemWidth();
+			ImGui::Spacing();
 
-				// ----- Rotation ------//
-				ImGui::PushID(1);
-				ImGui::PushItemWidth(80);
-				ImGui::SeparatorText("Rotation");
-				ImGui::DragFloat("X", &transform.rotation.x, 1.0f, -360.0f, 360.0f); ImGui::SameLine();
-				ImGui::DragFloat("Y", &transform.rotation.y, 1.0f, -360.0f, 360.0f); ImGui::SameLine();
-				ImGui::DragFloat("Z", &transform.rotation.z, 1.0f, -360.0f, 360.0f);
-				ImGui::PopItemWidth();
-				ImGui::PopID();
-				ImGui::Spacing();
+			ImGui::SeparatorText("Shininess");
+			ImGui::DragFloat("Value", &material.shininess, 1.0f, 0.0f, 100.0f);
 
-				// ----- Scale -----//
-				ImGui::PushID(2);
-				ImGui::PushItemWidth(80);
-				ImGui::SeparatorText("Scale");
-				ImGui::InputFloat("X", &transform.scale.x); ImGui::SameLine();
-				ImGui::InputFloat("Y", &transform.scale.y); ImGui::SameLine();
-				ImGui::InputFloat("Z", &transform.scale.z);
-				ImGui::PopItemWidth();
-				ImGui::PopID();
-				ImGui::Spacing();
+			ImGui::TreePop();
+		}
+	}
 
-				ImGui::TreePop();
-			}
+	void UIService::CreateLightComponent(std::shared_ptr<WorldCoordinator>& p_world) {
+		if (!p_world->HasComponent<LightComponent>(*m_selectedEntity)) {
+			return;
+		}
+
+		if (ImGui::TreeNode("Light")) {
+			LightComponent& light = p_world->GetComponent<LightComponent>(*m_selectedEntity);
+
+			// ----- Ambient -----//
+			ImGui::PushID(5);
+			ImGui::PushItemWidth(80);
+			ImGui::SeparatorText("Ambient");
+			ImGui::InputFloat("X", &light.ambient.x); ImGui::SameLine();
+			ImGui::InputFloat("Y", &light.ambient.y); ImGui::SameLine();
+			ImGui::InputFloat("Z", &light.ambient.z);
+			ImGui::PopItemWidth();
+			ImGui::PopID();
+			ImGui::Spacing();
+
+			// ----- Diffuse ------//
+			ImGui::PushID(6);
+			ImGui::PushItemWidth(80);
+			ImGui::SeparatorText("Diffuse");
+			ImGui::DragFloat("X", &light.diffuse.x, 1.0f, -360.0f, 360.0f); ImGui::SameLine();
+			ImGui::DragFloat("Y", &light.diffuse.y, 1.0f, -360.0f, 360.0f); ImGui::SameLine();
+			ImGui::DragFloat("Z", &light.diffuse.z, 1.0f, -360.0f, 360.0f);
+			ImGui::PopItemWidth();
+			ImGui::PopID();
+			ImGui::Spacing();
+
+			// ----- Specular -----//
+			ImGui::PushID(7);
+			ImGui::PushItemWidth(80);
+			ImGui::SeparatorText("Scale");
+			ImGui::InputFloat("X", &light.specular.x); ImGui::SameLine();
+			ImGui::InputFloat("Y", &light.specular.y); ImGui::SameLine();
+			ImGui::InputFloat("Z", &light.specular.z);
+			ImGui::PopItemWidth();
+			ImGui::PopID();
+			ImGui::Spacing();
+
+			ImGui::TreePop();
 		}
 	}
 

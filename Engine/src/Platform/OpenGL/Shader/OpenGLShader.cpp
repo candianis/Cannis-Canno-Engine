@@ -7,13 +7,13 @@
 namespace Cannis {
 	GLenum GetCorrectShaderEnum(ShaderType p_shaderType) {
 		switch (p_shaderType) {
-		case ShaderType::Vertex:
+		case ShaderType::VertexShader:
 			return GL_VERTEX_SHADER;
 
-		case ShaderType::Fragment:
+		case ShaderType::FragmentShader:
 			return GL_FRAGMENT_SHADER;
 
-		case ShaderType::Geometry:
+		case ShaderType::GeometryShader:
 			return GL_GEOMETRY_SHADER;
 		}
 	}
@@ -22,8 +22,8 @@ namespace Cannis {
 		std::string vertCode(GetSourceCode(p_vertexSource.c_str()));
 		std::string fragCode(GetSourceCode(p_fragmentSource.c_str()));
 
-		unsigned int vertexShader = CreateShader(vertCode.c_str(), ShaderType::Vertex);
-		unsigned int fragmentShader = CreateShader(fragCode.c_str(), ShaderType::Fragment);
+		unsigned int vertexShader = CreateShader(vertCode.c_str(), ShaderType::VertexShader);
+		unsigned int fragmentShader = CreateShader(fragCode.c_str(), ShaderType::FragmentShader);
 
 		CreateProgram(vertexShader, fragmentShader);
 
@@ -137,7 +137,7 @@ namespace Cannis {
 		if (!success) {
 			char infoLog[512];
 			glGetShaderInfoLog(shader, 512, NULL, infoLog);
-			std::string shaderTypeName = p_type == ShaderType::Vertex ? "VERTEX" : "FRAGMENT";
+			std::string shaderTypeName = p_type == ShaderType::VertexShader ? "VERTEX" : "FRAGMENT";
 			CC_CORE_ERROR("ERROR::SHADER::{0}::COMPILATION_FAILED", shaderTypeName);
 			CC_CORE_ERROR("{0}", infoLog);
 		}

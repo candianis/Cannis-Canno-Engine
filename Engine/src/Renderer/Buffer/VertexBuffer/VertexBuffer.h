@@ -2,6 +2,7 @@
 
 #include "ccpch.h"
 #include "Renderer/Buffer/BufferLayout/BufferLayout.h"
+#include "Renderer/Vertex/Vertex.h"
 
 namespace Cannis {
 	class VertexBuffer {
@@ -14,6 +15,6 @@ namespace Cannis {
 		virtual const BufferLayout& GetLayout() const = 0;
 		virtual void SetLayout(const BufferLayout& p_bufferLayout) = 0;
 
-		static std::shared_ptr<VertexBuffer> Create(float* p_vertices, size_t p_size);
+		static std::shared_ptr<VertexBuffer> Create(std::vector<Vertex>& p_vertices, size_t p_size);
 	};
 }

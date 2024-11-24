@@ -5,9 +5,9 @@
 
 namespace Cannis {
 	enum ShaderType {
-		Vertex,
-		Fragment,
-		Geometry
+		VertexShader,
+		FragmentShader,
+		GeometryShader
 	};
 
 	class Shader {
@@ -19,7 +19,7 @@ namespace Cannis {
 		virtual uint32_t GetID() const = 0;
 
 		virtual void UploadUniform(const std::string& p_name, const int p_value) = 0;
-
+		
 		virtual void UploadUniform(const std::string& p_name, const float p_value) = 0;
 		virtual void UploadUniform(const std::string& p_name, const glm::vec2& p_vector) = 0;
 		virtual void UploadUniform(const std::string& p_name, const float p_x, const float p_y) = 0;

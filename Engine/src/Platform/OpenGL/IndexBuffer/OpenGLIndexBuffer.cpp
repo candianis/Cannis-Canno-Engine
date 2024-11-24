@@ -5,10 +5,11 @@
 #include <glad/glad.h>
 
 namespace Cannis {
-	OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t* p_indices, size_t p_count) : m_count(p_count) {
+	OpenGLIndexBuffer::OpenGLIndexBuffer(std::vector<uint32_t>& p_indices, size_t p_count) : m_count(p_count) {
 		glCreateBuffers(1, &m_ID);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ID);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, p_count * sizeof(uint32_t), p_indices, GL_STATIC_DRAW);
+		// TODO: atioxx.dll error here for models with more than one mesh
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, p_count * sizeof(uint32_t), p_indices.data(), GL_STATIC_DRAW);
 	}
 
 	OpenGLIndexBuffer::~OpenGLIndexBuffer() {

@@ -5,7 +5,7 @@
 #include "Platform/OpenGL/VertexBuffer/OpenGLVertexBuffer.h"
 
 namespace Cannis {
-	std::shared_ptr<VertexBuffer> VertexBuffer::Create(float* p_vertices, size_t p_size) {
+	std::shared_ptr<VertexBuffer> VertexBuffer::Create(std::vector<Vertex>& p_vertices, size_t p_size) {
 		switch (Renderer::GetAPI()) {
 			case RendererAPI::API::None:
 				CC_CORE_ASSERT(false, "No API was chosen");

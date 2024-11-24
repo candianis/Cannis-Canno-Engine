@@ -5,14 +5,19 @@
 #include "ECS/Component/GUIComponent.hpp"
 #include "ECS/Component/ModelComponent.hpp"
 #include "ECS/Component/ShaderComponent.hpp"
+#include "ECS/Component/MaterialComponent.hpp"
+#include "ECS/Component/LightComponent.hpp"
 
 namespace Cannis {
 	ComponentManager::ComponentManager() : m_nextComponentID(0) {
-		//In this order 
+		//Any component to be used must first be registered here
+		//In this order the bitset for each component
 		RegisterComponent<TransformComponent>();
 		RegisterComponent<ModelComponent>();
 		RegisterComponent<GUIComponent>();
 		RegisterComponent<ShaderComponent>();
+		RegisterComponent<MaterialComponent>();
+		RegisterComponent<LightComponent>();
 	}
 
 	void ComponentManager::SubscribeToEvent(const std::shared_ptr<SysEventDispatcher>& p_eventDispatcher) {

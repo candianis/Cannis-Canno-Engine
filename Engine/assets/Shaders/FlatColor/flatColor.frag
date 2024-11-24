@@ -1,8 +1,13 @@
 #version 450 core
 layout (location = 0) out vec4 color;
 
-in vec4 faceColor;
+in vec3 Normal;
+in vec2 TexCoord;
+
+uniform sampler2D texture_diffuse1;
+
+uniform vec3 lightPos;
 
 void main() {
-	color = faceColor;
+	color = texture(texture_diffuse1, TexCoord);
 };
