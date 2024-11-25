@@ -26,8 +26,7 @@ namespace Cannis {
         unsigned int specularNr = 1;
         unsigned int normalNr = 1;
         unsigned int heightNr = 1;
-        for (unsigned int i = 0; i < m_textures.size(); i++)
-        {
+        for (unsigned int i = 0; i < m_textures.size(); i++) {
             glActiveTexture(GL_TEXTURE0 + i); // active proper texture unit before binding
             // retrieve texture number (the N in diffuse_textureN)
             string number;
@@ -36,27 +35,27 @@ namespace Cannis {
             switch (texType) {
                 case TextureType::DiffuseTex:
                     number = std::to_string(diffuseNr++);
-                    name = "texture_diffuse";
+                    name = ".texture_diffuse";
                     break;
 
                 case TextureType::SpecularTex:
                     number = std::to_string(specularNr++); // transfer unsigned int to string
-                    name = "texture_specular";
+                    name = ".texture_specular";
                     break;
 
                 case TextureType::NormalTex:
                     number = std::to_string(normalNr++); // transfer unsigned int to string
-                    name = "texture_normal";
+                    name = ".texture_normal";
                     break;
 
                 case TextureType::HeightTex:
                     number = std::to_string(heightNr++); // transfer unsigned int to string
-                    name = "texture_height";
+                    name = ".texture_height";
                     break;
             }
 
             // now set the sampler to the correct texture unit
-            glUniform1i(glGetUniformLocation(p_shaderID, (name + number).c_str()), i);
+            glUniform1i(glGetUniformLocation(p_shaderID, ("material" + name).c_str()), i);
 
             m_textures[i]->Bind();
         }

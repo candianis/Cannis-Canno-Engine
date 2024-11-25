@@ -245,7 +245,7 @@ namespace Cannis {
 			return;
 		}
 
-		if (ImGui::TreeNode("Light")) {
+		if (ImGui::TreeNode("Lighting Components")) {
 			LightComponent& light = p_world->GetComponent<LightComponent>(*m_selectedEntity);
 
 			// ----- Ambient -----//
@@ -273,7 +273,7 @@ namespace Cannis {
 			// ----- Specular -----//
 			ImGui::PushID(7);
 			ImGui::PushItemWidth(80);
-			ImGui::SeparatorText("Scale");
+			ImGui::SeparatorText("Specular");
 			ImGui::InputFloat("X", &light.specular.x); ImGui::SameLine();
 			ImGui::InputFloat("Y", &light.specular.y); ImGui::SameLine();
 			ImGui::InputFloat("Z", &light.specular.z);

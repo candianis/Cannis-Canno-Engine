@@ -15,7 +15,6 @@ namespace Cannis {
 
 	void Renderer::Submit(const std::shared_ptr<Shader>& p_shader, const std::shared_ptr<Model>& p_model) {
 		//Save both the shader and the VA so that they are drawn after the lights have been submitted
-		
 		p_shader->Bind();
 		p_shader->UploadUniform("u_viewProjection", m_sceneData->viewProjectionMatrix);
 

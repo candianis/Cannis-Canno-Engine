@@ -29,7 +29,7 @@ namespace Cannis {
 
 		virtual void SubscribeToEvent(const std::shared_ptr<SysEventDispatcher>& p_sysEventDispatcher) {}
 		void OnEntityDestroyed(const SysEvent& p_sysEvent);
-		void OnSignatureChanged(const SysEvent& p_sysEvent);
+		virtual void OnSignatureChanged(const SysEvent& p_sysEvent);
 
 	protected:
 		std::string m_debugName;

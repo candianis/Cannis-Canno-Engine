@@ -7,6 +7,7 @@
 #include "ECS/Component/ShaderComponent.hpp"
 #include "ECS/Component/MaterialComponent.hpp"
 #include "ECS/Component/LightComponent.hpp"
+#include "ECS/Component/PBRMaterialComponent.hpp"
 
 namespace Cannis {
 	ComponentManager::ComponentManager() : m_nextComponentID(0) {

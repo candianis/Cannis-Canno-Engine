@@ -27,12 +27,11 @@ namespace Cannis {
 	void Subsystem::OnSignatureChanged(const SysEvent& p_sysEvent) {
 		const SignatureChangedEvent& curEvent = static_cast<const SignatureChangedEvent&>(p_sysEvent);
 
-
 		if ((curEvent.GetSignature() & m_desiredComponentSignature) == m_desiredComponentSignature) {
 			m_entities.insert(curEvent.GetEntity());
 			return;
 		}
 
-		m_entities.erase(curEvent.GetEntity());
+		//m_entities.erase(curEvent.GetEntity());
 	}
 }

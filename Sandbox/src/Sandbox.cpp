@@ -17,30 +17,24 @@ public:
 
 		f22.AddComponent<Cannis::ModelComponent>("../Engine/assets/3DModels/f22.obj");
 		f22.GetComponent<Cannis::ModelComponent>().model->AddTexture(0, "../Engine/assets/Textures/f22.png");
-		f22.AddComponent<Cannis::MaterialComponent>(glm::vec3(0.5f), 64.0f);
-
-		std::string vertexSourceSquare = "../Engine/assets/Shaders/FlatColor/flatColor.vert";
-		std::string fragmentSourceSquare = "../Engine/assets/Shaders/FlatColor/flatColor.frag";
+		f22.AddComponent<Cannis::MaterialComponent>(Cannis::ShaderImplementation::Blinn_Phong ,glm::vec3(0.5f), 64.0f);
 	
-		f22.AddComponent<Cannis::ShaderComponent>(vertexSourceSquare, fragmentSourceSquare);
-
 		f22.SetPosition(glm::vec3(-1.0f, 0.0f, 0.0f));
 		f22.SetRotation(glm::vec3(45.0f, 90.0f, 0.0f));
 		f22.SetScale(glm::vec3(0.5f));
 
-		//Cannis::EntityHandle light(p_world, "Light");
-		//light.SetPosition(glm::vec3(0, 10, 0));
-		//light.AddComponent<Cannis::LightComponent>(glm::vec3(0), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f));
+		Cannis::EntityHandle light(p_world, "Light");
+		light.SetPosition(glm::vec3(0, 10, 0));
+		light.AddComponent<Cannis::LightComponent>(glm::vec3(0), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f));
 
-		//Cannis::EntityHandle efa(p_world, "EFA");
-		//efa.AddComponent<Cannis::ModelComponent>("../Engine/assets/3DModels/drone.obj");
-		//efa.GetComponent<Cannis::ModelComponent>().model->AddTexture(0, "../Engine/assets/Textures/drone.png");
+		Cannis::EntityHandle efa(p_world, "EFA");
+		efa.AddComponent<Cannis::ModelComponent>("../Engine/assets/3DModels/efa.obj");
+		efa.GetComponent<Cannis::ModelComponent>().model->AddTexture(0, "../Engine/assets/Textures/efa.png");
+		efa.AddComponent<Cannis::MaterialComponent>(Cannis::ShaderImplementation::Blinn_Phong, glm::vec3(0.5), 64.0f);
 
-		//efa.AddComponent<Cannis::ShaderComponent>(vertexSourceSquare, fragmentSourceSquare);
-
-		//efa.SetPosition(glm::vec3(1.0f, 0.0f, 0.0f));
-		//efa.SetRotation(glm::vec3(45.0f, 90.0f, 0.0f));
-		//efa.SetScale(glm::vec3(0.5f));
+		efa.SetPosition(glm::vec3(1.0f, 0.0f, 0.0f));
+		efa.SetRotation(glm::vec3(45.0f, 90.0f, 0.0f));
+		efa.SetScale(glm::vec3(0.5f));
 	}
 
 	void Update(Cannis::ComponentManager& p_componentManager, const Cannis::Timestep p_timestep) override {

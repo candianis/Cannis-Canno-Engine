@@ -6,8 +6,6 @@ in vec2 TexCoord;
 
 uniform sampler2D texture_diffuse1;
 
-uniform vec3 lightPos;
-
 void main() {
 	color = texture(texture_diffuse1, TexCoord);
 };
