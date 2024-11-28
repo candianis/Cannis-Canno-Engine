@@ -6,7 +6,7 @@
 namespace Cannis {
 	class OpenGLIndexBuffer : public IndexBuffer {
 	public:
-		OpenGLIndexBuffer(std::vector<uint32_t>& p_indices, size_t p_size);
+		OpenGLIndexBuffer(std::shared_ptr<std::vector<uint32_t>>& p_indices, size_t p_size);
 		virtual ~OpenGLIndexBuffer();
 
 		void Bind() const override;

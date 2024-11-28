@@ -10,7 +10,7 @@
 namespace Cannis {
 	class OpenGLMesh : public Mesh {
 	public:
-		OpenGLMesh(std::vector<Vertex>& p_vertices, const BufferLayout& p_bufferLayout, std::vector<uint32_t>& p_indices, std::vector<std::shared_ptr<Texture>>& p_textures);
+		OpenGLMesh(std::shared_ptr<std::vector<Vertex>>& p_vertices, const BufferLayout& p_bufferLayout, std::shared_ptr<std::vector<uint32_t>>& p_indices, std::vector<std::shared_ptr<Texture>>& p_textures);
 		virtual ~OpenGLMesh();
 
 		// @brief Bind the current mesh to be drawn. The shader has to have been bound previously

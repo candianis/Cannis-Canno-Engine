@@ -17,6 +17,6 @@ namespace Cannis {
 		virtual std::shared_ptr<VertexArray>& GetVAO() = 0;
 		virtual void AddTexture(std::shared_ptr<Texture>& p_texture) = 0;
 
-		static std::shared_ptr<Mesh> Create(std::vector<Vertex>& p_vertices, const BufferLayout& p_bufferLayout, std::vector<uint32_t>& p_indices, std::vector<std::shared_ptr<Texture>>& p_textures);
+		static std::shared_ptr<Mesh> Create(std::shared_ptr<std::vector<Vertex>>& p_vertices, const BufferLayout& p_bufferLayout, std::shared_ptr<std::vector<uint32_t>>& p_indices, std::vector<std::shared_ptr<Texture>>& p_textures);
 	};
 }

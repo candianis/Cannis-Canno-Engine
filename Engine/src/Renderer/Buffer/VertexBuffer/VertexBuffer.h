@@ -15,6 +15,6 @@ namespace Cannis {
 		virtual const BufferLayout& GetLayout() const = 0;
 		virtual void SetLayout(const BufferLayout& p_bufferLayout) = 0;
 
-		static std::shared_ptr<VertexBuffer> Create(std::vector<Vertex>& p_vertices, size_t p_size);
+		static std::shared_ptr<VertexBuffer> Create(std::shared_ptr<std::vector<Vertex>>& p_vertices, size_t p_size);
 	};
 }

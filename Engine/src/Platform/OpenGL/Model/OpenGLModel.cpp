@@ -55,8 +55,8 @@ namespace Cannis {
 
     void OpenGLModel::ProcessMesh(aiMesh* p_aiMesh, const aiScene* p_aiScene) {
         // data to fill
-        std::vector<Vertex> vertices;
-        std::vector<uint32_t> indices;
+        std::shared_ptr<std::vector<Vertex>> vertices = std::make_shared<std::vector<Vertex>>();
+        std::shared_ptr<std::vector<uint32_t>> indices = std::make_shared<std::vector<uint32_t>>();
         std::vector<std::shared_ptr<Texture>> textures;
 
         // walk through each of the mesh's vertices
@@ -103,7 +103,7 @@ namespace Cannis {
             else
                 vertex.texCoord = glm::vec2(0.0f, 0.0f);
 
-            vertices.push_back(vertex);
+            vertices->push_back(vertex);
         }
 
         // now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
@@ -111,7 +111,7 @@ namespace Cannis {
             aiFace face = p_aiMesh->mFaces[i];
             // retrieve all indices of the face and store them in the indices vector
             for (unsigned int j = 0; j < face.mNumIndices; j++)
-                indices.push_back(face.mIndices[j]);
+                indices->push_back(face.mIndices[j]);
         }
 
         // process materials

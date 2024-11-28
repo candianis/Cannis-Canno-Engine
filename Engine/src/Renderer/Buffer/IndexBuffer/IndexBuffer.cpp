@@ -5,7 +5,7 @@
 #include "Platform/OpenGL/IndexBuffer/OpenGLIndexBuffer.h"
 
 namespace Cannis {
-	std::shared_ptr<IndexBuffer> IndexBuffer::Create(std::vector<uint32_t>& p_indices, size_t p_count) {
+	std::shared_ptr<IndexBuffer> IndexBuffer::Create(std::shared_ptr<std::vector<uint32_t>>& p_indices, size_t p_count) {
 		switch (Renderer::GetAPI()) {
 		case RendererAPI::API::None:
 			CC_CORE_ASSERT(false, "No API was chosen");

@@ -23,10 +23,10 @@ namespace Cannis {
 		float aspect;
 		float Near;
 		float Far;
-		float yaw;
-		float pitch;
 
 		glm::vec3 position;
+		// Yaw is Y and Pitch is Z
+		glm::vec3 rotation;
 
 	private:
 		glm::mat4 m_projectionMatrix;

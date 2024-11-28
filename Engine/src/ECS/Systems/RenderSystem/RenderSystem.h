@@ -16,6 +16,8 @@ namespace Cannis {
 		void Update(ComponentManager& p_componentManager, const Timestep p_timestep) override;
 		void UpdateLights(ComponentManager& p_componentManager);
 		void UpdateEntities(ComponentManager& p_componentManager);
+
+		void UpdatePBRLightEntities(ComponentManager& p_componentManager);
 		void UpdatePBREntities(ComponentManager& p_componentManager);
 		
 		void Shutdown() override;
@@ -32,6 +34,9 @@ namespace Cannis {
 		// @brief Desired bitset for an entity to have for light simulation with Blinn Phong
 		Signature m_desiredLightSignature;
 		std::set<Entity> m_lightEntities;
+
+		Signature m_desiredPBRLightSignature;
+		std::set<Entity> m_pbrLightEntities;
 
 		// @brief Desired bitset for an entity to have for a model to implement PBR 
 		Signature m_desiredPBRSignature;

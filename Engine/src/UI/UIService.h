@@ -38,6 +38,8 @@ namespace Cannis {
 		void CreateTransformComponent(std::shared_ptr<WorldCoordinator>& p_world);
 		void CreateMaterialComponent(std::shared_ptr<WorldCoordinator>& p_world);
 		void CreateLightComponent(std::shared_ptr<WorldCoordinator>& p_world);
+		void CreatePBRMaterialComponent(std::shared_ptr<WorldCoordinator>& p_world);
+		void CreatePBRLightComponent(std::shared_ptr<WorldCoordinator>& p_world);
 
 		// Window events
 		void OnWindowClose(const SysEvent& p_event);

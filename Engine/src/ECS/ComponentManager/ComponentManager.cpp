@@ -8,6 +8,7 @@
 #include "ECS/Component/MaterialComponent.hpp"
 #include "ECS/Component/LightComponent.hpp"
 #include "ECS/Component/PBRMaterialComponent.hpp"
+#include "ECS/Component/PBRLightComponent.hpp"
 
 namespace Cannis {
 	ComponentManager::ComponentManager() : m_nextComponentID(0) {
@@ -19,6 +20,8 @@ namespace Cannis {
 		RegisterComponent<ShaderComponent>();
 		RegisterComponent<MaterialComponent>();
 		RegisterComponent<LightComponent>();
+		RegisterComponent<PBRLightComponent>();
+		RegisterComponent<PBRMaterialComponent>();
 	}
 
 	void ComponentManager::SubscribeToEvent(const std::shared_ptr<SysEventDispatcher>& p_eventDispatcher) {

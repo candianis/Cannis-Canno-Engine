@@ -20,6 +20,8 @@
 #include "ECS/Component/MaterialComponent.hpp"
 #include "ECS/Component/LightComponent.hpp"
 #include "ECS/Component/ShaderComponent.hpp"
+#include "ECS/Component/PBRLightComponent.hpp"
+#include "ECS/Component/PBRMaterialComponent.hpp"
 #include "Subsystem/Subsystem.h"
 
 #include "Renderer/Buffer/BufferLayout/BufferLayout.h"

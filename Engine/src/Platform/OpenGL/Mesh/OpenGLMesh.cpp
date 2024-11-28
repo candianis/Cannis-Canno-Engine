@@ -2,15 +2,15 @@
 #include "OpenGLMesh.h"
 
 namespace Cannis {
-	OpenGLMesh::OpenGLMesh(std::vector<Vertex>& p_vertices, const BufferLayout& p_bufferLayout, std::vector<uint32_t>& p_indices, std::vector<std::shared_ptr<Texture>>& p_textures) {
+	OpenGLMesh::OpenGLMesh(std::shared_ptr<std::vector<Vertex>>& p_vertices, const BufferLayout& p_bufferLayout, std::shared_ptr<std::vector<uint32_t>>& p_indices, std::vector<std::shared_ptr<Texture>>& p_textures) {
 		m_vertexArray = VertexArray::Create();
         m_vertexArray->Bind();
 
-		std::shared_ptr<VertexBuffer> vertexBuffer = VertexBuffer::Create(p_vertices, p_vertices.size() * sizeof(Vertex));
+		std::shared_ptr<VertexBuffer> vertexBuffer = VertexBuffer::Create(p_vertices, p_vertices->size() * sizeof(Vertex));
 		vertexBuffer->SetLayout(p_bufferLayout);
 		m_vertexArray->AddVertexBuffer(vertexBuffer);
 
-		std::shared_ptr<IndexBuffer> indexBuffer = IndexBuffer::Create(p_indices, p_indices.size() * sizeof(uint32_t));
+		std::shared_ptr<IndexBuffer> indexBuffer = IndexBuffer::Create(p_indices, p_indices->size() * sizeof(uint32_t));
 		m_vertexArray->SetIndexBuffer(indexBuffer);
 
 		m_textures = p_textures;

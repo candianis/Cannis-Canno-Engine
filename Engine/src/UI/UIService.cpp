@@ -6,6 +6,8 @@
 #include "ECS/Component/GUIComponent.hpp"
 #include "ECS/Component/MaterialComponent.hpp"
 #include "ECS/Component/LightComponent.hpp"
+#include "ECS/Component/PBRLightComponent.hpp"
+#include "ECS/Component/PBRMaterialComponent.hpp"
 
 #include <imgui.h>
 #include <backends/imgui_impl_opengl3.h>
@@ -148,8 +150,8 @@ namespace Cannis {
 
 		ImGui::SeparatorText("Rotation");
 		ImGui::PushItemWidth(80);
-		ImGui::DragFloat("Yaw", &cam.yaw, 1.0f, -360.0f, 360.0f); ImGui::SameLine();
-		ImGui::DragFloat("Pitch", &cam.pitch, 1.0f, -360.0f, 360.0f);
+		ImGui::DragFloat("Yaw", &cam.rotation.z, 1.0f, -360.0f, 360.0f); ImGui::SameLine();
+		ImGui::DragFloat("Pitch", &cam.rotation.y, 1.0f, -360.0f, 360.0f);
 		ImGui::PopItemWidth();
 			
 		ImGui::SeparatorText("Perspective Settings");
@@ -168,6 +170,8 @@ namespace Cannis {
 				CreateTransformComponent(p_world);
 				CreateMaterialComponent(p_world);
 				CreateLightComponent(p_world);
+				CreatePBRLightComponent(p_world);
+				CreatePBRMaterialComponent(p_world);
 			}
 		}
 
@@ -279,6 +283,45 @@ namespace Cannis {
 			ImGui::InputFloat("Z", &light.specular.z);
 			ImGui::PopItemWidth();
 			ImGui::PopID();
+			ImGui::Spacing();
+
+			ImGui::TreePop();
+		}
+	}
+
+	void UIService::CreatePBRMaterialComponent(std::shared_ptr<WorldCoordinator>& p_world) {
+		if (!p_world->HasComponent<PBRMaterialComponent>(*m_selectedEntity)) {
+			return;
+		}
+
+		if (ImGui::TreeNode("Light PBR")) {
+			PBRMaterialComponent& materialPBR = p_world->GetComponent<PBRMaterialComponent>(*m_selectedEntity);
+
+			// 
+			ImGui::PushItemWidth(80);
+			ImGui::SeparatorText("Specular");
+			ImGui::ColorEdit3("Albedo", glm::value_ptr(materialPBR.albedo));
+			ImGui::DragFloat("Metallic", &materialPBR.metallic, 1.0f, 0, 100.0f); ImGui::SameLine();
+			ImGui::DragFloat("Roughness", &materialPBR.roughness, 1.0f, 0, 100.0f); ImGui::SameLine();
+			ImGui::DragFloat("Ambient Occlusion", &materialPBR.ao, 1.0f, 0, 100.0f);
+			ImGui::PopItemWidth();
+			ImGui::Spacing();
+
+			ImGui::TreePop();
+		}
+	}
+
+	void UIService::CreatePBRLightComponent(std::shared_ptr<WorldCoordinator>& p_world) {
+		if (!p_world->HasComponent<PBRLightComponent>(*m_selectedEntity)) {
+			return;
+		}
+
+		if (ImGui::TreeNode("Light PBR")) {
+			PBRLightComponent& lightPBR = p_world->GetComponent<PBRLightComponent>(*m_selectedEntity);
+
+			// Color
+			ImGui::SeparatorText("Color");
+			ImGui::ColorEdit3("Value", glm::value_ptr(lightPBR.color));
 			ImGui::Spacing();
 
 			ImGui::TreePop();
