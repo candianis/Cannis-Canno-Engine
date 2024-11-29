@@ -3,7 +3,7 @@
 #include "ccpch.h"
 
 namespace Cannis {
-	enum class TextureType { DiffuseTex, SpecularTex, NormalTex, HeightTex };
+	enum class TextureType { DiffuseTex, SpecularTex, NormalTex, HeightTex, RoughnessTex, MetallicTex, AmbientOcclusionTex, AlbedoTex };
 
 	class Texture {
 	public:

@@ -10,6 +10,7 @@
 #include "ECS/Component/PBRMaterialComponent.hpp"
 
 #include <imgui.h>
+#define IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #include <backends/imgui_impl_opengl3.h>
 #include <backends/imgui_impl_glfw.h>
 
@@ -294,17 +295,15 @@ namespace Cannis {
 			return;
 		}
 
-		if (ImGui::TreeNode("Light PBR")) {
+		if (ImGui::TreeNode("PBR Material")) {
 			PBRMaterialComponent& materialPBR = p_world->GetComponent<PBRMaterialComponent>(*m_selectedEntity);
 
 			// 
-			ImGui::PushItemWidth(80);
 			ImGui::SeparatorText("Specular");
 			ImGui::ColorEdit3("Albedo", glm::value_ptr(materialPBR.albedo));
-			ImGui::DragFloat("Metallic", &materialPBR.metallic, 1.0f, 0, 100.0f); ImGui::SameLine();
-			ImGui::DragFloat("Roughness", &materialPBR.roughness, 1.0f, 0, 100.0f); ImGui::SameLine();
-			ImGui::DragFloat("Ambient Occlusion", &materialPBR.ao, 1.0f, 0, 100.0f);
-			ImGui::PopItemWidth();
+			ImGui::DragFloat("Metallic", &materialPBR.metallic, 0.1f, 0, 1.0f);
+			ImGui::DragFloat("Roughness", &materialPBR.roughness, 0.1f, 0, 1.0f); 
+			ImGui::DragFloat("Ambient Occlusion", &materialPBR.ao, 0.1f, 0, 1.0f);
 			ImGui::Spacing();
 
 			ImGui::TreePop();
@@ -321,7 +320,9 @@ namespace Cannis {
 
 			// Color
 			ImGui::SeparatorText("Color");
+			ImGui::PushItemWidth(100);
 			ImGui::ColorEdit3("Value", glm::value_ptr(lightPBR.color));
+			ImGui::PopItemWidth();
 			ImGui::Spacing();
 
 			ImGui::TreePop();

@@ -22,7 +22,7 @@ namespace Cannis {
 
 		m_window = std::unique_ptr<Window>(Window::Create());
 		m_window->SetSysEventCallback(std::bind(&Application::OnSysEvent, this, std::placeholders::_1));
-		m_window->SetVSync(true);
+		m_window->SetVSync(false);
 		m_uiService = std::make_unique<UIService>();
 		
 		m_eventDispatcher = std::make_shared<SysEventDispatcher>();

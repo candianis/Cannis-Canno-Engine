@@ -20,8 +20,8 @@ namespace Cannis {
         return m_meshes;
     }
 
-    void OpenGLModel::AddTexture(size_t p_meshID, const std::string& p_path) {
-        std::shared_ptr<Texture> newTexture = Texture::Create(p_path, TextureType::DiffuseTex);
+    void OpenGLModel::AddTexture(size_t p_meshID, const std::string& p_path, const TextureType p_texType) {
+        std::shared_ptr<Texture> newTexture = Texture::Create(p_path, p_texType);
 
         m_meshes[p_meshID]->AddTexture(newTexture);
     }

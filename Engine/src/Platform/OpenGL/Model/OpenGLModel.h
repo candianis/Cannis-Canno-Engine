@@ -17,7 +17,7 @@ namespace Cannis {
 
 		void Bind(uint32_t p_shaderID) override;
 		std::vector<std::shared_ptr<Mesh>>& GetMeshes() override;
-		void AddTexture(size_t p_meshID, const std::string& p_path) override;
+		void AddTexture(size_t p_meshID, const std::string& p_path, const TextureType p_texType) override;
 
 	private:
 		void LoadModel(const std::string& p_path);

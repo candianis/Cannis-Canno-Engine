@@ -404,3 +404,4 @@ FodyWeavers.xsd
 *.vcxproj
 *.filters
 .vscode/settings.json
+*.zip

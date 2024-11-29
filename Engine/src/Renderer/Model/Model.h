@@ -11,7 +11,7 @@ namespace Cannis {
 
 		virtual void Bind(uint32_t p_shaderID) = 0;
 		virtual std::vector<std::shared_ptr<Mesh>>& GetMeshes() = 0;
-		virtual void AddTexture(size_t p_meshID, const std::string& p_path) = 0;
+		virtual void AddTexture(size_t p_meshID, const std::string& p_path, const TextureType p_texType) = 0;
 
 		static std::shared_ptr<Model> Create(const std::string& p_path);
 	};

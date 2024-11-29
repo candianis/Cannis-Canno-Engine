@@ -28,36 +28,45 @@ namespace Cannis {
         unsigned int heightNr = 1;
         for (unsigned int i = 0; i < m_textures.size(); i++) {
             glActiveTexture(GL_TEXTURE0 + i); // active proper texture unit before binding
-            // retrieve texture number (the N in diffuse_textureN)
-            string number;
             string name;
             TextureType texType = m_textures[i]->GetType();
             switch (texType) {
                 case TextureType::DiffuseTex:
-                    number = std::to_string(diffuseNr++);
-                    name = ".texture_diffuse";
+                    name = "diffuseMap";
                     break;
 
                 case TextureType::SpecularTex:
-                    number = std::to_string(specularNr++); // transfer unsigned int to string
-                    name = ".texture_specular";
+                    name = "specularMap";
                     break;
 
                 case TextureType::NormalTex:
-                    number = std::to_string(normalNr++); // transfer unsigned int to string
-                    name = ".texture_normal";
+                    name = "normalMap";
                     break;
 
                 case TextureType::HeightTex:
-                    number = std::to_string(heightNr++); // transfer unsigned int to string
-                    name = ".texture_height";
+                    name = "heightMap";
                     break;
+
+                case TextureType::AlbedoTex:
+                    name = "albedoMap";
+                    break;
+
+                case TextureType::MetallicTex:
+                    name = "metallicMap";
+                    break;
+
+                case TextureType::RoughnessTex:
+                    name = "roughnessMap";
+                    break;
+
+                case TextureType::AmbientOcclusionTex:
+                    name = "aoMap";
             }
 
             // now set the sampler to the correct texture unit
-            glUniform1i(glGetUniformLocation(p_shaderID, ("material" + name).c_str()), i);
-
+            glUniform1i(glGetUniformLocation(p_shaderID, name.c_str()), i);
             m_textures[i]->Bind();
+
         }
 
 		m_vertexArray->Bind();

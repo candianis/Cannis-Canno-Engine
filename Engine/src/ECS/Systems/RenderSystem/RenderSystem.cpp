@@ -48,19 +48,21 @@ namespace Cannis {
 
 	void RenderSystem::Update(ComponentManager& p_componentManager, const Timestep p_timestep) {
 		camera.Update();
-		m_shaderLibrary.GetRegisteredShader(ShaderImplementation::PBR)->UploadUniform("camPos", camera.position);
 
 		RenderCommand::SetClearColor(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f));
 		RenderCommand::Clear();
 
 		Renderer::BeginScene(camera);
+
 		// Blinn-Phong
 		m_shaderLibrary.BindShader(ShaderImplementation::Blinn_Phong);
 		UpdateLights(p_componentManager);
 		UpdateEntities(p_componentManager);
 		m_shaderLibrary.UnbindShader(ShaderImplementation::Blinn_Phong);
 
+		// PBR
 		m_shaderLibrary.BindShader(ShaderImplementation::PBR);
+		m_shaderLibrary.GetRegisteredShader(ShaderImplementation::PBR)->UploadUniform("camPos", camera.position);
 		UpdatePBRLightEntities(p_componentManager);
 		UpdatePBREntities(p_componentManager);
 		m_shaderLibrary.UnbindShader(ShaderImplementation::PBR);
@@ -114,9 +116,8 @@ namespace Cannis {
 		for (const Entity& entity : m_pbrLightEntities) {
 			TransformComponent& transform = p_componentManager.GetComponent<TransformComponent>(entity);
 			PBRLightComponent& pbrLight = p_componentManager.GetComponent<PBRLightComponent>(entity);
-			std::string baseName = "lights[" + std::to_string(i) + "].";
-			m_shaderLibrary.GetRegisteredShader(ShaderImplementation::PBR)->UploadUniform(baseName + "position", transform.position);
-			m_shaderLibrary.GetRegisteredShader(ShaderImplementation::PBR)->UploadUniform(baseName + "color", pbrLight.color);
+			m_shaderLibrary.GetRegisteredShader(ShaderImplementation::PBR)->UploadUniform("lightPositions[" + std::to_string(i) + "]", transform.position);
+			m_shaderLibrary.GetRegisteredShader(ShaderImplementation::PBR)->UploadUniform("lightColors[" + std::to_string(i) + "]", pbrLight.color);
 			i++;
 		}
 	}
@@ -143,10 +144,10 @@ namespace Cannis {
 			model.modelMatrix = glm::scale(model.modelMatrix, transform.scale);
 
 			m_shaderLibrary.GetRegisteredShader(ShaderImplementation::PBR)->UploadUniform("u_model", model.modelMatrix);
-			m_shaderLibrary.GetRegisteredShader(ShaderImplementation::PBR)->UploadUniform("u_albedo", pbrMaterial.albedo);
-			m_shaderLibrary.GetRegisteredShader(ShaderImplementation::PBR)->UploadUniform("u_metallic", pbrMaterial.metallic);
-			m_shaderLibrary.GetRegisteredShader(ShaderImplementation::PBR)->UploadUniform("u_roughness", pbrMaterial.roughness);
-			m_shaderLibrary.GetRegisteredShader(ShaderImplementation::PBR)->UploadUniform("u_ambientOcclusion", pbrMaterial.ao);
+			//m_shaderLibrary.GetRegisteredShader(ShaderImplementation::PBR)->UploadUniform("albedo", pbrMaterial.albedo);
+			m_shaderLibrary.GetRegisteredShader(ShaderImplementation::PBR)->UploadUniform("metallic", pbrMaterial.metallic);
+			m_shaderLibrary.GetRegisteredShader(ShaderImplementation::PBR)->UploadUniform("roughness", pbrMaterial.roughness);
+			m_shaderLibrary.GetRegisteredShader(ShaderImplementation::PBR)->UploadUniform("ao", pbrMaterial.ao);
 
 			Renderer::Submit(m_shaderLibrary.GetRegisteredShader(ShaderImplementation::PBR), model.model);
 		}
@@ -182,13 +183,13 @@ namespace Cannis {
 
 		// Add entity if it has a simple material component and not anything of PBR
 		if ((curEvent.GetSignature() & m_desiredPBRLightSignature) == m_desiredPBRLightSignature) {
-			m_entities.insert(curEvent.GetEntity());
+			m_pbrLightEntities.insert(curEvent.GetEntity());
 			return;
 		}
 
 		// Add entity if it has the desired components to implement PBR
 		if ((curEvent.GetSignature() & m_desiredPBRSignature) == m_desiredPBRSignature) {
-			m_entities.insert(curEvent.GetEntity());
+			m_PBREntities.insert(curEvent.GetEntity());
 		}
 	}
 }

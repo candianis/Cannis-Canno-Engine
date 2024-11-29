@@ -9,7 +9,7 @@ namespace Cannis {
     OpenGLTexture2D::OpenGLTexture2D(const std::string& p_path, TextureType p_type) : m_type(p_type), m_ID(0), m_width(0), m_height(0) {
         int width, height, channels;
         stbi_set_flip_vertically_on_load(0);
-        stbi_uc* data = stbi_load(p_path.c_str(), &width, &height, &channels, 0);
+        stbi_uc* data = stbi_load(p_path.c_str(), &width, &height, &channels, STBI_rgb_alpha);
 
         if (!data) {
             CC_CORE_ERROR("Failed to load image with : " + p_path);
@@ -19,19 +19,30 @@ namespace Cannis {
         m_width = width;
         m_height = height;
 
-        glCreateTextures(GL_TEXTURE_2D, 1, &m_ID);
-        glTextureStorage2D(m_ID, 1, GL_RGB8, m_width, m_height);
+        glGenTextures(1, &m_ID);
 
-
-        GLenum format = channels == 3 ? GL_RGB : GL_RGBA;
-        glTextureSubImage2D(m_ID, 0, 0, 0, m_width, m_height, format, GL_UNSIGNED_BYTE, data);
+        glBindTexture(GL_TEXTURE_2D, m_ID);
+        //GLenum format = channels == 3 ? GL_RGB : GL_RGBA;
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
-
-        glTextureParameteri(m_ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTextureParameteri(m_ID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        CC_CORE_ERROR(glGetError());
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        //glCreateTextures(GL_TEXTURE_2D, 1, &m_ID);
+        //glTextureStorage2D(m_ID, 1, GL_RGB8, m_width, m_height);
+
+        //glTextureSubImage2D(m_ID, 0, 0, 0, m_width, m_height, format, GL_UNSIGNED_BYTE, data);
+        //glTextureSubImage2D()
+
+        //glTextureParameteri(m_ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        //glTextureParameteri(m_ID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
         stbi_image_free(data);
     }
